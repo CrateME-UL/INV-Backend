@@ -20,6 +20,7 @@
 - mikestead.dotenv
 - aaron-bond.better-comments
 - ms-vscode.notepadplusplus-keybindings
+- ms-vsliveshare.vsliveshare
 
 ## vscode extensions to install for rust
 
