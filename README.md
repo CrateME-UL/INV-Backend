@@ -42,4 +42,4 @@
 ### run with cargo package
 - check cargo version: cargo --version
 - to build: cargo build
-- to execute: cargo run=
+- to execute: cargo run
