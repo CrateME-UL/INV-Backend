@@ -29,3 +29,17 @@
 - vadimcn.vscode-lldb
 - tamasfe.even-better-toml
 
+
+## setup rust on windows
+- install rust on windows from https://www.rust-lang.org/tools/install
+- check your rust version: rustc --version
+- check for the latest version of rust : rustup update
+### run without cargo package: 
+   TO compile: rustc main.rs
+   To execute:.\main.exe
+
+
+### run with cargo package
+- check cargo version: cargo --version
+- to build: cargo build
+- to execute: cargo run=
