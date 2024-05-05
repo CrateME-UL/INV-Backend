@@ -43,3 +43,8 @@
 - check cargo version: cargo --version
 - to build: cargo build
 - to execute: cargo run
+
+# TODO: format
+# FIXME: this
+## Format for rust 
+(to do)
