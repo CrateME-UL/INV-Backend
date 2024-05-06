@@ -43,3 +43,9 @@
 - check cargo version: cargo --version
 - to build: cargo build
 - to execute: cargo run
+
+## Docker
+	
+- container named some-postgres: docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+- show all the containers with thier status, ports... : docker ps
+
