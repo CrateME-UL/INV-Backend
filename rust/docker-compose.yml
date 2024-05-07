@@ -1,4 +1,5 @@
 services:
+  # TODO: update to suppport web, as web is faster so we should be able to healthcheck to avoid that db connection fails when starting app. https://docs.docker.com/compose/startup-order/
   # web:
   #   build: .
   #   ports:
@@ -34,11 +35,12 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+# similar to DBreave maybe to remove
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
 
 volumes:
   pgdata:
