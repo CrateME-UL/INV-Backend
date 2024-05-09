@@ -76,10 +76,17 @@ async fn create_user(
 async fn get_users_db() -> anyhow::Result<Vec<User>> {
     println!("test: {}", "avant!");
     // let pool = PgPool::connect("postgres://postgres:mysecretpassword@jdbc:postgresql://127.0.0.1:5432/postgres").await?;
-    let pool = PgPool::connect("jdbc:postgresql:mysecretpassword//localhost:5432/postgres").await?;
+    //let pool = PgPool::connect("jdbc:postgresql:mysecretpassword//localhost:5432/postgres").await?;
+    let (client, connection) = tokio_postgres::Config::new()
+    .host("localhost")
+    .user("postgres")
+    .password("mysecretpassword")
+    .dbname("postgres")
+    .connect(NoTls)
+    .await?;
     println!("test: {}", "connected!");
     let users = sqlx::query_as("SELECT id, username FROM users")
-        .fetch_all(&pool)
+        .fetch_all(&connection).collect
         .await?;
 
     Ok(users.into_iter().map(|user: (i32, String)| User { id: user.0 as u64, username: user.1 }).collect())
