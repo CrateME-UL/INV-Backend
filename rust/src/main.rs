@@ -9,12 +9,14 @@ use axum::{
     http::StatusCode,
      response::IntoResponse,
      routing::{get, post},
-     Json, Router,
+     Json, 
+     Router,
  };
 
  use serde::{Deserialize, Serialize};
  use serde_json::{Map, Number, Value};
  use sqlx::postgres::PgPoolOptions;
+ use tower_http::cors::CorsLayer;
 
 
  #[tokio::main(flavor = "current_thread")]
@@ -29,7 +31,9 @@ use axum::{
          // `GET /users` goes to `user_id`
          .route("/users", get(get_users))
         // `POST /users` goes to `create_user`
-         .route("/users", post(create_user));
+         .route("/users", post(create_user))
+         //enable cors
+         .layer(CorsLayer::permissive());
 
      // run our app with hyper
      let listener = tokio::net::TcpListener::bind("127.0.0.1:5432")
