@@ -63,3 +63,7 @@ docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=[Password] -d 
 # add this in a .env file in the src directory
 DATABASE_URL=postgres://[Username]:[Password]@[Host]:[Port]/[Database]
 ```
+### Rust format code
+```
+cargo fmt
+```
