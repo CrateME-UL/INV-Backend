@@ -23,25 +23,5 @@
         "vadimcn",
         "wayou",
         "yzhang"
-    ],
-    "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#5db5a7",
-        "activityBar.background": "#5db5a7",
-        "activityBar.foreground": "#15202b",
-        "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#a050af",
-        "activityBarBadge.foreground": "#e7e7e7",
-        "commandCenter.border": "#e7e7e799",
-        "sash.hoverBorder": "#5db5a7",
-        "statusBar.background": "#46998c",
-        "statusBar.foreground": "#e7e7e7",
-        "statusBarItem.hoverBackground": "#5db5a7",
-        "statusBarItem.remoteBackground": "#46998c",
-        "statusBarItem.remoteForeground": "#e7e7e7",
-        "titleBar.activeBackground": "#46998c",
-        "titleBar.activeForeground": "#e7e7e7",
-        "titleBar.inactiveBackground": "#46998c99",
-        "titleBar.inactiveForeground": "#e7e7e799"
-    },
-    "peacock.color": "#46998c"
+    ]
 }
