@@ -16,20 +16,22 @@ use axum::{
 // use std::sync::Arc;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Number, Value};
+use sqlx::postgres::PgPool;
 // use uuid::Uuid;
+use async_std::task;
+use sqlx::prelude::*;
 
-
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() {
     // initialize tracing
     tracing_subscriber::fmt::init();
-
+    
     // build our application with a route
     let app = Router::new()
         // `GET /` goes to `root`
         .route("/", get(root))
         // `GET /users` goes to `user_id`
-        .route("/users", get(get_users))	
+        .route("/users", get(get_users))
         // `POST /users` goes to `create_user`
         .route("/users", post(create_user));
 
@@ -40,6 +42,7 @@ async fn main() {
     println!("server running: {}", "127.0.0.1:5432");
     tracing::debug!("listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
+
 }
 
 // basic handler that responds with a static string
@@ -62,7 +65,27 @@ async fn create_user(
     // with a status code of `201 Created`
     (StatusCode::CREATED, Json(user))
     
-}async fn get_users() -> impl IntoResponse {
+}
+
+// async fn get_users_db() -> anyhow::Result<()> {
+//     let pool = PgPool::connect("postgres://postgres:mysecretpassword@127.0.0.1:5432/postgres").await.unwrap();
+//     let _ = sqlx::query("SELECT * FROM users")
+//         .fetch(&pool);
+//     Ok(())
+// }
+async fn get_users_db() -> anyhow::Result<Vec<User>> {
+    println!("test: {}", "avant!");
+    // let pool = PgPool::connect("postgres://postgres:mysecretpassword@jdbc:postgresql://127.0.0.1:5432/postgres").await?;
+    let pool = PgPool::connect("jdbc:postgresql:mysecretpassword//localhost:5432/postgres").await?;
+    println!("test: {}", "connected!");
+    let users = sqlx::query_as("SELECT id, username FROM users")
+        .fetch_all(&pool)
+        .await?;
+
+    Ok(users.into_iter().map(|user: (i32, String)| User { id: user.0 as u64, username: user.1 }).collect())
+}
+async fn get_users() -> impl IntoResponse {
+let response: Vec<User> = task::block_on(get_users_db()).unwrap();
     // insert your application logic here
 let users: Vec<User> = vec![
     User {
@@ -75,7 +98,8 @@ let users: Vec<User> = vec![
     },
 ];
 
-let list_response: Vec<Value> = users
+
+let list_response: Vec<Value> = response
    .into_iter()
    .map(|user| {
         let mut map = Map::new();
@@ -86,9 +110,6 @@ let list_response: Vec<Value> = users
    .collect();
 
 let obj = Value::Array(list_response);
-
-
-
 
     // this will be converted into a JSON response
     // with a status code of `201 Created`
