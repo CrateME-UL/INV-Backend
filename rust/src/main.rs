@@ -17,6 +17,8 @@ use axum::{
  use serde_json::{Map, Number, Value};
  use sqlx::postgres::PgPoolOptions;
  use tower_http::cors::CorsLayer;
+ use dotenv::dotenv;
+use std::env;
 
 
  #[tokio::main(flavor = "current_thread")]
@@ -70,8 +72,11 @@ use axum::{
 
 
 async fn get_users_db() -> anyhow::Result<Vec<User>> {
-    let database_url = "postgres://postgres:mysecretpassword@localhost:5432/postgres";
+     // load environment variables from.env file
+     dotenv().ok();
 
+     // get the database URL from the environment variable
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     // Create a connection pool
     let pool = PgPoolOptions::new()
        .max_connections(5)

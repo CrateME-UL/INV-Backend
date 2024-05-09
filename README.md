@@ -47,7 +47,19 @@
 
 ## Docker
 - to connect to docker: docker login
-- download the container if not existing, container named some-postgres (we are specifing the port as it must be the same used in DBreave) :  docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+- download the container if not existing, container named some-postgres (we are specifing the port as it must be the same used in DBreave) :
+```
+docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=[Password] -d postgres
+  ```
 - show all the containers that are running with thier status, ports... : docker ps
-- To launch your Postgres database and supporting services: docker compose -f docker-compose.yml up
+- To launch your Postgres database and supporting services: docker compose -f docker-compose.yml up or in docker desktop
 - to stop the container: docker stop some-postgres
+
+### Postgres and SQLx
+- launch the DB on docker
+- setup the database connection with the environment variable for example in a .env file in the src directory (replace the values of [...] corresponding in DBeaver connection form into your connection string) to launch backend with Rust and access the DB via the backend API
+- **Make Sure to NOT track the .env file on Github!!**
+```
+# add this in a .env file in the src directory
+DATABASE_URL=postgres://[Username]:[Password]@[Host]:[Port]/[Database]
+```
