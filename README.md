@@ -43,3 +43,11 @@
 - check cargo version: cargo --version
 - to build: cargo build
 - to execute: cargo run
+
+
+## Docker
+- to connect to docker: docker login
+- download the container if not existing, container named some-postgres (we are specifing the port as it must be the same used in DBreave) :  docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+- show all the containers that are running with thier status, ports... : docker ps
+- To launch your Postgres database and supporting services: docker compose -f docker-compose.yml up
+- to stop the container: docker stop some-postgres
