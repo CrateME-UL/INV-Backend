@@ -16,7 +16,9 @@ tokio              = { version = "1.29", features = ["full"] }
 tracing            = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 uuid               = { version = "1.0", features = ["v4", "serde"] }
-sqlx = { version = "0.7", features = [ "runtime-tokio", "tls-native-tls" ] }
+sqlx = { version = "0.7", features = [ "runtime-tokio", "runtime-tokio-native-tls", "postgres" ] }
+tokio-postgres = "0.7"
+dotenv = "0.15.0"
 
 [dev-dependencies]
 axum-test = "14.4"
