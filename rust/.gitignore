@@ -1,2 +1,3 @@
 target/
+target/.rust_info.json
 .env
