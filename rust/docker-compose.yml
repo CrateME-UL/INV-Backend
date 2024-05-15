@@ -8,12 +8,24 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  server:
-    build:
-      context: .
-      target: final
+  inv-db:
+    image: "postgres:latest"
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    networks:
+      - inv
+
+  inv-server:
     ports:
-      - 8080:5432
+        - 3000:3000
+    image: inv-server
+    networks:
+      - inv
+      
+networks:
+  inv:
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
