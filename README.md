@@ -55,6 +55,16 @@ docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=[Password] -d 
 - To launch your Postgres database and supporting services: docker compose -f docker-compose.yml up or in docker desktop
 - to stop the container: docker stop some-postgres
 
+## create Docker image for Rust server
+```
+docker build -t inv-backend .
+```
+
+## run Docker container
+```
+docker run -p 5000:5000 inv-backend
+```
+
 ### Postgres and SQLx
 - launch the DB on docker
 - setup the database connection with the environment variable for example in a .env file in the src directory (replace the values of [...] corresponding in DBeaver connection form into your connection string) to launch backend with Rust and access the DB via the backend API
