@@ -11,6 +11,8 @@ services:
       - inv
 
   inv-server:
+    environment:
+      DATABASE_URL: $DATABASE_URL
     ports:
         - 3000:3000
     image: inv-server
