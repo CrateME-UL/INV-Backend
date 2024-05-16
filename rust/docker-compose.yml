@@ -7,8 +7,6 @@ services:
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
     ports:
       - 5432:5432
-    networks:
-      - inv
 
   inv-server:
     environment:
@@ -16,9 +14,3 @@ services:
     ports:
         - 3000:3000
     image: inv-server
-    networks:
-      - inv
-      
-networks:
-  inv:
-
