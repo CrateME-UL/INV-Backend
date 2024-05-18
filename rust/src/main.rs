@@ -18,6 +18,9 @@ use sqlx::postgres::PgPoolOptions;
 use std::env;
 use tower_http::cors::CorsLayer;
 
+//TODO: add env variables for server address listener (to connect with databse outside docker network)
+//TODO: test with changed types -> then test with web
+//TODO: document readme with the procedure to reproduce results
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
@@ -40,10 +43,10 @@ async fn main() {
         .layer(CorsLayer::permissive());
 
     // run our app with hyper
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:5432")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await
         .unwrap();
-    println!("server running: {}", "127.0.0.1:5432");
+    println!("server running: {}", "0.0.0.0:3000");
     tracing::debug!("listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }
@@ -98,11 +101,19 @@ async fn get_places_db() -> anyhow::Result<Vec<Place>> {
         .connect(&database_url)
         .await?;
     
-    let places = sqlx::query_as!(Place, "SELECT placeId as place_id, placeName as place_name, placeType as place_type FROM Places")
+    let places = sqlx::query_as("SELECT placeId, placeName, placeType FROM Places")
     .fetch_all(&pool)
     .await?;
 
-    Ok(places)
+    
+    Ok(places
+        .into_iter()
+        .map(|place: (i32, String, String)| Place {
+            place_id: place.0,
+            place_name: place.1,
+            place_type: place.2,
+        })
+        .collect())
 }
 
 async fn get_items_db() -> anyhow::Result<Vec<Item>> {
@@ -112,12 +123,19 @@ async fn get_items_db() -> anyhow::Result<Vec<Item>> {
         .max_connections(5)
         .connect(&database_url)
         .await?;
-
-    let items = sqlx::query_as!(Item, "SELECT itemId as item_id, placeId as place_id, nbOfItems as nb_of_items, itemName as item_name FROM Items")
+    let items = sqlx::query_as("SELECT itemId, placeId, nbOfItems, itemName FROM Items")
         .fetch_all(&pool)
         .await?;
+    Ok(items
+        .into_iter()
+        .map(|item: (i32, i32, i32, String)| Item {
+            item_id: item.0,
+            place_id: item.1,
+            nb_of_items: item.2,
+            item_name: item.3,
+        })
+        .collect())
 
-    Ok(items)
 }
 
 
@@ -128,7 +146,7 @@ async fn get_places() -> impl IntoResponse {
                 .into_iter()
                 .map(|place| {
                     let mut map = Map::new();
-                    map.insert("placeId".to_string(), Value::String(place.place_id.to_string()));
+                    map.insert("placeId".to_string(), Value::Number(Number::from(place.place_id)));
                     map.insert("placeName".to_string(), Value::String(place.place_name));
                     map.insert("placeType".to_string(), Value::String(place.place_type));
                     Value::Object(map)
@@ -155,16 +173,15 @@ async fn get_items() -> impl IntoResponse {
                 .into_iter()
                 .map(|item| {
                     let mut map = Map::new();
-                    map.insert("item_id".to_string(), Value::String(item.item_id.to_string()));
-                    map.insert("place_id".to_string(), Value::String(item.place_id.to_string()));
-                    map.insert("nb_of_items".to_string(), Value::String(item.nb_of_items));
+                    map.insert("item_id".to_string(), Value::Number(Number::from(item.item_id)));
+                    map.insert("place_id".to_string(), Value::Number(Number::from(item.place_id)));
+                    map.insert("nb_of_items".to_string(), Value::Number(Number::from(item.nb_of_items)));
                     map.insert("item_name".to_string(), Value::String(item.item_name));
                     Value::Object(map)
                 })
                 .collect();
-
             let obj = Value::Array(list_response);
-            (StatusCode::OK, Json(obj))
+            (StatusCode::CREATED, Json(obj))
         }
         Err(err) => {
             eprintln!("Error fetching items: {}", err);
@@ -197,8 +214,6 @@ async fn get_users_db() -> anyhow::Result<Vec<User>> {
         })
         .collect())
 }
-
-
 
 
 async fn get_users() -> impl IntoResponse {
@@ -267,7 +282,7 @@ struct Place {
 struct Item {
     item_id: i32,
     place_id: i32,
-    nb_of_items: String,
+    nb_of_items: i32,
     item_name: String,
 }
 
