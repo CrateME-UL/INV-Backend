@@ -17,14 +17,17 @@ use serde_json::{Map, Number, Value};
 use sqlx::postgres::PgPoolOptions;
 use std::env;
 use tower_http::cors::CorsLayer;
+use tracing::instrument;
 
 //TODO: add env variables for server address listener (to connect with databse outside docker network)
 //TODO: test with changed types -> then test with web
 //TODO: document readme with the procedure to reproduce results
 
 #[tokio::main(flavor = "current_thread")]
+#[instrument]
 async fn main() {
     // initialize tracing
+    dotenv().ok();
     tracing_subscriber::fmt::init();
 
     // build our application with a route
@@ -46,7 +49,6 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await
         .unwrap();
-    println!("server running: {}", "0.0.0.0:3000");
     tracing::debug!("listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }

@@ -1,5 +1,5 @@
 # Docker
-## 1. create Docker image for Rust server
+## 1. create Docker image for Rust server (you will need to run this to apply changes)
 ```
 docker build -t inv-server .
 ```
@@ -17,6 +17,9 @@ POSTGRES_PASSWORD=<...>
 
 # server
 DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@inv-db:5432/$POSTGRES_DB
+
+# log
+RUST_LOG=debug
 ```
 ## 3. run docker-compose (for all services in a network) N.B: make sure to build inv-ui before!
 ```
