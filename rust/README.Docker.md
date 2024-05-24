@@ -1,22 +1,33 @@
-### Building and running your application
+# Docker
+## 1. create Docker image for Rust server
+```
+docker build -t inv-server .
+```
+## 2. Postgres and SQLx
+### if you only want the db -> launch the DB on docker once created with docker-compose
 
-When you're ready, start your application by running:
-`docker compose up --build`.
+### general setup
+- setup the database connection with the environment variable for example in a .env file in the src directory (replace the values of [...] corresponding in DBeaver connection form into your connection string) to launch backend with Rust and access the DB via the backend API
+- **Make Sure to NOT track the .env file on Github!!**
+```
+# database
+POSTGRES_USER=<...>
+POSTGRES_DB=<...>
+POSTGRES_PASSWORD=<...>
 
-Your application will be available at http://localhost:5432.
+# server
+DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@inv-db:5432/$POSTGRES_DB
+```
+## 3. run docker-compose (for all services in a network) N.B: make sure to build inv-ui before!
+```
+docker compose up --build
+```
+## 4. click manually in docker desktop to start created containers (to look the content of the db for example)
 
-### Deploying your application to the cloud
-
-First, build your image, e.g.: `docker build -t myapp .`.
-If your cloud uses a different CPU architecture than your development
-machine (e.g., you are on a Mac M1 and your cloud provider is amd64),
-you'll want to build the image for that platform, e.g.:
-`docker build --platform=linux/amd64 -t myapp .`.
-
-Then, push it to your registry, e.g. `docker push myregistry.com/myapp`.
-
-Consult Docker's [getting started](https://docs.docker.com/go/get-started-sharing/)
-docs for more detail on building and pushing.
-
-### References
-* [Docker's Rust guide](https://docs.docker.com/language/rust/)
+### useful commands
+```
+docker login
+docker stop some-postgres
+docker ps
+docker run -p 3000:3000 inv-server
+```

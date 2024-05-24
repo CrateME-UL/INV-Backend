@@ -17,5 +17,5 @@ services:
 
   inv-ui:
     ports:
-        - 4173:4173
+        - 8080:8080
     image: inv-ui
