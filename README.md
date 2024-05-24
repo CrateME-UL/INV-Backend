@@ -30,50 +30,23 @@
 - tamasfe.even-better-toml
 
 
-## setup rust on windows
+## setup rust
 - install rust on windows from https://www.rust-lang.org/tools/install
 - check your rust version: rustc --version
 - check for the latest version of rust : rustup update
 ### run without cargo package: 
-   TO compile: rustc main.rs
+   To compile: rustc main.rs
    To execute:.\main.exe
-
-
-### run with cargo package
+### run with cargo package (preferred)
 - check cargo version: cargo --version
 - to build: cargo build
 - to execute: cargo run
 
+## Docker setup
+follow the [docker-compose setup](./rust/README.Docker.md) to launch containers locally or run only the database container
 
-## Docker
 
-
-### 1. create Docker image for Rust server
-```
-docker build -t inv-server .
-```
-### 2. run docker-compose (for all services in a network)
-```
-docker compose up
-```
-### useful commands
-```
-docker login
-docker stop some-postgres
-docker ps
-docker run -p 3000:3000 inv-server
-```
-#### click manually in docker desktop to start created containers (to look the content of the db for example)
-
-### Postgres and SQLx
-- launch the DB on docker
-- setup the database connection with the environment variable for example in a .env file in the src directory (replace the values of [...] corresponding in DBeaver connection form into your connection string) to launch backend with Rust and access the DB via the backend API
-- **Make Sure to NOT track the .env file on Github!!**
-```
-# add this in a .env file in the src directory
-DATABASE_URL=postgres://[Username]:[Password]@[Host]:[Port]/[Database]
-```
-### Rust format code
+## Rust format code
 ```
 cargo fmt
 ```

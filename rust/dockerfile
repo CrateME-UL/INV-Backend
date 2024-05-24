@@ -8,7 +8,7 @@ WORKDIR /usr/src/inv-server
 COPY . .
 
 # Build the Rust app
-RUN cargo build
+RUN cargo build --release
 
-# Set the command to run the Rust app
-CMD cargo run
+# Set the command to run the compiled Rust app
+CMD ["./target/release/rust"]
