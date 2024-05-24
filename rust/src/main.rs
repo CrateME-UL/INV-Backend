@@ -18,6 +18,10 @@ use sqlx::postgres::PgPoolOptions;
 use std::env;
 use tower_http::cors::CorsLayer;
 
+//TODO: add env variables for server address listener (to connect with databse outside docker network)
+//TODO: test with changed types -> then test with web
+//TODO: document readme with the procedure to reproduce results
+
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
     // initialize tracing
@@ -31,6 +35,10 @@ async fn main() {
         .route("/users", get(get_users))
         // `POST /users` goes to `create_user`
         .route("/users", post(create_user))
+        // 'get_/places' goes to `get_places`
+        .route("/places", get(get_places))
+        // 'get_/items' goes to `get_items`
+        .route("/items", get(get_items))
         //enable cors
         .layer(CorsLayer::permissive());
 
@@ -48,6 +56,27 @@ async fn root() -> &'static str {
     "Hello, World!"
 }
 
+// async fn create_place(Json(payload): Json<CreatePlace>) -> impl IntoResponse {
+//     let place = Place {
+//         place_id: payload.place_id,
+//         place_name: payload.place_name,
+//         place_type: payload.place_type,
+//     };
+
+//     (StatusCode::CREATED, Json(place))
+// }
+
+
+// async fn create_item(Json(payload): Json<CreateItem>) -> impl IntoResponse {
+//     let item = Item {
+//         item_id: Uuid::new_v4(),
+//         place_id: payload.place_id,
+//         nb_of_items: payload.nb_of_items,
+//         item_name: payload.item_name, 
+//     };
+//     (StatusCode::CREATED, Json(item))
+// }
+
 async fn create_user(
     // this argument tells axum to parse the request body
     // as JSON into a `CreateUser` type
@@ -64,6 +93,103 @@ async fn create_user(
     (StatusCode::CREATED, Json(user))
 }
 
+async fn get_places_db() -> anyhow::Result<Vec<Place>> {
+    dotenv().ok();
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let pool = PgPoolOptions::new()
+        .max_connections(5)
+        .connect(&database_url)
+        .await?;
+    
+    let places = sqlx::query_as("SELECT placeId, placeName, placeType FROM Places")
+    .fetch_all(&pool)
+    .await?;
+
+    
+    Ok(places
+        .into_iter()
+        .map(|place: (i32, String, String)| Place {
+            place_id: place.0,
+            place_name: place.1,
+            place_type: place.2,
+        })
+        .collect())
+}
+
+async fn get_items_db() -> anyhow::Result<Vec<Item>> {
+    dotenv().ok();
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let pool = PgPoolOptions::new()
+        .max_connections(5)
+        .connect(&database_url)
+        .await?;
+    let items = sqlx::query_as("SELECT itemId, placeId, nbOfItems, itemName FROM Items")
+        .fetch_all(&pool)
+        .await?;
+    Ok(items
+        .into_iter()
+        .map(|item: (i32, i32, i32, String)| Item {
+            item_id: item.0,
+            place_id: item.1,
+            nb_of_items: item.2,
+            item_name: item.3,
+        })
+        .collect())
+
+}
+
+
+async fn get_places() -> impl IntoResponse {
+    match get_places_db().await {
+        Ok(places_result) => {
+            let list_response: Vec<Value> = places_result
+                .into_iter()
+                .map(|place| {
+                    let mut map = Map::new();
+                    map.insert("placeId".to_string(), Value::Number(Number::from(place.place_id)));
+                    map.insert("placeName".to_string(), Value::String(place.place_name));
+                    map.insert("placeType".to_string(), Value::String(place.place_type));
+                    Value::Object(map)
+                })
+                .collect();
+
+            let obj = Value::Array(list_response);
+            (StatusCode::OK, Json(obj))
+        }
+        Err(err) => {
+            eprintln!("Error fetching places: {}", err);
+            let error_response = serde_json::json!({ "error": err.to_string() });
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(error_response))
+        }
+    }
+}
+
+
+
+async fn get_items() -> impl IntoResponse {
+    match get_items_db().await {
+        Ok(items_result) => {
+            let list_response: Vec<Value> = items_result
+                .into_iter()
+                .map(|item| {
+                    let mut map = Map::new();
+                    map.insert("item_id".to_string(), Value::Number(Number::from(item.item_id)));
+                    map.insert("place_id".to_string(), Value::Number(Number::from(item.place_id)));
+                    map.insert("nb_of_items".to_string(), Value::Number(Number::from(item.nb_of_items)));
+                    map.insert("item_name".to_string(), Value::String(item.item_name));
+                    Value::Object(map)
+                })
+                .collect();
+            let obj = Value::Array(list_response);
+            (StatusCode::CREATED, Json(obj))
+        }
+        Err(err) => {
+            eprintln!("Error fetching items: {}", err);
+            let error_response = serde_json::json!({ "error": err.to_string() });
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(error_response))
+        }
+    }
+}
 async fn get_users_db() -> anyhow::Result<Vec<User>> {
     // load environment variables from.env file
     dotenv().ok();
@@ -88,6 +214,7 @@ async fn get_users_db() -> anyhow::Result<Vec<User>> {
         })
         .collect())
 }
+
 
 async fn get_users() -> impl IntoResponse {
     match get_users_db().await {
@@ -129,3 +256,34 @@ struct User {
     id: u64,
     username: String,
 }
+// #[derive(Deserialize)]
+// struct CreatePlace {
+//     place_id: u32,
+//     place_name: String,
+//     place_type: String,
+// }
+
+#[derive(Serialize)]
+struct Place {
+    place_id: i32,
+    place_name: String,
+    place_type: String,
+}
+
+// #[derive(Deserialize)]
+// struct CreateItem {
+//     item_id: u32,
+//     place_id: u32,
+//     nb_of_items: String,
+//     item_name: String,
+// }
+
+#[derive(Serialize)]
+struct Item {
+    item_id: i32,
+    place_id: i32,
+    nb_of_items: i32,
+    item_name: String,
+}
+
+

@@ -28,3 +28,6 @@ VALUES ((SELECT placeId FROM Places WHERE placeName = 'Inventaire'), 1, 'ballon'
 
 SELECT * FROM Places;
 SELECT * FROM Items;
+
+
+
