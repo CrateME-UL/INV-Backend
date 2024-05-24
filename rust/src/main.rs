@@ -35,10 +35,10 @@ async fn main() {
         .layer(CorsLayer::permissive());
 
     // run our app with hyper
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:5432")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await
         .unwrap();
-    println!("server running: {}", "127.0.0.1:5432");
+    println!("server running: {}", "0.0.0.0:3000");
     tracing::debug!("listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }
