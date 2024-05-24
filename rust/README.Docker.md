@@ -4,7 +4,10 @@
 docker build -t inv-server .
 ```
 ## 2. Postgres and SQLx
-### if you only want the db -> launch the DB on docker once created with docker-compose
+### if you only want the db -> in the .env file dir
+```console
+docker run -d --name inv-db-standalone --env-file .env -p 5432:5432 postgres:latest
+```
 
 ### general setup
 - setup the database connection with the environment variable for example in a .env file in the src directory (replace the values of [...] corresponding in DBeaver connection form into your connection string) to launch backend with Rust and access the DB via the backend API
