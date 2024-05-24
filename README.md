@@ -46,14 +46,24 @@
 
 
 ## Docker
-- to connect to docker: docker login
-- download the container if not existing, container named some-postgres (we are specifing the port as it must be the same used in DBreave) :
+
+
+### 1. create Docker image for Rust server
 ```
-docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=[Password] -d postgres
-  ```
-- show all the containers that are running with thier status, ports... : docker ps
-- To launch your Postgres database and supporting services: docker compose -f docker-compose.yml up or in docker desktop
-- to stop the container: docker stop some-postgres
+docker build -t inv-server .
+```
+### 2. run docker-compose (for all services in a network)
+```
+docker compose up
+```
+### useful commands
+```
+docker login
+docker stop some-postgres
+docker ps
+docker run -p 3000:3000 inv-server
+```
+#### click manually in docker desktop to start created containers (to look the content of the db for example)
 
 ### Postgres and SQLx
 - launch the DB on docker
