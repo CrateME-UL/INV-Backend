@@ -4,7 +4,7 @@
 docker build -t inv-server .
 ```
 ## 2. Postgres and SQLx
-### if you only want the db -> in the .env file dir
+### if you only want the db -> in the .env file dir -> make sure to change `inv-db` to `localhost` in the .env file
 ```console
 docker run -d --name inv-db-standalone --env-file .env -p 5432:5432 postgres:latest
 ```
