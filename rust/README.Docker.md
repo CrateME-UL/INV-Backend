@@ -8,6 +8,10 @@ docker build -t inv-server .
 ```console
 docker run -d --name inv-db-standalone --env-file .env -p 5432:5432 postgres:latest
 ```
+### to launch only, not create
+```console
+docker start inv-db-standalone
+```
 
 ### general setup
 - setup the database connection with the environment variable for example in a .env file in the src directory (replace the values of [...] corresponding in DBeaver connection form into your connection string) to launch backend with Rust and access the DB via the backend API

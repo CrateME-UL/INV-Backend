@@ -19,9 +19,9 @@ use std::env;
 use tower_http::cors::CorsLayer;
 use tracing::instrument;
 
-//TODO: add env variables for server address listener (to connect with databse outside docker network)
-//TODO: test with changed types -> then test with web
-//TODO: document readme with the procedure to reproduce results
+//TODO: add places implementation (to show places instead of place id)
+//TODO: refactor code
+//TODO: add tests
 
 #[tokio::main(flavor = "current_thread")]
 #[instrument]
