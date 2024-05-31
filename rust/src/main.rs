@@ -11,7 +11,6 @@ use axum::{
     Json, Router,
 };
 
-use excel_reader::read_excel;
 use dotenv::dotenv;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Number, Value};
@@ -24,26 +23,30 @@ use tracing::instrument;
 //TODO: refactor code
 //TODO: add tests
 
-#[derive(Debug, Deserialize)]
-struct Data {
-    place: String,
-    obj: String,
-    qte: i32,
-    emp: String,
-}
+
+// impl<'de> Deserialize<'de> for Data {
+//     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+//     where
+//         D: Deserializer<'de>,
+//     {
+//         let value: Value = Deserialize::deserialize(deserializer)?;
+//         let obj = value.get("obj").and_then(Value::as_str).unwrap_or_default().to_string();
+//         let place = value.get("place").and_then(Value::as_str).unwrap_or_default().to_string();
+//         let emp = value.get("emp").and_then(Value::as_str).unwrap_or_default().to_string();
+//         let qte = value
+//             .get("qte")
+//             .and_then(Value::as_str)
+//             .unwrap_or_default()
+//             .parse::<i32>()
+//             .map_err(serde::de::Error::custom)?;
+
+//         Ok(Data { place, obj, qte, emp })
+//     }
+// }
 
 #[tokio::main(flavor = "current_thread")]
 #[instrument]
 async fn main() {
-
-    match read_excel::<Data>("../map_inventaire.xlsx") {
-        Ok(records) => {
-            for record in records {
-                println!("{:?}; {:?}; {:?}; {:?}; ", record.place, record.obj, record.qte, record.emp);
-            }
-        }
-        Err(e) => eprintln!("Error reading CSV file: {}", e),
-    }
     // initialize tracing
     dotenv().ok();
     tracing_subscriber::fmt::init();
