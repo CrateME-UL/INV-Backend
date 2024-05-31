@@ -1,5 +1,5 @@
 [package]
-name = "csv-reader"
+name = "csv_reader"
 version = "0.1.0"
 edition = "2021"
 

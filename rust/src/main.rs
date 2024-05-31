@@ -11,6 +11,7 @@ use axum::{
     Json, Router,
 };
 
+use csv_reader::read_csv;
 use dotenv::dotenv;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Number, Value};
@@ -23,20 +24,30 @@ use tracing::instrument;
 //TODO: refactor code
 //TODO: add tests
 
+#[derive(Debug, Deserialize)]
+struct CSV {
+    place: String,
+    obj: String,
+    qte: i32,
+    emp: String,
+}
+
 #[tokio::main(flavor = "current_thread")]
 #[instrument]
 async fn main() {
-    // initialize tracing
-    dotenv().ok();
-    tracing_subscriber::fmt::init();
-    match read_csv("path/to/your/file.csv") {
+
+    match read_csv::<CSV>("../inventaire-mapping.csv") {
         Ok(records) => {
             for record in records {
-                println!("{:?}", record);
+                println!("{:?}; {:?}; {:?}; {:?}; ", record.place, record.obj, record.qte, record.emp);
             }
         }
         Err(e) => eprintln!("Error reading CSV file: {}", e),
     }
+    // initialize tracing
+    dotenv().ok();
+    tracing_subscriber::fmt::init();
+
 
     // build our application with a route
     let app = Router::new()
