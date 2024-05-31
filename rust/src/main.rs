@@ -36,7 +36,7 @@ struct Data {
 #[instrument]
 async fn main() {
 
-    match read_excel::<Data>("../inventaire-mapping.csv") {
+    match read_excel::<Data>("../map_inventaire.xlsx") {
         Ok(records) => {
             for record in records {
                 println!("{:?}; {:?}; {:?}; {:?}; ", record.place, record.obj, record.qte, record.emp);
