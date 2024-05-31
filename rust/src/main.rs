@@ -29,6 +29,14 @@ async fn main() {
     // initialize tracing
     dotenv().ok();
     tracing_subscriber::fmt::init();
+    match read_csv("path/to/your/file.csv") {
+        Ok(records) => {
+            for record in records {
+                println!("{:?}", record);
+            }
+        }
+        Err(e) => eprintln!("Error reading CSV file: {}", e),
+    }
 
     // build our application with a route
     let app = Router::new()
