@@ -11,7 +11,7 @@ use axum::{
     Json, Router,
 };
 
-use csv_reader::read_csv;
+use excel_reader::read_excel;
 use dotenv::dotenv;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Number, Value};
@@ -25,7 +25,7 @@ use tracing::instrument;
 //TODO: add tests
 
 #[derive(Debug, Deserialize)]
-struct CSV {
+struct Data {
     place: String,
     obj: String,
     qte: i32,
@@ -36,7 +36,7 @@ struct CSV {
 #[instrument]
 async fn main() {
 
-    match read_csv::<CSV>("../inventaire-mapping.csv") {
+    match read_excel::<Data>("../inventaire-mapping.csv") {
         Ok(records) => {
             for record in records {
                 println!("{:?}; {:?}; {:?}; {:?}; ", record.place, record.obj, record.qte, record.emp);

@@ -1,0 +1,9 @@
+[package]
+name = "excel_reader"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+calamine = "0.25.0" # Make sure this version matches your use case
+serde = "1.0"
+serde_json = "1.0"
