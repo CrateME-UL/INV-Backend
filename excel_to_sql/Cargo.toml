@@ -7,3 +7,10 @@ edition = "2021"
 calamine = "0.25.0" # Make sure this version matches your use case
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+tokio              = { version = "1.29", features = ["full"] }
+tracing            = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+uuid               = { version = "1.0", features = ["v4", "serde"] }
+sqlx = { version = "0.7", features = [ "runtime-tokio", "runtime-tokio-native-tls", "postgres", "uuid"] }
+tokio-postgres = "0.7"
+dotenv = "0.15.0"
