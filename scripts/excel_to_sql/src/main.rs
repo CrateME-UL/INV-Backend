@@ -1,11 +1,12 @@
-use std::error::Error;
+mod excel_reader;
 
 use dotenv::dotenv;
-use excel_to_sql::read_excel;
+use excel_reader::read_excel;
 use serde::Deserialize;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 use std::env;
+use std::error::Error;
 
 #[derive(Debug, Deserialize)]
 struct Data {
@@ -15,7 +16,6 @@ struct Data {
     emp: String,
 }
 
-#[allow(dead_code)]
 #[derive(Debug, Clone)]
 struct ParsedData {
     place: String,

@@ -1,5 +1,5 @@
 # Docker
-## 1. create Docker image for Rust server (you will need to run this to apply changes)
+## 1. create Docker image for Rust server (you will need to run this to apply changes in the server folder)
 ```
 docker build -t inv-server .
 ```
