@@ -28,8 +28,9 @@ DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@inv-db:5432/$POSTGRES_
 # log
 RUST_LOG=debug
 ```
-## 3. run docker-compose (for all services in a network) N.B: make sure to build inv-ui before!
+## 3. run docker-compose (for all services in a network) N.B: make sure to use the good images tag!
 ```
+docker compose -f docker-compose.db.yml up
 docker compose up --build
 ```
 ## 4. click manually in docker desktop to start created containers (to look the content of the db for example)
