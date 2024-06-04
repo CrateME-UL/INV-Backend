@@ -1,11 +1,13 @@
 [package]
-name = "rust"
+name = "app"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+resource = { path = "../resource"}
+repository = { path = "../repository"}
+service = { path = "../service"}
+
 anyhow             = "1.0"
 axum               = { version = "0.7", features = ["tracing"] }
 clap               = { version = "4.5", features = ["derive"] }
