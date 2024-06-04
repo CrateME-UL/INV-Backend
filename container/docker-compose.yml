@@ -1,13 +1,4 @@
 services:
-  inv-db:
-    image: "postgres:latest"
-    environment:
-      POSTGRES_USER: $POSTGRES_USER
-      POSTGRES_DB: $POSTGRES_DB
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-    ports:
-      - 5432:5432
-
   inv-server:
     environment:
       DATABASE_URL: $DATABASE_URL
