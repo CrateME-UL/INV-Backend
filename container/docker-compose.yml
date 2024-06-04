@@ -12,9 +12,9 @@ services:
       DATABASE_URL: $DATABASE_URL
     ports:
         - 3000:3000
-    image: inv-server
+    image: ghcr.io/crateme-ul/inv-backend:inv-21-setup-pipelines-ci
 
   inv-ui:
     ports:
         - 8080:8080
-    image: inv-ui
+    image: ghcr.io/crateme-ul/inv-frontend:inv-21-setup-pipelines-ci
