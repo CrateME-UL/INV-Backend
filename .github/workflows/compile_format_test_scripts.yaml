@@ -34,7 +34,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/cache@v4
+    - name: Cache Rust
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cargo
@@ -42,6 +43,13 @@ jobs:
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
         restore-keys: |
           ${{ runner.os }}-cargo-
+    - name: Cache Docker image
+      uses: actions/cache@v4
+      with:
+        path: /var/lib/docker
+        key: ${{ runner.os }}-docker-${{ hashFiles('**/docker-compose.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
     - name: Wait for PostgreSQL
       run: |
         until pg_isready -h localhost -p 5432; do
