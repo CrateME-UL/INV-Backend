@@ -49,7 +49,7 @@ jobs:
       env:
         DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
     - name: Run tests in scripts
-      run: cd scripts && cargo test
+      run: cd scripts/excel_to_sql && cargo test
       env:
         DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
     - name: Build server
