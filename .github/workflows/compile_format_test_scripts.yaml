@@ -1,4 +1,4 @@
-name: compile_format_test
+name: compile_format_test_scripts
 
 on:
   push:
@@ -34,7 +34,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       with:
         path: |
           ~/.cargo
@@ -56,13 +56,6 @@ jobs:
     - name: Build and run scripts
       run: | 
         cd scripts/excel_to_sql
-        cargo clippy --all-targets --all-features
-        cargo test
-      env:
-        DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
-    - name: Build and run server
-      run: |
-        cd server
         cargo clippy --all-targets --all-features
         cargo test
       env:
