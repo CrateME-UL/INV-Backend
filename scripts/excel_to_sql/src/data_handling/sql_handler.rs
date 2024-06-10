@@ -64,18 +64,3 @@ pub async fn add_items_db(pool: &PgPool, parsed_data: Vec<ParsedData>) -> Result
     println!("nb of items added: {} ", i);
     Ok(())
 }
-
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
