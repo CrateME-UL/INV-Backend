@@ -1,7 +1,7 @@
 use crate::read_excel;
 
-use std::error::Error;
 use serde::Deserialize;
+use std::error::Error;
 
 #[derive(Debug, Deserialize)]
 pub struct Data {
@@ -59,4 +59,3 @@ impl Data {
         })
     }
 }
-

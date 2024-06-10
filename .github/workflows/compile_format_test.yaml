@@ -1,0 +1,57 @@
+name: compile_format_test
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '*'
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Wait for PostgreSQL
+      run: |
+        until pg_isready -h localhost -p 5432; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 1
+        done
+    - name: Build scripts
+      run: cd scripts/excel_to_sql && cargo build
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
+    - name: Run tests in scripts
+      run: cd scripts && cargo test
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
+    - name: Build server
+      run: cd server && cargo build
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
+    - name: Run tests in server
+      run: cd server && cargo test
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
