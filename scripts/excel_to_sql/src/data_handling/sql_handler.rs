@@ -13,7 +13,7 @@ pub async fn add_places_db(pool: &PgPool, parsed_data: Vec<ParsedData>) -> Resul
         .await?
         .exists;
 
-        if exists.unwrap_or(false) != true {
+        if !exists.unwrap_or(false) {
             sqlx::query!(
                 "INSERT INTO Places (placeName, placeType) VALUES ($1, $2)",
                 parsed_data.place,

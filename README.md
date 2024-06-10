@@ -29,24 +29,35 @@
 - vadimcn.vscode-lldb
 - tamasfe.even-better-toml
 
-
 ## setup rust
+
 - install rust on windows from https://www.rust-lang.org/tools/install
 - check your rust version: rustc --version
 - check for the latest version of rust : rustup update
-### run without cargo package: 
-   To compile: rustc main.rs
-   To execute:.\main.exe
+
+### run without cargo package:
+
+To compile: rustc main.rs
+To execute:.\main.exe
+
 ### run with cargo package (preferred)
+
 - check cargo version: cargo --version
 - to build: cargo build
 - to execute: cargo run
 
 ## Docker setup
+
 follow the [docker-compose setup](./rust/README.Docker.md) to launch containers locally or run only the database container
 
+## Rust lint code
+
+```
+cargo clippy --all-targets --all-features
+```
 
 ## Rust format code
+
 ```
 cargo fmt
 ```

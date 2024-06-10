@@ -10,9 +10,10 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-Dwarnings"
 
 jobs:
-  build:
+  compile_format_test:
 
     runs-on: ubuntu-latest
 
@@ -52,9 +53,17 @@ jobs:
         psql -h localhost -U postgres -d test_db -f scripts/DbScripts.sql
       env:
         PGPASSWORD: password
-    - name: Build and Test All
+    - name: Build and run scripts
+      run: | 
+        cd scripts/excel_to_sql
+        cargo clippy --all-targets --all-features
+        cargo test
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
+    - name: Build and run server
       run: |
-        cargo build --workspace
-        cargo test --workspace
+        cd server
+        cargo clippy --all-targets --all-features
+        cargo test
       env:
         DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
