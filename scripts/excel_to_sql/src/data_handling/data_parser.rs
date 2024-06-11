@@ -1,7 +1,7 @@
 use crate::read_excel;
 
-use std::error::Error;
 use serde::Deserialize;
+use std::error::Error;
 
 #[derive(Debug, Deserialize)]
 pub struct Data {
@@ -19,7 +19,7 @@ pub struct ParsedData {
     pub emp: String,
 }
 pub fn parse_records_from_excel(file_path: &str) -> Result<Vec<ParsedData>, Box<dyn Error>> {
-    let records = read_excel::<Data>(&file_path)?;
+    let records = read_excel::<Data>(file_path)?;
     let mut parsed_data: Vec<ParsedData> = Vec::new();
     let mut i = 0;
     for record in records {
@@ -59,4 +59,3 @@ impl Data {
         })
     }
 }
-

@@ -1,0 +1,63 @@
+name: compile_format_test_server
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '*'
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-Dwarnings"
+
+jobs:
+  compile_format_test:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Cache Rust
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-
+    - name: Wait for PostgreSQL
+      run: |
+        until pg_isready -h localhost -p 5432; do
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 1
+        done
+    - name: Set up database schema
+      run: |
+        psql -h localhost -U postgres -d test_db -f scripts/DbScripts.sql
+      env:
+        PGPASSWORD: password
+    - name: Build and run server
+      run: |
+        cd server
+        cargo clippy --all-targets --all-features
+        cargo test
+      env:
+        DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
