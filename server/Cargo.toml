@@ -1,4 +1,4 @@
 [workspace]
 resolver = "2"
 
-members = ["app", "resource", "repository", "service"]
+members = ["app", "domain", "resource", "repository", "service"]
