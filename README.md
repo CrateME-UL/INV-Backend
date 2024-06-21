@@ -35,6 +35,13 @@
 - check your rust version: rustc --version
 - check for the latest version of rust : rustup update
 
+## setup after installing rust linux
+
+```bash
+sudo apt-get update
+sudo apt-get install libssl-dev pkg-config clang libclang-dev
+```
+
 ### run without cargo package:
 
 To compile: rustc main.rs
@@ -48,7 +55,7 @@ To execute:.\main.exe
 
 ## Docker setup
 
-follow the [docker-compose setup](./rust/README.Docker.md) to launch containers locally or run only the database container
+follow the [docker-compose setup](./container/README.Docker.md) to launch containers locally or run only the database container
 
 ## Rust lint code
 
