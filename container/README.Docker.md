@@ -38,14 +38,14 @@ DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@inv-db:5432/$POSTGRES_
 RUST_LOG=debug
 ```
 
-## 3. run docker-compose (for all services in a network) N.B: make sure to build inv-ui before! Make sure to create a token on github. make sure to pull the last versions
+## 3. run docker-compose (for all services in a network) Make sure to create a token on github. Make sure to pull the last versions. check this link to connect with the github container registery
 
 https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-with-a-personal-access-token-classic
 
 ```bash
 docker pull ghcr.io/crateme-ul/inv-frontend:main
 docker pull ghcr.io/crateme-ul/inv-backend:main
-docker compose up --build  -d
+docker compose up --build -d
 ```
 
 ## 4. access the database in the docker compose with the .env variables

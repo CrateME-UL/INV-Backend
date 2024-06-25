@@ -13,11 +13,12 @@ newgrp docker
 groups $USER
 ls -l /var/run/docker.sock
 
+# export CR_PAT=<enter-token-github>
 sudo echo $CR_PAT | docker login ghcr.io -u <enter-user-github> --password-stdin
 
 docker pull ghcr.io/crateme-ul/inv-frontend:main
 docker pull ghcr.io/crateme-ul/inv-backend:main
-docker compose up --build  -d
+docker compose up --build -d
 
 docker-compose exec inv-db sh -c 'psql -U $POSTGRES_USER $POSTGRES_DB'
 
