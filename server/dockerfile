@@ -1,14 +1,21 @@
-# Use the latest version of the Rust base image
-FROM rust:latest
+FROM rust:1.79-slim-bullseye
 
-# Set the working directory in the container
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+    netcat \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a new directory for the project
 WORKDIR /usr/src/inv-server
 
-# Copy the Rust project files to the working directory
+# Copy the project files into the Docker image
 COPY . .
 
-# Build the Rust app
-RUN cargo build --release
+# Copy the entrypoint script
+COPY entrypoint.sh /usr/src/inv-server/entrypoint.sh
+RUN chmod +x /usr/src/inv-server/entrypoint.sh
 
-# Set the command to run the compiled Rust app
-CMD ["./target/release/app"]
+# Set the entrypoint
+ENTRYPOINT ["/usr/src/inv-server/entrypoint.sh"]
