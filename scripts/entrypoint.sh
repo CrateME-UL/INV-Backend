@@ -22,19 +22,16 @@ wait_for_db() {
   done
 }
 
-DATABASE_HOST=${DATABASE_HOST:-inv-db}
-DATABASE_PORT=${DATABASE_PORT:-5432}
-DATABASE_TIMEOUT=${DATABASE_TIMEOUT:-30}
-POSTGRES_USER=${POSTGRES_USER:-some-postgres}
-POSTGRES_DB=${POSTGRES_DB:-some-postgres}
-POSTGRES_PASSWORD=${POSTGRES_DB:-mysecretpassword}
-
-export PGPASSWORD=$POSTGRES_PASSWORD
+DATABASE_HOST=inv-db
+DATABASE_PORT=5432
+DATABASE_TIMEOUT=30
 
 wait_for_db "$DATABASE_HOST" "$DATABASE_PORT" "$DATABASE_TIMEOUT"
 rm -rf container documentation LICENSE README.md docker-compose.yml .github .vscode
 
-# remove if data is already done
+sql_script=$(cat /app/scripts/db_script.sql)
+psql postgres://some-postgres:mysecretpassword@inv-db:5432/some-postgres -c "$sql_script"
+
 cd /app/scripts/excel_to_sql
 cargo run build --release
 

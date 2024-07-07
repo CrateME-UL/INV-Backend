@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     libssl-dev \
     netcat \
-    # postgresql-client \
+    postgresql-client \
     clang \
     && rm -rf /var/lib/apt/lists/*
 
