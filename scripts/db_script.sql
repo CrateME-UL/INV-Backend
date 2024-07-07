@@ -1,0 +1,18 @@
+ DROP TABLE IF EXISTS Items;
+ DROP TABLE IF EXISTS Places;
+
+CREATE TABLE IF NOT EXISTS Places (
+    placeId SERIAL PRIMARY KEY,
+    placeName VARCHAR(30) NOT NULL,
+    placeType VARCHAR(3) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Items (
+    itemId SERIAL PRIMARY KEY,
+    placeId INT REFERENCES Places(placeId) NOT NULL,
+    nbOfItems INT not NULL, 
+    itemName VARCHAR(30) NOT NULL
+);
+
+
+

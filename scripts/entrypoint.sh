@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# Function to wait for the database to be ready
 wait_for_db() {
   local host="$1"
   local port="$2"
@@ -23,19 +22,27 @@ wait_for_db() {
   done
 }
 
-# Environment variables
 DATABASE_HOST=${DATABASE_HOST:-inv-db}
 DATABASE_PORT=${DATABASE_PORT:-5432}
 DATABASE_TIMEOUT=${DATABASE_TIMEOUT:-30}
+POSTGRES_USER=${POSTGRES_USER:-some-postgres}
+POSTGRES_DB=${POSTGRES_DB:-some-postgres}
+POSTGRES_PASSWORD=${POSTGRES_DB:-mysecretpassword}
 
-# Wait for the database to be ready
+export PGPASSWORD=$POSTGRES_PASSWORD
+
 wait_for_db "$DATABASE_HOST" "$DATABASE_PORT" "$DATABASE_TIMEOUT"
+rm -rf container documentation LICENSE README.md docker-compose.yml .github .vscode
 
-# Run any necessary setup commands
-# For example, you might want to run database migrations here
-# ./your_migration_command
+# remove if data is already done
+cd /app/scripts/excel_to_sql
 cargo run build --release
-/usr/src/inv-server/target/release/app
 
-# Start the Rust application
+/app/scripts/excel_to_sql/target/release/excel_to_sql
+
+cd /app/server
+cargo run build --release
+
+/app/server/target/release/app
+
 exec "$@"

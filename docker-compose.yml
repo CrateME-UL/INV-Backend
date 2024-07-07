@@ -1,27 +1,21 @@
 services:
-  web:
-    image: nginx:1.27.0
-    ports:
-      - 80:80
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - inv-ui-build:/usr/share/nginx/html
-    networks:
-      - inv
-
   inv-db:
+    container_name: inv-db
     image: "postgres:16.3"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - inv-db-data:/var/lib/postgresql/data
     networks:
       - inv
 
   inv-server:
-    build: ../server
+    container_name: inv-server
+    build: .
+    depends_on:
+      - inv-db
     environment:
       DATABASE_URL: ${DATABASE_URL}
     # image: ghcr.io/crateme-ul/inv-backend:main
@@ -29,7 +23,10 @@ services:
       - inv
 
   inv-ui:
+    container_name: inv-ui
     image: "inv-ui"
+    depends_on:
+      - inv-server
     environment:
       VITE_API_ENDPOINT: ${VITE_API_ENDPOINT}
     # image: ghcr.io/crateme-ul/inv-frontend:main
@@ -38,8 +35,21 @@ services:
     networks:
       - inv
 
+  inv-web:
+    container_name: inv-web
+    image: nginx:1.27.0
+    ports:
+      - 80:80
+    depends_on:
+      - inv-ui
+    volumes:
+      - ./container/nginx.conf:/etc/nginx/nginx.conf
+      - inv-ui-build:/usr/share/nginx/html
+    networks:
+      - inv
+
 volumes:
-  db-data:
+  inv-db-data:
   inv-ui-build:
 
 networks:
