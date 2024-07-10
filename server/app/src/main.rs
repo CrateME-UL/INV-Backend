@@ -38,10 +38,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 async fn root() -> &'static str {
     "Hello, World!"
 }
-// async fn get_items_db(
-//     pool: &PgPool,
-//     query: &Query<ItemQuery>,
-// ) -> Result<Vec<Item>, Box<dyn std::error::Error>> {
+
 async fn get_items_db(pool: &PgPool) -> Result<Vec<Item>, Box<dyn std::error::Error>> {
     let items = sqlx::query!("SELECT item_id, item_name FROM Items ORDER BY item_name;")
         .fetch_all(pool)
@@ -55,6 +52,7 @@ async fn get_items_db(pool: &PgPool) -> Result<Vec<Item>, Box<dyn std::error::Er
 
     Ok(items)
 }
+
 async fn get_places_db(pool: &PgPool) -> Result<Vec<Place>, Box<dyn std::error::Error>> {
     let places =
         sqlx::query!("SELECT place_id, place_name, place_type FROM Places ORDER BY place_name;")
@@ -125,9 +123,9 @@ async fn get_places(Extension(pool): Extension<PgPool>) -> impl IntoResponse {
 }
 
 async fn get_inventory_items(
-    pool: &PgPool,
-    query: &Query<InventoryQuery>,
-) -> Result<Vec<InventoryItem>, Box<dyn std::error::Error>> {
+    Extension(pool): Extension<PgPool>,
+    query: Query<InventoryQuery>,
+) -> impl IntoResponse {
     match get_inventory_items_db(&pool, &query).await {
         Ok(items_result) => {
             let list_response: Vec<Value> = items_result
@@ -139,7 +137,10 @@ async fn get_inventory_items(
                         Value::Number(Number::from(item.item_id)),
                     );
                     map.insert("item_name".to_string(), Value::String(item.item_name));
-                    map.insert("nb_of_items".to_string(), Value::String(item.nb_of_items));
+                    map.insert(
+                        "nb_of_items".to_string(),
+                        Value::Number(Number::from(item.nb_of_items)),
+                    );
                     Value::Object(map)
                 })
                 .collect();
@@ -148,15 +149,16 @@ async fn get_inventory_items(
         }
         Err(err) => {
             eprintln!("Error fetching inventory items: {}", err);
-            Err(err)
+            let error_response = serde_json::json!({ "error": err.to_string() });
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(error_response))
         }
     }
 }
 
 async fn get_inventory_places(
-    pool: &PgPool,
-    query: &Query<InventoryQuery>,
-) -> Result<Vec<InventoryPlace>, Box<dyn std::error::Error>> {
+    Extension(pool): Extension<PgPool>,
+    query: Query<InventoryQuery>,
+) -> impl IntoResponse {
     match get_inventory_places_db(&pool, &query).await {
         Ok(places_result) => {
             let list_response: Vec<Value> = places_result
@@ -169,11 +171,11 @@ async fn get_inventory_places(
                     );
 
                     map.insert("place_name".to_string(), Value::String(place.place_name));
+                    map.insert("place_type".to_string(), Value::String(place.place_type));
                     map.insert(
-                        "place_typ".to_string(),
-                        Value::Number(Number::from(place.place_type)),
+                        "nb_of_items".to_string(),
+                        Value::Number(Number::from(place.nb_of_items)),
                     );
-                    map.insert("nb_of_items".to_string(), Value::String(place.nb_of_items));
                     Value::Object(map)
                 })
                 .collect();
@@ -181,8 +183,9 @@ async fn get_inventory_places(
             (StatusCode::OK, Json(obj))
         }
         Err(err) => {
-            eprintln!("Error fetching inventory items: {}", err);
-            Err(err)
+            eprintln!("Error fetching inventory places: {}", err);
+            let error_response = serde_json::json!({ "error": err.to_string() });
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(error_response))
         }
     }
 }
@@ -220,8 +223,8 @@ async fn get_inventory_items_db(
 async fn get_inventory_places_db(
     pool: &PgPool,
     query: &Query<InventoryQuery>,
-) -> Result<Vec<InventoryItem>, Box<dyn std::error::Error>> {
-    let items = sqlx::query!(
+) -> Result<Vec<InventoryPlace>, Box<dyn std::error::Error>> {
+    let places = sqlx::query!(
         "SELECT Places.place_id as place_id, Places.place_name as place_name, Places.place_type as place_type, Inventory.nb_of_items as nb_of_items
             FROM Inventory
             JOIN Places ON Inventory.place_id = Places.place_id
@@ -264,15 +267,15 @@ struct Place {
 #[derive(Serialize)]
 struct InventoryItem {
     item_id: i32,
-    item_name: i32,
+    item_name: String,
     nb_of_items: i32,
 }
 
 #[derive(Serialize)]
 struct InventoryPlace {
     place_id: i32,
-    place_name: i32,
-    place_type: i32,
+    place_name: String,
+    place_type: String,
     nb_of_items: i32,
 }
 
