@@ -1,5 +1,5 @@
 use dotenv::dotenv;
-use excel_to_sql::{parse_records_from_excel, add_places_db, add_items_db};
+use excel_to_sql::{parse_records_from_excel, add_places_db, add_items_db, add_inventory_db};
 use sqlx::postgres::PgPoolOptions;
 use std::env;
 
@@ -23,8 +23,11 @@ async fn main() {
             if let Err(e) = add_places_db(&pool, data.clone()).await {
                 eprintln!("Error adding places to the database: {}", e);
             }
-            if let Err(e) = add_items_db(&pool, data).await {
+            if let Err(e) = add_items_db(&pool, data.clone()).await {
                 eprintln!("Error adding items to the database: {}", e);
+            }            
+            if let Err(e) = add_inventory_db(&pool, data).await {
+                eprintln!("Error adding inventory entries to the database: {}", e);
             }
         }
         Err(e) => {
