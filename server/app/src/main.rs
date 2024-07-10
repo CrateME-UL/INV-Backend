@@ -8,7 +8,6 @@ use sqlx::{postgres::PgPoolOptions, PgPool};
 use std::env;
 use tower_http::cors::CorsLayer;
 use tracing::instrument;
-use uuid::Uuid;
 
 #[tokio::main(flavor = "current_thread")]
 #[instrument]
@@ -25,6 +24,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/", get(root))
         .route("/items", get(get_items))
         .route("/places", get(get_places))
+        .route("/inventory/items", get(get_inventory_items))
+        .route("/inventory/places", get(get_inventory_places))
         .layer(CorsLayer::permissive())
         .layer(Extension(pool));
 
@@ -37,57 +38,41 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 async fn root() -> &'static str {
     "Hello, World!"
 }
-
-async fn get_items_db(
-    pool: &PgPool,
-    query: &Query<ItemQuery>,
-) -> Result<Vec<Item>, Box<dyn std::error::Error>> {
-    let items = sqlx::query!(
-        "SELECT itemName, SUM(nbOfItems) AS nbOfItems
-        FROM Items
-        JOIN Places ON Items.placeId = Places.placeId
-        WHERE (Places.placeName = $1 OR $1 IS NULL or $1='') 
-            AND (Places.placeType = $2 OR $2 IS NULL or $2='') 
-            AND (Items.itemName = $3 OR $3 IS NULL or $3='')
-        GROUP BY itemName
-        ORDER BY nbOfItems DESC;",
-        query.place_name,
-        query.place_type,
-        query.item_name,
-    )
-    .fetch_all(pool)
-    .await?
-    .into_iter()
-    .map(|record| Item {
-        item_id: Uuid::new_v4(),
-        item_name: record.itemname,
-        nb_of_items: record.nbofitems.unwrap_or_default() as i32,
-    })
-    .collect();
+// async fn get_items_db(
+//     pool: &PgPool,
+//     query: &Query<ItemQuery>,
+// ) -> Result<Vec<Item>, Box<dyn std::error::Error>> {
+async fn get_items_db(pool: &PgPool) -> Result<Vec<Item>, Box<dyn std::error::Error>> {
+    let items = sqlx::query!("SELECT item_id, item_name FROM Items ORDER BY item_name;")
+        .fetch_all(pool)
+        .await?
+        .into_iter()
+        .map(|record| Item {
+            item_id: record.item_id,
+            item_name: record.item_name,
+        })
+        .collect();
 
     Ok(items)
 }
 async fn get_places_db(pool: &PgPool) -> Result<Vec<Place>, Box<dyn std::error::Error>> {
     let places =
-        sqlx::query!("SELECT placeId, placeName, placeType FROM Places ORDER BY placeName;")
+        sqlx::query!("SELECT place_id, place_name, place_type FROM Places ORDER BY place_name;")
             .fetch_all(pool)
             .await?
             .into_iter()
             .map(|record| Place {
-                place_id: record.placeid,
-                place_name: record.placename,
-                place_type: record.placetype,
+                place_id: record.place_id,
+                place_name: record.place_name,
+                place_type: record.place_type,
             })
             .collect();
 
     Ok(places)
 }
 
-async fn get_items(
-    Extension(pool): Extension<PgPool>,
-    query: Query<ItemQuery>,
-) -> impl IntoResponse {
-    match get_items_db(&pool, &query).await {
+async fn get_items(Extension(pool): Extension<PgPool>) -> impl IntoResponse {
+    match get_items_db(&pool).await {
         Ok(items_result) => {
             let list_response: Vec<Value> = items_result
                 .into_iter()
@@ -98,10 +83,6 @@ async fn get_items(
                         Value::String(item.item_id.to_string()),
                     );
                     map.insert("item_name".to_string(), Value::String(item.item_name));
-                    map.insert(
-                        "nb_of_items".to_string(),
-                        Value::Number(Number::from(item.nb_of_items)),
-                    );
                     Value::Object(map)
                 })
                 .collect();
@@ -143,20 +124,160 @@ async fn get_places(Extension(pool): Extension<PgPool>) -> impl IntoResponse {
     }
 }
 
+async fn get_inventory_items(
+    pool: &PgPool,
+    query: &Query<InventoryQuery>,
+) -> Result<Vec<InventoryItem>, Box<dyn std::error::Error>> {
+    match get_inventory_items_db(&pool, &query).await {
+        Ok(items_result) => {
+            let list_response: Vec<Value> = items_result
+                .into_iter()
+                .map(|item| {
+                    let mut map = Map::new();
+                    map.insert(
+                        "item_id".to_string(),
+                        Value::Number(Number::from(item.item_id)),
+                    );
+                    map.insert("item_name".to_string(), Value::String(item.item_name));
+                    map.insert("nb_of_items".to_string(), Value::String(item.nb_of_items));
+                    Value::Object(map)
+                })
+                .collect();
+            let obj = Value::Array(list_response);
+            (StatusCode::OK, Json(obj))
+        }
+        Err(err) => {
+            eprintln!("Error fetching inventory items: {}", err);
+            Err(err)
+        }
+    }
+}
+
+async fn get_inventory_places(
+    pool: &PgPool,
+    query: &Query<InventoryQuery>,
+) -> Result<Vec<InventoryPlace>, Box<dyn std::error::Error>> {
+    match get_inventory_places_db(&pool, &query).await {
+        Ok(places_result) => {
+            let list_response: Vec<Value> = places_result
+                .into_iter()
+                .map(|place| {
+                    let mut map = Map::new();
+                    map.insert(
+                        "place_id".to_string(),
+                        Value::Number(Number::from(place.place_id)),
+                    );
+
+                    map.insert("place_name".to_string(), Value::String(place.place_name));
+                    map.insert(
+                        "place_typ".to_string(),
+                        Value::Number(Number::from(place.place_type)),
+                    );
+                    map.insert("nb_of_items".to_string(), Value::String(place.nb_of_items));
+                    Value::Object(map)
+                })
+                .collect();
+            let obj = Value::Array(list_response);
+            (StatusCode::OK, Json(obj))
+        }
+        Err(err) => {
+            eprintln!("Error fetching inventory items: {}", err);
+            Err(err)
+        }
+    }
+}
+
+async fn get_inventory_items_db(
+    pool: &PgPool,
+    query: &Query<InventoryQuery>,
+) -> Result<Vec<InventoryItem>, Box<dyn std::error::Error>> {
+    let items = sqlx::query!(
+        "SELECT Items.item_id as item_id, Items.item_name as item_name, Inventory.nb_of_items as nb_of_items
+            FROM Inventory
+            JOIN Places ON Inventory.place_id = Places.place_id
+            JOIN Items ON Inventory.item_id = Items.item_id
+            WHERE (place_name =  $1 OR $1 = '' OR $1 = NULL) 
+                AND (place_type = $2 OR $2 = '' OR $2 = NULL)
+                AND (item_name = $3 OR $3 = '' OR $3 = NULL)
+            ORDER BY Inventory.nb_of_items DESC;",
+        query.place_name,
+        query.place_type,
+        query.item_name,
+    )
+    .fetch_all(pool)
+    .await?
+    .into_iter()
+    .map(|record| InventoryItem {
+        item_id: record.item_id,
+        item_name: record.item_name,
+        nb_of_items: record.nb_of_items,
+    })
+    .collect();
+
+    Ok(items)
+}
+
+async fn get_inventory_places_db(
+    pool: &PgPool,
+    query: &Query<InventoryQuery>,
+) -> Result<Vec<InventoryItem>, Box<dyn std::error::Error>> {
+    let items = sqlx::query!(
+        "SELECT Places.place_id as place_id, Places.place_name as place_name, Places.place_type as place_type, Inventory.nb_of_items as nb_of_items
+            FROM Inventory
+            JOIN Places ON Inventory.place_id = Places.place_id
+            JOIN Items ON Inventory.item_id = Items.item_id
+            WHERE (place_name =  $1 OR $1 = '' OR $1 = NULL) 
+                AND (place_type = $2 OR $2 = '' OR $2 = NULL)
+                AND (item_name = $3 OR $3 = '' OR $3 = NULL)
+            ORDER BY Inventory.nb_of_items DESC;",
+        query.place_name,
+        query.place_type,
+        query.item_name,
+    )
+    .fetch_all(pool)
+    .await?
+    .into_iter()
+    .map(|record| InventoryPlace {
+        place_id: record.place_id,
+        place_name: record.place_name,
+        place_type: record.place_type,
+        nb_of_items: record.nb_of_items,
+    })
+    .collect();
+
+    Ok(places)
+}
+
 #[derive(Serialize)]
 struct Item {
-    item_id: Uuid,
+    item_id: i32,
     item_name: String,
-    nb_of_items: i32,
 }
+
 #[derive(Serialize)]
 struct Place {
     place_id: i32,
     place_name: String,
     place_type: String,
 }
+
+#[derive(Serialize)]
+struct InventoryItem {
+    item_id: i32,
+    item_name: i32,
+    nb_of_items: i32,
+}
+
+#[derive(Serialize)]
+struct InventoryPlace {
+    place_id: i32,
+    place_name: i32,
+    place_type: i32,
+    nb_of_items: i32,
+}
+
 #[derive(Deserialize)]
-struct ItemQuery {
+struct InventoryQuery {
     place_name: Option<String>,
     place_type: Option<String>,
     item_name: Option<String>,
