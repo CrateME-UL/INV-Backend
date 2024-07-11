@@ -124,7 +124,7 @@ async fn get_places(Extension(pool): Extension<PgPool>) -> impl IntoResponse {
 
 async fn get_inventory_items(
     Extension(pool): Extension<PgPool>,
-    query: Query<InventoryQuery>,
+    query: Query<InventoryItemQuery>,
 ) -> impl IntoResponse {
     match get_inventory_items_db(&pool, &query).await {
         Ok(items_result) => {
@@ -157,7 +157,7 @@ async fn get_inventory_items(
 
 async fn get_inventory_places(
     Extension(pool): Extension<PgPool>,
-    query: Query<InventoryQuery>,
+    query: Query<InventoryPlaceQuery>,
 ) -> impl IntoResponse {
     match get_inventory_places_db(&pool, &query).await {
         Ok(places_result) => {
@@ -192,20 +192,19 @@ async fn get_inventory_places(
 
 async fn get_inventory_items_db(
     pool: &PgPool,
-    query: &Query<InventoryQuery>,
+    query: &Query<InventoryItemQuery>,
 ) -> Result<Vec<InventoryItem>, Box<dyn std::error::Error>> {
+    let default = "";
     let items = sqlx::query!(
         "SELECT Items.item_id as item_id, Items.item_name as item_name, Inventory.nb_of_items as nb_of_items
             FROM Inventory
             JOIN Places ON Inventory.place_id = Places.place_id
             JOIN Items ON Inventory.item_id = Items.item_id
-            WHERE (place_name =  $1 OR $1 = '' OR $1 = NULL) 
-                AND (place_type = $2 OR $2 = '' OR $2 = NULL)
-                AND (item_name = $3 OR $3 = '' OR $3 = NULL)
+            WHERE (place_name =  $1 OR $1 = '') 
+                AND (place_type = $2 OR $2 = '')
             ORDER BY Inventory.nb_of_items DESC;",
-        query.place_name,
-        query.place_type,
-        query.item_name,
+            query.place_name.as_deref().unwrap_or(default),
+            query.place_type.as_deref().unwrap_or(default),
     )
     .fetch_all(pool)
     .await?
@@ -222,20 +221,17 @@ async fn get_inventory_items_db(
 
 async fn get_inventory_places_db(
     pool: &PgPool,
-    query: &Query<InventoryQuery>,
+    query: &Query<InventoryPlaceQuery>,
 ) -> Result<Vec<InventoryPlace>, Box<dyn std::error::Error>> {
+    let default = "";
     let places = sqlx::query!(
         "SELECT Places.place_id as place_id, Places.place_name as place_name, Places.place_type as place_type, Inventory.nb_of_items as nb_of_items
             FROM Inventory
             JOIN Places ON Inventory.place_id = Places.place_id
             JOIN Items ON Inventory.item_id = Items.item_id
-            WHERE (place_name =  $1 OR $1 = '' OR $1 = NULL) 
-                AND (place_type = $2 OR $2 = '' OR $2 = NULL)
-                AND (item_name = $3 OR $3 = '' OR $3 = NULL)
+            WHERE (item_name =  $1 OR $1 = '') 
             ORDER BY Inventory.nb_of_items DESC;",
-        query.place_name,
-        query.place_type,
-        query.item_name,
+        query.item_name.as_deref().unwrap_or(default),
     )
     .fetch_all(pool)
     .await?
@@ -271,7 +267,7 @@ struct InventoryItem {
     nb_of_items: i32,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 struct InventoryPlace {
     place_id: i32,
     place_name: String,
@@ -279,11 +275,14 @@ struct InventoryPlace {
     nb_of_items: i32,
 }
 
-#[derive(Deserialize)]
-struct InventoryQuery {
+#[derive(Deserialize, Debug)]
+struct InventoryPlaceQuery {
+    item_name: Option<String>,
+}
+#[derive(Deserialize, Debug)]
+struct InventoryItemQuery {
     place_name: Option<String>,
     place_type: Option<String>,
-    item_name: Option<String>,
 }
 
 #[cfg(test)]

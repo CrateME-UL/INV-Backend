@@ -4,13 +4,13 @@ DROP TABLE IF EXISTS Places;
 
 CREATE TABLE IF NOT EXISTS Places (
     place_id SERIAL PRIMARY KEY,
-    place_name VARCHAR(30) UNIQUE NOT NULL,
-    place_type VARCHAR(3) NOT NULL
+    place_name VARCHAR(30) UNIQUE NOT NULL CHECK (TRIM(place_name) <> ''),
+    place_type VARCHAR(3) NOT NULL CHECK (TRIM(place_type) <> '')
 );
 
 CREATE TABLE IF NOT EXISTS Items (
     item_id SERIAL PRIMARY KEY,
-    item_name VARCHAR(30) UNIQUE NOT NULL
+    item_name VARCHAR(30) UNIQUE NOT NULL CHECK (TRIM(item_name) <> '')
 );
 
 CREATE TABLE IF NOT EXISTS Inventory (
