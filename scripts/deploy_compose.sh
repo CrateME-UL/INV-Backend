@@ -16,6 +16,9 @@ ls -l /var/run/docker.sock
 # export CR_PAT=<enter-token-github>
 sudo echo $CR_PAT | docker login ghcr.io -u <enter-user-github> --password-stdin
 
+docker system prune
+
+
 docker pull ghcr.io/crateme-ul/inv-frontend:main
 docker pull ghcr.io/crateme-ul/inv-backend:main
 docker compose up --build -d
