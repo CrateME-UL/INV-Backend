@@ -1,0 +1,61 @@
+services:
+  inv-db:
+    container_name: inv-db
+    image: postgres:16.3
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - inv-db-data:/var/lib/postgresql/data
+    networks:
+      - inv
+
+  inv-server:
+    container_name: inv-server
+    image: ghcr.io/crateme-ul/inv-backend:main
+    # build: .
+    restart: unless-stopped
+    depends_on:
+      - inv-db
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+    networks:
+      - inv
+
+  inv-ui:
+    container_name: inv-ui
+    image: ghcr.io/crateme-ul/inv-frontend:main
+    # image: inv-ui
+    depends_on:
+      - inv-server
+    environment:
+      VITE_API_ENDPOINT: ${VITE_API_ENDPOINT}
+    volumes:
+      - inv-ui-build:/app/dist
+    networks:
+      - inv
+
+  inv-nginx:
+    container_name: inv-nginx
+    image: nginx:1.27.0
+    restart: unless-stopped
+    ports:
+      - 80:80
+    depends_on:
+      - inv-ui
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - inv-ui-build:/usr/share/nginx/html
+    networks:
+      - inv
+    
+
+volumes:
+  inv-db-data:
+  inv-ui-build:
+
+networks:
+  inv:
+    driver: bridge

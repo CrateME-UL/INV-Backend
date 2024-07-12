@@ -3,12 +3,12 @@ name: compile_format_test_scripts
 on:
   push:
     branches:
-      - 'main'
+      - "main"
     tags:
-      - '*'
+      - "*"
   pull_request:
     branches:
-      - '*'
+      - "*"
   workflow_dispatch:
 
 env:
@@ -17,7 +17,6 @@ env:
 
 jobs:
   compile_format_test:
-
     runs-on: ubuntu-latest
 
     services:
@@ -36,31 +35,31 @@ jobs:
           --health-retries 5
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Cache Rust
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cargo
-          target
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cargo-
-    - name: Wait for PostgreSQL
-      run: |
-        until pg_isready -h localhost -p 5432; do
-          echo "Waiting for PostgreSQL to be ready..."
-          sleep 1
-        done
-    - name: Set up database schema
-      run: |
-        psql -h localhost -U postgres -d test_db -f scripts/DbScripts.sql
-      env:
-        PGPASSWORD: password
-    - name: Build and run scripts
-      run: | 
-        cd scripts/excel_to_sql
-        cargo clippy --all-targets --all-features
-        cargo test
-      env:
-        DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
+      - uses: actions/checkout@v4
+      - name: Cache Rust
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 1
+          done
+      - name: Set up database schema
+        run: |
+          psql -h localhost -U postgres -d test_db -f scripts/db_script.sql
+        env:
+          PGPASSWORD: password
+      - name: Build and run scripts
+        run: |
+          cd scripts/excel_to_sql
+          cargo clippy --all-targets --all-features
+          cargo test
+        env:
+          DATABASE_URL: postgres://postgres:password@localhost:5432/test_db

@@ -1,12 +1,6 @@
 # Docker
 
-## 1. create Docker image for Rust server (you will need to run this to apply changes in the server folder to test it locally if you change the image)
-
-```bash
-docker build -t inv-server .
-```
-
-## 2. Postgres and SQLx
+## 1. Postgres and SQLx
 
 ### if you only want the db -> in the .env file dir -> make sure to change `inv-db` to `localhost` in the .env file
 
@@ -23,7 +17,6 @@ docker start inv-db-standalone
 ### general setup (for compose)
 
 - setup the database connection with the environment variable for example in a .env file in the src directory (replace the values of [...] corresponding in DBeaver connection form into your connection string) to launch backend with Rust and access the DB via the backend API
-- **Make Sure to NOT track the .env file on Github!!**
 
 ```bash
 # database
@@ -36,19 +29,20 @@ DATABASE_URL=postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@inv-db:5432/$POSTGRES_
 
 # log
 RUST_LOG=debug
+
+# ui -> change localhost to DNS name
+VITE_API_ENDPOINT=http://localhost/api/v0
 ```
 
-## 3. run docker-compose (for all services in a network) N.B: make sure to build inv-ui before! Make sure to create a token on github. make sure to pull the last versions
+## 2. run docker-compose (for all services in a network) Make sure to create a token on github. Make sure to pull the good versions -> change the docker-compose if needed ex: `docker pull ghcr.io/crateme-ul/inv-<repository>:<tag>`. check this link to connect with the github container registery
 
 https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-with-a-personal-access-token-classic
 
 ```bash
-docker pull ghcr.io/crateme-ul/inv-frontend:main
-docker pull ghcr.io/crateme-ul/inv-backend:main
-docker compose up --build  -d
+docker compose up --build -d
 ```
 
-## 4. access the database in the docker compose with the .env variables
+## 3. access the database in the docker compose with the .env variables
 
 ```bash
 docker-compose exec inv-db sh -c 'psql -U $POSTGRES_USER $POSTGRES_DB'

@@ -39,13 +39,8 @@
 
 ```bash
 sudo apt-get update
-sudo apt-get install libssl-dev pkg-config clang libclang-dev
+sudo apt-get install libssl-dev pkg-config clang libclang-dev postgresql-client
 ```
-
-### run without cargo package:
-
-To compile: rustc main.rs
-To execute:.\main.exe
 
 ### run with cargo package (preferred)
 
@@ -55,7 +50,7 @@ To execute:.\main.exe
 
 ## Docker setup
 
-follow the [docker-compose setup](./container/README.Docker.md) to launch containers locally or run only the database container
+follow the [docker-compose setup](./README.Docker.md) to launch containers locally or run only the database container
 
 ## Rust lint code
 
