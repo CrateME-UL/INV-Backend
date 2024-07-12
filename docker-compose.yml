@@ -2,6 +2,7 @@ services:
   inv-db:
     container_name: inv-db
     image: postgres:16.3
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
@@ -15,7 +16,7 @@ services:
     container_name: inv-server
     image: ghcr.io/crateme-ul/inv-backend:main
     # build: .
-    pull_policy: always
+    restart: unless-stopped
     depends_on:
       - inv-db
     environment:
@@ -27,7 +28,6 @@ services:
     container_name: inv-ui
     image: ghcr.io/crateme-ul/inv-frontend:main
     # image: inv-ui
-    pull_policy: always
     depends_on:
       - inv-server
     environment:
@@ -40,6 +40,7 @@ services:
   inv-nginx:
     container_name: inv-nginx
     image: nginx:1.27.0
+    restart: unless-stopped
     ports:
       - 80:80
     depends_on:
