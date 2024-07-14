@@ -1545,6 +1545,14 @@ dependencies = [
 [[package]]
 name = "resource"
 version = "0.1.0"
+dependencies = [
+ "axum",
+ "repository",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "tokio",
+]
 
 [[package]]
 name = "rsa"
