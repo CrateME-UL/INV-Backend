@@ -46,7 +46,8 @@ sudo apt-get install libssl-dev pkg-config clang libclang-dev postgresql-client
 
 - check cargo version: cargo --version
 - to build: cargo build
-- to execute: cargo run
+- to execute in dev: cargo run
+- to use release profile (in prod): cargo run --release
 
 ## Docker setup
 
