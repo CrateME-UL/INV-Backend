@@ -37,6 +37,17 @@ pub async fn get_inventory_items_db(
     let default = "";
     let is_query_empty = query.place_name.as_deref().unwrap_or(default) == default
         && query.place_type.as_deref().unwrap_or(default) == default;
+    println!("place_type: {:?}", query);
+    println!(
+        "place_type1: {:?}",
+        &query
+            .place_type
+            .as_deref()
+            .unwrap_or(default)
+            .split(',')
+            .map(|s| s.to_string())
+            .collect::<Vec<String>>()
+    );
     let items = match is_query_empty {
         true => sqlx::query!(
             "SELECT Items.item_id, Items.item_name, SUM (Inventory.nb_of_items) AS nb_of_items
@@ -61,10 +72,16 @@ pub async fn get_inventory_items_db(
                     JOIN Places ON Inventory.place_id = Places.place_id
                     JOIN Items ON Inventory.item_id = Items.item_id
                     WHERE (place_name =  $1 OR $1 = '') 
-                        AND (place_type = $2 OR $2 = '')
+                        AND (place_type = ANY($2::text[]) or $2 = '{}')
                     ORDER BY Inventory.nb_of_items DESC;",
             query.place_name.as_deref().unwrap_or(default),
-            query.place_type.as_deref().unwrap_or(default),
+            &query
+                .place_type
+                .as_deref()
+                .unwrap_or(default)
+                .split(',')
+                .map(|s| s.to_string())
+                .collect::<Vec<String>>()
         )
         .fetch_all(get_db_pool())
         .await?
@@ -85,6 +102,7 @@ pub async fn get_inventory_places_db(
 ) -> Result<Vec<InventoryPlace>, Box<dyn std::error::Error>> {
     let default = "";
     let is_query_empty = query.item_name.as_deref().unwrap_or(default) == default;
+    println!("place_type: {:?}", query);
     let places = match is_query_empty {
         true => {
             sqlx::query!(
