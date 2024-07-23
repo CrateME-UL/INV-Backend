@@ -82,7 +82,6 @@ pub async fn get_inventory_places_db(
 ) -> Result<Vec<InventoryPlace>, Box<dyn std::error::Error>> {
     let default = "";
     let is_query_empty = query.item_name.as_deref().unwrap_or(default) == default;
-    println!("place_type: {:?}", query);
     let places = match is_query_empty {
         true => {
             sqlx::query!(
