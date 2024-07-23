@@ -31,9 +31,9 @@ pub struct InventoryPlace {
 #[derive(Deserialize, Debug)]
 pub struct InventoryPlaceQuery {
     pub item_name: Option<String>,
+    pub place_type: Option<String>,
 }
 #[derive(Deserialize, Debug)]
 pub struct InventoryItemQuery {
     pub place_name: Option<String>,
-    pub place_type: Option<String>,
 }
