@@ -1,19 +1,19 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct Item {
     pub item_id: i32,
     pub item_name: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct Place {
     pub place_id: i32,
     pub place_name: String,
     pub place_type: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
 pub struct InventoryItem {
     pub item_id: i32,
     pub item_name: String,
