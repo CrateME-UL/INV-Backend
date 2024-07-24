@@ -1,14 +1,6 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+mod data_handling;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub use crate::data_handling::pool_handler::get_db_pool;
+pub use crate::data_handling::sql_handler::{
+    get_inventory_items_db, get_inventory_places_db, get_items_db, get_places_db,
+};

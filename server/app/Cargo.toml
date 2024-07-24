@@ -6,28 +6,14 @@ edition = "2021"
 [dependencies]
 resource = { path = "../resource" }
 repository = { path = "../repository" }
-service = { path = "../service" }
 
-anyhow = "1.0"
-axum = { version = "0.7", features = ["tracing"] }
-clap = { version = "4.5", features = ["derive"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = { version = "1.0" }
-tower-http = { version = "0.5", features = ["trace", "cors"] }
-tokio = { version = "1.29", features = ["full"] }
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-uuid = { version = "1.0", features = ["v4", "serde"] }
-sqlx = { version = "0.7", features = [
-    "runtime-tokio",
-    "runtime-tokio-native-tls",
-    "postgres",
-    "uuid",
-] }
-tokio-postgres = "0.7"
-dotenv = "0.15.0"
-tower = "0.4"
+axum = { version = "0.7.5", features = ["tracing"] }
+tokio = { version = "1.38.0", features = ["full"] }
+tracing = { version = "0.1.40" }
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+tower-http = { version = "0.5.2", features = ["cors"] }
+dotenv = { version = "0.15.0" }
 
 [dev-dependencies]
-axum-test = "15.0.1"
-hyper = { version = "1.3.1", features = ["full"] }
+axum-test = "15.3.0"
+hyper = { version = "1.4.1", features = ["full"] }
