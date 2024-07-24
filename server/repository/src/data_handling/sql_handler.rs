@@ -99,7 +99,6 @@ pub async fn get_inventory_places_db(
                 .split(',')
                 .map(|s| s.to_string())
                 .collect::<Vec<String>>()
-
             )
             .fetch_all(get_db_pool())
             .await?

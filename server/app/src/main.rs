@@ -10,6 +10,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
     tracing_subscriber::fmt::init();
 
+    //setup connection pool with static to avoid prop drilling and handle connection errors at start up
+    let _pool = get_db_pool();
+
     let app = Router::new()
         .route("/", get(health))
         .route("/items", get(get_items))
