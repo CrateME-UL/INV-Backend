@@ -59,7 +59,6 @@ dependencies = [
  "axum-test",
  "dotenv",
  "hyper",
- "repository",
  "resource",
  "tokio",
  "tower-http",

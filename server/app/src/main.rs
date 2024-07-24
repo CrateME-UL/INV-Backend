@@ -1,6 +1,5 @@
 use axum::{routing::get, Router};
 use dotenv::dotenv;
-use repository::get_db_pool;
 use resource::{get_inventory_items, get_inventory_places, get_items, get_places, health};
 use tower_http::cors::CorsLayer;
 use tracing::instrument;
@@ -10,9 +9,6 @@ use tracing::instrument;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
     tracing_subscriber::fmt::init();
-
-    //setup connection pool with static to avoid prop drilling and handle connection errors at start up
-    let _pool = get_db_pool();
 
     let app = Router::new()
         .route("/", get(health))

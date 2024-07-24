@@ -35,8 +35,7 @@ pub async fn get_inventory_items_db(
     query: &Query<InventoryItemQuery>,
 ) -> Result<Vec<InventoryItem>, Box<dyn std::error::Error>> {
     let default = "";
-    let is_query_empty = query.place_name.as_deref().unwrap_or(default) == default
-        && query.place_type.as_deref().unwrap_or(default) == default;
+    let is_query_empty = query.place_name.as_deref().unwrap_or(default) == default;
     let items = match is_query_empty {
         true => sqlx::query!(
             "SELECT Items.item_id, Items.item_name, SUM (Inventory.nb_of_items) AS nb_of_items
@@ -61,10 +60,8 @@ pub async fn get_inventory_items_db(
                     JOIN Places ON Inventory.place_id = Places.place_id
                     JOIN Items ON Inventory.item_id = Items.item_id
                     WHERE (place_name =  $1 OR $1 = '') 
-                        AND (place_type = $2 OR $2 = '')
                     ORDER BY Inventory.nb_of_items DESC;",
             query.place_name.as_deref().unwrap_or(default),
-            query.place_type.as_deref().unwrap_or(default),
         )
         .fetch_all(get_db_pool())
         .await?
@@ -92,8 +89,16 @@ pub async fn get_inventory_places_db(
                     FROM Inventory
                     JOIN Places ON Inventory.place_id = Places.place_id
                     JOIN Items ON Inventory.item_id = Items.item_id
+                    WHERE (place_type = ANY($1::text[]) OR $1 = '{}')
                 GROUP BY Places.place_id, Places.place_name, Places.place_type
-                ORDER BY nb_of_items DESC, Places.place_name;"
+                ORDER BY nb_of_items DESC, Places.place_name;",
+                &query
+                .place_type
+                .as_deref()
+                .unwrap_or(default)
+                .split(',')
+                .map(|s| s.to_string())
+                .collect::<Vec<String>>()
             )
             .fetch_all(get_db_pool())
             .await?
@@ -113,8 +118,16 @@ pub async fn get_inventory_places_db(
                     JOIN Places ON Inventory.place_id = Places.place_id
                     JOIN Items ON Inventory.item_id = Items.item_id
                     WHERE (item_name =  $1 OR $1 = '') 
+                        AND (place_type = ANY($2::text[]) OR $2 = '{}')
                     ORDER BY Inventory.nb_of_items DESC;",
                 query.item_name.as_deref().unwrap_or(default),
+                &query
+                .place_type
+                .as_deref()
+                .unwrap_or(default)
+                .split(',')
+                .map(|s| s.to_string())
+                .collect::<Vec<String>>()
             )
             .fetch_all(get_db_pool())
             .await?
