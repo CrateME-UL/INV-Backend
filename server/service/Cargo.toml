@@ -10,3 +10,11 @@ domain = { path = "../domain" }
 serde = { version = "1.0.204", features = ["derive"] }
 serde_json = "1.0.120"
 axum = "0.7.5"
+
+jsonwebtoken = "7.2.0"
+warp = "0.3"
+chrono = "0.4"
+bcrypt = "0.10"
+thiserror = "1.0"
+
+sqlx = { version = "0.7.4", features = ["runtime-tokio", "postgres"] }

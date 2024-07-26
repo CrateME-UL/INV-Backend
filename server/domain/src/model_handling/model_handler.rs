@@ -38,3 +38,35 @@ pub struct InventoryItemQuery {
     pub place_name: Option<String>,
     pub place_type: Option<String>,
 }
+
+#[derive(Serialize, Debug)]
+pub struct User {
+    pub user_id: i32,
+    pub user_firstname: Option<String>,
+    pub user_lastname: Option<String>,
+    pub user_email: Option<String>,
+    pub user_password: Option<String>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Claims {
+    pub sub: i32,
+    pub exp: usize,
+}
+
+#[derive(Serialize, Debug)]
+pub struct ErrorResponse {
+    pub message: String,
+    pub status: String,
+}
+
+#[derive(Deserialize)]
+pub struct LoginRequest {
+    pub user_email: Option<String>,
+    pub user_password: Option<String>,
+}
+
+#[derive(Serialize, Debug)]
+pub struct LoginResponse {
+    pub token: String,
+}
