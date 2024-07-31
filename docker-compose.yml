@@ -15,7 +15,6 @@ services:
   inv-server:
     container_name: inv-server
     image: ghcr.io/crateme-ul/inv-backend:main
-    # build: .
     restart: unless-stopped
     depends_on:
       - inv-db
@@ -27,7 +26,6 @@ services:
   inv-ui:
     container_name: inv-ui
     image: ghcr.io/crateme-ul/inv-frontend:main
-    # image: inv-ui
     depends_on:
       - inv-server
     environment:
@@ -50,7 +48,6 @@ services:
       - inv-ui-build:/usr/share/nginx/html
     networks:
       - inv
-    
 
 volumes:
   inv-db-data:
