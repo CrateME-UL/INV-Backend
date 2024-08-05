@@ -3,6 +3,8 @@
 !.github/**
 !documentation/
 !documentation/**
+!INV-Frontend/
+!INV-Frontend/**
 !.vscode
 !.vscode/**
 !k8s/
