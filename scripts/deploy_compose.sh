@@ -21,8 +21,7 @@ docker rm $(docker ps -a -q)
 docker rmi $(docker images -q)
 docker volume rm $(docker volume ls -q)
 
-docker pull ghcr.io/crateme-ul/inv-frontend:main
-docker pull ghcr.io/crateme-ul/inv-backend:main
+# docker pull ghcr.io/crateme-ul/inv-backend:main
 docker-compose up --build -d
 
 docker-compose exec inv-db sh -c 'psql -U $POSTGRES_USER $POSTGRES_DB'

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deploy
+  labels:
+    app: inv
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inv
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: inv
+        tier: backend
+    spec:
+      containers:
+        - name: inv-backend
+          image: ghcr.io/crateme-ul/inv-backend:main
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1"
