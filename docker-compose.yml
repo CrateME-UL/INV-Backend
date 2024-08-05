@@ -14,7 +14,10 @@ services:
 
   inv-server:
     container_name: inv-server
-    image: ghcr.io/crateme-ul/inv-backend:main
+    # image: ghcr.io/crateme-ul/inv-backend:main
+    build:
+      context: .
+      dockerfile: ./dockerfile.backend
     restart: unless-stopped
     depends_on:
       - inv-db
@@ -23,35 +26,21 @@ services:
     networks:
       - inv
 
-  inv-ui:
-    container_name: inv-ui
-    image: ghcr.io/crateme-ul/inv-frontend:main
-    depends_on:
-      - inv-server
-    environment:
-      VITE_API_ENDPOINT: ${VITE_API_ENDPOINT}
-    volumes:
-      - inv-ui-build:/app/dist
-    networks:
-      - inv
-
   inv-nginx:
     container_name: inv-nginx
-    image: nginx:1.27.0
+    # image: nginx:1.27.0
+    build:
+      context: .
+      dockerfile: ./dockerfile.nginx
+
     restart: unless-stopped
     ports:
       - 80:80
-    depends_on:
-      - inv-ui
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - inv-ui-build:/usr/share/nginx/html
     networks:
       - inv
 
 volumes:
   inv-db-data:
-  inv-ui-build:
 
 networks:
   inv:
