@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+  labels:
+    tier: db
+    app: inv
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      tier: db
+      app: inv
+  template:
+    metadata:
+      name: inv-db
+      labels:
+        app: inv
+        tier: db
+    spec:
+      containers:
+        - name: inv-db
+          image: postgres
+          env:
+            - name: POSTGRES_USER
+              value: "some-postgres"
+            - name: POSTGRES_PASSWORD
+              value: "mysecretpassword"
+            - name: POSTGRES_DB
+              value: "some-postgres"
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db-storage
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1"
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: db-pvc

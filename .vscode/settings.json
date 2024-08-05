@@ -28,5 +28,8 @@
   "editor.formatOnSave": true,
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  "yaml.schemas": {
+    "kubernetes": "*/k8s/*.yml"
   }
 }

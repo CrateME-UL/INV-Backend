@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy-deploy
+  labels:
+    app: inv
+    tier: proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inv
+      tier: proxy
+  template:
+    metadata:
+      labels:
+        app: inv
+        tier: proxy
+    spec:
+      containers:
+        - name: inv-proxy
+          image: ghcr.io/crateme-ul/inv-backend/proxy:INV-114-pipeline-cd-ec2
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1"
