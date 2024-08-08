@@ -1,10 +1,22 @@
-use axum::{routing::get, Router};
+use axum::{
+    http::StatusCode,
+    routing::{get, post},
+    Json, Router,
+};
 use dotenv::dotenv;
-use resource::{get_inventory_items, get_inventory_places, get_items, get_places, health};
+use resource::{
+    //create_user
+    get_inventory_items,
+    get_inventory_places,
+    get_items,
+    get_places,
+    health,
+    login_request,
+};
+use serde::{Deserialize, Serialize};
 use tower_http::cors::CorsLayer;
 use tracing::instrument;
-
-#[tokio::main(flavor = "current_thread")]
+#[tokio::main]
 #[instrument]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
@@ -16,6 +28,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/places", get(get_places))
         .route("/inventory/items", get(get_inventory_items))
         .route("/inventory/places", get(get_inventory_places))
+        .route("/login", post(login_request))
+        //.route("/users", post(create_user))
         .layer(CorsLayer::permissive());
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
