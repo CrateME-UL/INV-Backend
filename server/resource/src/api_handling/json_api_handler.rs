@@ -77,7 +77,9 @@ pub async fn get_inventory_places(query: Query<InventoryPlaceQuery>) -> impl Int
 }
 
 pub async fn login_request(payload: Json<LoginRequest>) -> impl IntoResponse {
-    handle_service_result_login(login_service(payload).await);
+    let result = login_service(payload).await;
+    print!("{:?}", result);
+    handle_service_result_login(result)
 }
 
 // pub async fn create_user(payload: Json<CreateUser>) -> impl IntoResponse {

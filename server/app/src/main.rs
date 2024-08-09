@@ -3,6 +3,7 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
+use bcrypt::{hash, DEFAULT_COST};
 use dotenv::dotenv;
 use resource::{
     //create_user
@@ -14,6 +15,7 @@ use resource::{
     login_request,
 };
 use serde::{Deserialize, Serialize};
+
 use tower_http::cors::CorsLayer;
 use tracing::instrument;
 #[tokio::main]
@@ -21,6 +23,13 @@ use tracing::instrument;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
     tracing_subscriber::fmt::init();
+
+    pub fn hash_pass(user_password: &str) -> String {
+        hash(user_password, DEFAULT_COST).unwrap()
+    }
+    let test = "123";
+    let hash_test = hash_pass(test);
+    println!("{:?}", hash_test);
 
     let app = Router::new()
         .route("/", get(health))
