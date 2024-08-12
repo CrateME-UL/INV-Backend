@@ -1,13 +1,7 @@
 use axum::extract::Query;
-use axum::Json;
-use domain::{CreateUser, InventoryItemQuery, InventoryPlaceQuery, LoginRequest, User};
-use repository::{
-    get_inventory_items_db,
-    get_inventory_places_db,
-    get_items_db,
-    get_places_db,
-    //post_user_db, //get_user_db,
-};
+
+use domain::{InventoryItemQuery, InventoryPlaceQuery};
+use repository::{get_inventory_items_db, get_inventory_places_db, get_items_db, get_places_db};
 use serde::Serialize;
 use serde_json::Value;
 
@@ -53,19 +47,3 @@ pub async fn get_inventory_places_service(
 ) -> Result<Value, Box<dyn Error>> {
     handle_db_result(get_inventory_places_db(&query)).await
 }
-
-// pub async fn get_users_service(query: Query<LoginRequest>) -> Result<Value, Box<dyn Error>> {
-//     handle_db_result(get_user_db(&query)).await
-// }
-// pub async fn post_users_service(payload: Json<CreateUser>) -> Result<Value, Box<dyn Error>> {
-//     handle_db_result(post_user_db(payload)).await
-// }
-
-// pub async fn get_users_service(payload: Json<CreateUser>) -> Result<Value, Box<dyn Error>> {
-
-//     let user = User {
-//         id: 1337,
-//         username: payload.username.clone(),
-//     };
-//     handle_db_result(User)
-// }

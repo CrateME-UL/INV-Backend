@@ -1,20 +1,12 @@
 use axum::{
-    http::StatusCode,
     routing::{get, post},
-    Json, Router,
+    Router,
 };
-use bcrypt::{hash, DEFAULT_COST};
+//use bcrypt::{hash, DEFAULT_COST};
 use dotenv::dotenv;
 use resource::{
-    //create_user
-    get_inventory_items,
-    get_inventory_places,
-    get_items,
-    get_places,
-    health,
-    login_request,
+    get_inventory_items, get_inventory_places, get_items, get_places, health, login_request,
 };
-use serde::{Deserialize, Serialize};
 
 use tower_http::cors::CorsLayer;
 use tracing::instrument;
@@ -24,12 +16,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
     tracing_subscriber::fmt::init();
 
-    pub fn hash_pass(user_password: &str) -> String {
-        hash(user_password, DEFAULT_COST).unwrap()
-    }
-    let test = "123";
-    let hash_test = hash_pass(test);
-    println!("{:?}", hash_test);
+    // just to generate hashed pass for test purposes
+    // pub fn hash_pass(user_password: &str) -> String {
+    //     hash(user_password, DEFAULT_COST).unwrap()
+    // }
+    // let test = "123";
+    // let hash_test = hash_pass(test);
+    // println!("{:?}", hash_test);
 
     let app = Router::new()
         .route("/", get(health))
@@ -38,7 +31,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/inventory/items", get(get_inventory_items))
         .route("/inventory/places", get(get_inventory_places))
         .route("/login", post(login_request))
-        //.route("/users", post(create_user))
         .layer(CorsLayer::permissive());
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();

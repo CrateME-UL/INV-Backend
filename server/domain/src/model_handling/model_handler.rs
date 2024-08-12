@@ -70,17 +70,3 @@ pub struct LoginRequest {
 pub struct LoginResponse {
     pub token: String,
 }
-
-// the input to our `create_user` handler
-#[derive(Deserialize, Debug)]
-pub struct CreateUser {
-    pub username: Option<String>,
-    pub email: Option<String>,
-}
-
-// the output to our `create_user` handler
-// #[derive(Serialize, Debug)]
-// pub struct User {
-//     pub id: u64,
-//     pub username: String,
-// }
