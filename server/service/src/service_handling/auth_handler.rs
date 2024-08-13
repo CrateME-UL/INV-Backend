@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use crate::{create_jwt, error::Error::WrongCredentialsError, verify_hash};
+use crate::{create_jwt, error::AuthError::WrongCredentials, verify_hash};
 use axum::Json;
 use domain::{LoginRequest, LoginResponse};
 use repository::get_user_db;
@@ -33,20 +33,20 @@ pub async fn login_service(
 ) -> Result<Value, Box<dyn std::error::Error>> {
     let user = get_user_db(&payload)
         .await
-        .map_err(|_| Box::new(WrongCredentialsError) as Box<dyn Error>)?;
+        .map_err(|_| Box::new(WrongCredentials) as Box<dyn Error>)?;
 
     let is_password_valid = verify_hash(
-        &payload.user_password.as_deref().unwrap_or_default(),
-        &user.user_password.as_deref().unwrap_or_default(),
+        payload.user_password.as_deref().unwrap_or_default(),
+        user.user_password.as_deref().unwrap_or_default(),
     );
 
     let response_user_db = async {
         if user.user_email == payload.user_email && is_password_valid {
             create_jwt(&user.user_id)
                 .map(|token| LoginResponse { token })
-                .map_err(|_| Box::new(WrongCredentialsError) as Box<dyn Error>)
+                .map_err(|_| Box::new(WrongCredentials) as Box<dyn Error>)
         } else {
-            Err(Box::new(WrongCredentialsError) as Box<dyn Error>)
+            Err(Box::new(WrongCredentials) as Box<dyn Error>)
         }
     };
 

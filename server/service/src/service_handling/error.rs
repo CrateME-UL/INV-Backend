@@ -4,34 +4,34 @@ use thiserror::Error;
 use warp::{http::StatusCode, Rejection, Reply};
 
 #[derive(Error, Debug)]
-pub enum Error {
+pub enum AuthError {
     #[error("wrong credentials")]
-    WrongCredentialsError,
+    WrongCredentials,
     #[error("jwt token not valid")]
-    JWTTokenError,
+    JWTToken,
     #[error("jwt token creation error")]
-    JWTTokenCreationError,
+    JWTTokenCreation,
     #[error("no auth header")]
-    NoAuthHeaderError,
+    NoAuthHeader,
     #[error("invalid auth header")]
-    InvalidAuthHeaderError,
+    InvalidAuthHeader,
     #[error("no permission")]
-    NoPermissionError,
+    NoPermission,
     #[error("user already exists")]
-    UserAlreadyExistsError,
+    UserAlreadyExists,
 }
 
-impl warp::reject::Reject for Error {}
+impl warp::reject::Reject for AuthError {}
 
 pub async fn handle_rejection(err: Rejection) -> std::result::Result<impl Reply, Infallible> {
     let (code, message) = if err.is_not_found() {
         (StatusCode::NOT_FOUND, "Not Found".to_string())
-    } else if let Some(e) = err.find::<Error>() {
+    } else if let Some(e) = err.find::<AuthError>() {
         match e {
-            Error::WrongCredentialsError => (StatusCode::FORBIDDEN, e.to_string()),
-            Error::NoPermissionError => (StatusCode::UNAUTHORIZED, e.to_string()),
-            Error::JWTTokenError => (StatusCode::UNAUTHORIZED, e.to_string()),
-            Error::JWTTokenCreationError => (
+            AuthError::WrongCredentials => (StatusCode::FORBIDDEN, e.to_string()),
+            AuthError::NoPermission => (StatusCode::UNAUTHORIZED, e.to_string()),
+            AuthError::JWTToken => (StatusCode::UNAUTHORIZED, e.to_string()),
+            AuthError::JWTTokenCreation => (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "Internal Server Error".to_string(),
             ),
@@ -43,7 +43,6 @@ pub async fn handle_rejection(err: Rejection) -> std::result::Result<impl Reply,
             "Method Not Allowed".to_string(),
         )
     } else {
-        eprintln!("unhandled error: {:?}", err);
         (
             StatusCode::INTERNAL_SERVER_ERROR,
             "Internal Server Error".to_string(),

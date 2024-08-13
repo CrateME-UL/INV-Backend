@@ -8,5 +8,5 @@ pub fn hash_pass(user_password: &str) -> String {
 }
 
 pub fn verify_hash(user_password: &str, hash: &str) -> bool {
-    verify(user_password, &hash).unwrap()
+    verify(user_password, hash).unwrap()
 }

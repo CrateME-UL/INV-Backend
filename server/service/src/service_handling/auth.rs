@@ -1,4 +1,4 @@
-use crate::{error::Error, Result, WebResult};
+use crate::{error::AuthError, Result, WebResult};
 use chrono::prelude::*;
 use domain::Claims;
 
@@ -25,12 +25,12 @@ pub fn create_jwt(uid: &i32) -> Result<String> {
         .timestamp();
 
     let claims = Claims {
-        sub: uid.clone(),
+        sub: *uid,
         exp: expiration as usize,
     };
     let header = Header::new(Algorithm::HS512);
     encode(&header, &claims, &EncodingKey::from_secret(JWT_SECRET))
-        .map_err(|_| Error::JWTTokenCreationError)
+        .map_err(|_| AuthError::JWTTokenCreation)
 }
 
 async fn authorize(headers: HeaderMap<HeaderValue>) -> WebResult<i32> {
@@ -41,23 +41,22 @@ async fn authorize(headers: HeaderMap<HeaderValue>) -> WebResult<i32> {
                 &DecodingKey::from_secret(JWT_SECRET),
                 &Validation::new(Algorithm::HS512),
             )
-            .map_err(|_| reject::custom(Error::JWTTokenError))?;
+            .map_err(|_| reject::custom(AuthError::JWTToken))?;
 
             Ok(decoded.claims.sub)
         }
-        Err(e) => return Err(reject::custom(e)),
+        Err(e) => Err(reject::custom(e)),
     }
 }
 
 fn jwt_from_header(headers: &HeaderMap<HeaderValue>) -> Result<String> {
-    println!("{:?}", headers);
     let header = match headers.get(AUTH_HEADER) {
         Some(v) => v,
-        None => return Err(Error::NoAuthHeaderError),
+        None => return Err(AuthError::NoAuthHeader),
     };
     let auth_header = match std::str::from_utf8(header.as_bytes()) {
         Ok(v) => v,
-        Err(_) => return Err(Error::NoAuthHeaderError),
+        Err(_) => return Err(AuthError::NoAuthHeader),
     };
 
     Ok(auth_header.to_owned())

@@ -13,7 +13,6 @@ pub async fn health() -> &'static str {
 fn handle_service_result(
     result: Result<serde_json::Value, Box<dyn std::error::Error>>,
 ) -> impl IntoResponse {
-    println!("{}:200", format!("{:?}:200", result));
     match result {
         Ok(data) => (StatusCode::OK, Json(data)),
         Err(err) => (
