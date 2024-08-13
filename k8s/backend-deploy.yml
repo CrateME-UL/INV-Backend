@@ -20,6 +20,11 @@ spec:
       containers:
         - name: inv-backend
           image: ghcr.io/crateme-ul/inv-backend:main
+          env:
+            - name: DATABASE_URL
+              value: postgres://some-postgres:mysecretpassword@inv-db:5432/some-postgres
+            - name: RUST_LOG
+              value: debug
           resources:
             requests:
               memory: "256Mi"
@@ -27,3 +32,5 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "1"
+      imagePullSecrets:
+        - name: ghcr-secret

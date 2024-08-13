@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-service
+  name: inv-db
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 5432
       targetPort: 5432

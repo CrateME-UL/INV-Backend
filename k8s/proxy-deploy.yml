@@ -19,11 +19,17 @@ spec:
     spec:
       containers:
         - name: inv-proxy
-          image: ghcr.io/crateme-ul/inv-backend/proxy:INV-114-pipeline-cd-ec2
+          # image: ghcr.io/crateme-ul/inv-backend/nginx:inv-114-pipeline-cd-ec2
+          image: inv-backend/nginx:local
+          env:
+            - name: VITE_API_ENDPOINT
+              value: http://localhost/api/v0
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "500m"
-            limits:
               memory: "512Mi"
               cpu: "1"
+            limits:
+              memory: "1024Mi"
+              cpu: "2"
+      imagePullSecrets:
+        - name: ghcr-secret

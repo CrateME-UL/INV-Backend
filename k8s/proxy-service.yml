@@ -3,11 +3,10 @@ kind: Service
 metadata:
   name: proxy-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30000
   selector:
     app: inv
     tier: db

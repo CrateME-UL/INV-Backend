@@ -9,3 +9,8 @@ ui-copy:
 	rm -rf .git .github .vscode
 	echo "plugin copied: run the command again and change if needed -> git checkout <branch-name> "
 	cd ../..
+
+config:
+	cd k8s && \
+	kubectl create secret generic ghcr-secret --from-file=.dockerconfigjson --type=kubernetes.io/dockerconfigjson && \
+	cd ..
