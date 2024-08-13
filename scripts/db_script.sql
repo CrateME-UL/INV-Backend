@@ -22,6 +22,19 @@ CREATE TABLE IF NOT EXISTS Inventory (
     FOREIGN KEY (item_id) REFERENCES Items(item_id)
 );
 
+CREATE TABLE IF NOT EXISTS Users (
+    user_id SERIAL PRIMARY KEY,
+    user_firstname VARCHAR(255),
+    user_lastname VARCHAR(255), 
+    user_email VARCHAR(255),
+    user_password VARCHAR(255)
+);
+
+-- INSERT INTO Users (user_firstname,user_lastname, user_email ,user_password)
+-- VALUES ('test','last','test@gmail.com', '$2b$12$RRqwMoswwKde2RIhGF7zHelWlqSXoPOGdTZq6qSpgnzC9XAysjkJi');
+
+-- select * from Users
+
 -- INSERT INTO Places (place_name, place_type) VALUES ('Dépôt', 'INV');
 -- INSERT INTO Places (place_name, place_type) VALUES ('Vachon', 'IN');
 -- INSERT INTO Places (place_name, place_type) VALUES ('Pouliot', 'OUT');
