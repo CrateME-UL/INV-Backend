@@ -2,7 +2,6 @@ services:
   inv-db:
     container_name: inv-db
     image: postgres:16.3
-    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
@@ -18,11 +17,17 @@ services:
     build:
       context: .
       dockerfile: ./dockerfile.backend
-    restart: unless-stopped
     depends_on:
       - inv-db
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      APP_DIR: ${APP_DIR}
+      RUST_LOG: ${RUST_LOG}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
     networks:
       - inv
 
@@ -32,8 +37,9 @@ services:
     build:
       context: .
       dockerfile: ./dockerfile.nginx
+    environment:
+      VITE_API_ENDPOINT: ${VITE_API_ENDPOINT}
 
-    restart: unless-stopped
     ports:
       - 80:80
     networks:

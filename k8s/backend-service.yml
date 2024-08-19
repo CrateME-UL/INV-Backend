@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: inv-server
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - port: 3000
       targetPort: 3000
   selector:
     app: inv
-    tier: db
+    tier: backend

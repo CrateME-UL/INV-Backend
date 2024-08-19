@@ -1,4 +1,3 @@
-use dotenv::dotenv;
 use excel_to_sql::{parse_records_from_excel, add_places_db, add_items_db, add_inventory_db};
 use sqlx::postgres::PgPoolOptions;
 use std::env;
@@ -6,8 +5,6 @@ use std::env;
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
-    dotenv().ok();
-
     // get the database URL from the environment variable
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     // Create a connection pool

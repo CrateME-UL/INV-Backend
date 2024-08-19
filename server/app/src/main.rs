@@ -1,5 +1,4 @@
 use axum::{routing::get, Router};
-use dotenv::dotenv;
 use resource::{get_inventory_items, get_inventory_places, get_items, get_places, health};
 use tower_http::cors::CorsLayer;
 use tracing::instrument;
@@ -7,7 +6,6 @@ use tracing::instrument;
 #[tokio::main(flavor = "current_thread")]
 #[instrument]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenv().ok();
     tracing_subscriber::fmt::init();
 
     let app = Router::new()

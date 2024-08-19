@@ -4,18 +4,18 @@ metadata:
   name: proxy-deploy
   labels:
     app: inv
-    tier: proxy
+    tier: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: inv
-      tier: proxy
+      tier: frontend
   template:
     metadata:
       labels:
         app: inv
-        tier: proxy
+        tier: frontend
     spec:
       containers:
         - name: inv-proxy
@@ -23,7 +23,7 @@ spec:
           image: inv-backend/nginx:local
           env:
             - name: VITE_API_ENDPOINT
-              value: http://localhost/api/v0
+              value: http://inv-server:3000/api/v0
           resources:
             requests:
               memory: "512Mi"
@@ -31,5 +31,5 @@ spec:
             limits:
               memory: "1024Mi"
               cpu: "2"
-      imagePullSecrets:
-        - name: ghcr-secret
+      # imagePullSecrets:
+      #   - name: ghcr-secret
