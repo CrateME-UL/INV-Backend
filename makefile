@@ -14,3 +14,10 @@ config:
 	cd k8s && \
 	kubectl create secret generic ghcr-secret --from-file=.dockerconfigjson --type=kubernetes.io/dockerconfigjson && \
 	cd ..
+
+build:
+	docker build -t inv-backend:local -f dockerfile.backend .
+
+dns:
+	kubectl run -i --tty dns-test --image=busybox --restart=Never -- sh
+	nslookup inv-server.default.svc.cluster.local

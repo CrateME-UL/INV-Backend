@@ -23,7 +23,10 @@ wait_for_db() {
 }
 
 DATABASE_TIMEOUT=30
-
+# echo $DATABASE_HOST
+# echo $DATABASE_URL
+# echo $DATABASE_PORT
+# echo $DATABASE_TIMEOUT
 wait_for_db "$DATABASE_HOST" "$DATABASE_PORT" "$DATABASE_TIMEOUT"
 
 sql_script=$(cat "$APP_DIR/scripts/db_script.sql")

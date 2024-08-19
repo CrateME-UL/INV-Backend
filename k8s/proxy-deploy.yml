@@ -21,9 +21,9 @@ spec:
         - name: inv-proxy
           # image: ghcr.io/crateme-ul/inv-backend/nginx:inv-114-pipeline-cd-ec2
           image: inv-backend/nginx:local
-          env:
-            - name: VITE_API_ENDPOINT
-              value: http://inv-server:3000/api/v0
+          # env:
+          #   - name: VITE_API_ENDPOINT
+          #     value: http://inv-server.default.svc.cluster.local
           resources:
             requests:
               memory: "512Mi"

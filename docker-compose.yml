@@ -33,10 +33,10 @@ services:
 
   inv-nginx:
     container_name: inv-nginx
-    # image: nginx:1.27.0
-    build:
-      context: .
-      dockerfile: ./dockerfile.nginx
+    image: inv-backend/nginx:local
+    # build:
+    #   context: .
+    #   dockerfile: ./dockerfile.nginx
     environment:
       VITE_API_ENDPOINT: ${VITE_API_ENDPOINT}
 
