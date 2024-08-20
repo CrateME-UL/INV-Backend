@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: proxy-deploy
+  name: frontend-deploy
   labels:
     app: inv
     tier: frontend
@@ -18,12 +18,14 @@ spec:
         tier: frontend
     spec:
       containers:
-        - name: inv-proxy
+        - name: inv-frontend
           # image: ghcr.io/crateme-ul/inv-backend/nginx:inv-114-pipeline-cd-ec2
-          image: inv-backend/nginx:local
+          image: inv-frontend:local
           # env:
           #   - name: VITE_API_ENDPOINT
           #     value: http://inv-server.default.svc.cluster.local
+          ports:
+            - containerPort: 80
           resources:
             requests:
               memory: "512Mi"

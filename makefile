@@ -16,8 +16,13 @@ config:
 	cd ..
 
 build:
-	docker build -t inv-backend:local -f dockerfile.backend .
+	minikube image rm inv-backend:local && \
+	minikube image build -t inv-backend:local -f dockerfile.backend .
 
 dns:
 	kubectl run -i --tty dns-test --image=busybox --restart=Never -- sh
-	nslookup inv-server.default.svc.cluster.local
+	nslookup inv-backend.default.svc.cluster.local
+
+ingress:
+	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	helm install my-ingress ingress-nginx/ingress-nginx

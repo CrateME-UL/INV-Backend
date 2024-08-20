@@ -1,12 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: inv-server
+  name: inv-backend
   labels:
     app: inv
     tier: backend
 spec:
-  type: ClusterIP
   ports:
     - port: 3000
       targetPort: 3000
