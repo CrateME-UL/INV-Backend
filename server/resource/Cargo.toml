@@ -9,3 +9,11 @@ domain = { path = "../domain" }
 
 serde_json = "1.0.120"
 axum = "0.7.5"
+
+sqlx = { version = "0.5", features = [
+    "runtime-tokio-rustls",
+    "postgres",
+    "json",
+] }
+
+warp = "0.3"

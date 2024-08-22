@@ -1,12 +1,27 @@
-use axum::{routing::get, Router};
-use resource::{get_inventory_items, get_inventory_places, get_items, get_places, health};
+use axum::{
+    routing::{get, post},
+    Router,
+};
+//use bcrypt::{hash, DEFAULT_COST};
+use dotenv::dotenv;
+use resource::{
+    get_inventory_items, get_inventory_places, get_items, get_places, health, login_request,
+};
+
 use tower_http::cors::CorsLayer;
 use tracing::instrument;
-
-#[tokio::main(flavor = "current_thread")]
+#[tokio::main]
 #[instrument]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
+
+    // just to generate hashed pass for test purposes
+    // pub fn hash_pass(user_password: &str) -> String {
+    //     hash(user_password, DEFAULT_COST).unwrap()
+    // }
+    // let test = "123";
+    // let hash_test = hash_pass(test);
+    // println!("{:?}", hash_test);
 
     let app = Router::new()
         .route("/", get(health))
@@ -14,6 +29,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/places", get(get_places))
         .route("/inventory/items", get(get_inventory_items))
         .route("/inventory/places", get(get_inventory_places))
+        .route("/login", post(login_request))
         .layer(CorsLayer::permissive());
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();

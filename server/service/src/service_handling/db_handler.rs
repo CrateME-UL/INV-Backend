@@ -1,8 +1,10 @@
 use axum::extract::Query;
+
 use domain::{InventoryItemQuery, InventoryPlaceQuery};
 use repository::{get_inventory_items_db, get_inventory_places_db, get_items_db, get_places_db};
 use serde::Serialize;
 use serde_json::Value;
+
 use std::error::Error;
 
 fn map_to_value<T>(items: T) -> Value
