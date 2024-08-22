@@ -19,19 +19,18 @@ spec:
     spec:
       containers:
         - name: inv-frontend
-          # image: ghcr.io/crateme-ul/inv-backend/nginx:inv-114-pipeline-cd-ec2
-          image: inv-frontend:local
-          # env:
-          #   - name: VITE_API_ENDPOINT
-          #     value: http://inv-server.default.svc.cluster.local
+          image: ghcr.io/crateme-ul/inv-frontend:inv-114-pipeline-cd-ec2
+          env:
+            - name: VITE_API_ENDPOINT
+              value: http://localhost/api/v1
           ports:
             - containerPort: 80
           resources:
             requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
               memory: "512Mi"
               cpu: "1"
-            limits:
-              memory: "1024Mi"
-              cpu: "2"
-      # imagePullSecrets:
-      #   - name: ghcr-secret
+      imagePullSecrets:
+        - name: ghcr-secret
