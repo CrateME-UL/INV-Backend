@@ -9,7 +9,6 @@
 !.vscode/**
 !k8s/
 !k8s/**!.dockerconfigjson**
-
 !scripts/
 !scripts/**
 !server/
