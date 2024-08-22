@@ -16,8 +16,7 @@
 !.env
 !.gitignore
 !docker-compose.yml
-!dockerfile.backend
-!dockerfile.nginx
+!dockerfile
 !LICENSE
 !makefile
 !nginx.conf

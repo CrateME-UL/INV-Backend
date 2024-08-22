@@ -24,7 +24,7 @@ env:
   VITE_API_ENDPOINT: http://localhost/api/v1
 
 jobs:
-  build-and-push-backend-image:
+  build-and-push-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -50,7 +50,6 @@ jobs:
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
-          dockerfile: ./dockerfile.backend
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

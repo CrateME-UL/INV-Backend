@@ -3,7 +3,6 @@ use axum::{
     Router,
 };
 //use bcrypt::{hash, DEFAULT_COST};
-use dotenv::dotenv;
 use resource::{
     get_inventory_items, get_inventory_places, get_items, get_places, health, login_request,
 };
