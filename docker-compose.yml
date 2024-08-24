@@ -13,9 +13,7 @@ services:
 
   inv-backend:
     container_name: inv-backend
-    # image: ghcr.io/crateme-ul/inv-backend:main
-    build:
-      context: .
+    image: ${BACKEND_IMAGE_NAME}
     depends_on:
       - inv-db
     environment:
@@ -32,11 +30,9 @@ services:
 
   inv-frontend:
     container_name: inv-frontend
-    image: inv-frontend:local
-    # image: ghcr.io/crateme-ul/inv-frontend:main
-    environment:
-      VITE_API_ENDPOINT: ${VITE_API_ENDPOINT}
-
+    image: ${FRONTEND_IMAGE_NAME}
+    depends_on:
+      - inv-backend
     ports:
       - 80:80
     networks:

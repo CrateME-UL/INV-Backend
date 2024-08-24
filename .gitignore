@@ -13,7 +13,7 @@
 !scripts/**
 !server/
 !server/**!target/**
-!.env
+!**.env
 !.gitignore
 !docker-compose.yml
 !dockerfile
