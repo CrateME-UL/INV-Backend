@@ -11,12 +11,11 @@ services:
     networks:
       - inv
 
-  inv-server:
-    container_name: inv-server
+  inv-backend:
+    container_name: inv-backend
     # image: ghcr.io/crateme-ul/inv-backend:main
     build:
       context: .
-      dockerfile: ./dockerfile.backend
     depends_on:
       - inv-db
     environment:
@@ -31,12 +30,10 @@ services:
     networks:
       - inv
 
-  inv-nginx:
-    container_name: inv-nginx
-    image: inv-backend/nginx:local
-    # build:
-    #   context: .
-    #   dockerfile: ./dockerfile.nginx
+  inv-frontend:
+    container_name: inv-frontend
+    image: inv-frontend:local
+    # image: ghcr.io/crateme-ul/inv-frontend:main
     environment:
       VITE_API_ENDPOINT: ${VITE_API_ENDPOINT}
 
