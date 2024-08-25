@@ -38,6 +38,20 @@ docker stop inv-db-standalone
 ### local compose setup or dev compose setup -> no need to build for dev setup -> but you need to login to the github container registry
 
 ```bash
+# use swarm (recommended)
+docker swarm init
+docker secret create regcred ~/.docker/config.json
+docker stack deploy -c docker-compose.yml inv --with-registry-auth -d --prune
+docker stack ps inv
+```
+
+```bash
+# to delete the node in swarm
+docker swarm leave --force
+```
+
+```bash
+# compose method (alternative)
 # clean up the images and volumes you don't need -> warning: this cleans ALL, clean what you need
 docker stop $(docker ps -a -q)
 docker system prune

@@ -8,8 +8,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - inv-db-data:/var/lib/postgresql/data
-    # networks:
-    #   - inv
+    secrets:
+      - regcred
 
   inv-backend:
     container_name: inv-backend
@@ -25,8 +25,8 @@ services:
       RUST_LOG: ${RUST_LOG}
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
-    # networks:
-    #   - inv
+    secrets:
+      - regcred
 
   inv-frontend:
     container_name: inv-frontend
@@ -35,11 +35,12 @@ services:
       - inv-backend
     ports:
       - 80:80
-    # networks:
-    #   - inv
+    secrets:
+      - regcred
 
 volumes:
   inv-db-data:
-# networks:
-#   inv:
-#     driver: overlay
+
+secrets:
+  regcred:
+    external: true
