@@ -6,11 +6,11 @@
 
 - for local development [local.standalone.env](./local.standalone.env)
 - for docker compose local development [local.compose.env](./local.compose.env)
-- for docker compose dev environment (cloud) [dev.compose.env](./dev.compose.env)
+- for docker compose dev environment (cloud) [dev.compose.env](./dev.compose.env) -> this version may not be used here, as it will be used by the pipeline for the docker swarm build
 
-### depending on the setup, run these commands
+## 2. depending on the setup, run these commands
 
-#### local development setup
+### local development setup
 
 ```bash
 # if first run
@@ -35,7 +35,7 @@ cargo run
 docker stop inv-db-standalone
 ```
 
-#### local compose setup or dev compose setup -> no need to build for dev setup
+### local compose setup or dev compose setup -> no need to build for dev setup -> but you need to login to the github container registry
 
 ```bash
 # clean up the images and volumes you don't need -> warning: this cleans ALL, clean what you need
@@ -67,13 +67,9 @@ docker compose start
 docker compose down
 ```
 
-## 2. run docker-compose (for all services in a network) Make sure to create a token on github. Make sure to pull the good versions -> change the docker-compose if needed ex: `docker pull ghcr.io/crateme-ul/inv-<repository>:<tag>`. check this link to connect with the github container registery
+#### check this link to connect with the github container registery
 
 https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry#authenticating-with-a-personal-access-token-classic
-
-```bash
-docker compose up --build -d
-```
 
 ## 3. access the database in the docker compose with the .env variables
 
@@ -87,7 +83,3 @@ docker-compose exec inv-db sh -c 'psql -U $POSTGRES_USER $POSTGRES_DB'
 \dt
 \q
 ```
-
-### to upload excel to sql, create a new database, create the tables, run the script, downlaod the script with sql commands, then use psql to insert the entries in the database. make sure that the database has empty tables before doing that. because the database is small, we can afford that
-
-## to deploy: use the commands one at a time for deploy_compose.sh in the cloud shell aws
