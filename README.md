@@ -42,6 +42,18 @@ sudo apt-get update
 sudo apt-get install libssl-dev pkg-config clang libclang-dev postgresql-client
 ```
 
+## to install sqlx-cli to get offline mode and run in the server dir and excel_to_sql
+
+```bash
+rustup update stable
+cargo install sqlx-cli
+export SQLX_OFFLINE=true
+export export DATABASE_URL=postgres://some-postgres:mysecretpassword@localhost:5432/some-postgres
+cargo sqlx prepare --workspace
+# or for non workspcace
+cargo sqlx prepare
+```
+
 ### run with cargo package (preferred)
 
 - check cargo version: cargo --version

@@ -19,8 +19,10 @@ docker run -d --name inv-db-standalone \
 -e POSTGRES_DB=some-postgres \
 -e POSTGRES_PASSWORD=mysecretpassword \
 -p 5432:5432 postgres:16.3
-sudo chmod +x ./entrypoint.sh
-./entrypoint.sh
+sudo chmod +x ./connect_db.sh
+./connect_db.sh
+sql_script=$(cat "$APP_DIR/scripts/db_script.sql")
+psql $DATABASE_URL -c "$sql_script"
 ```
 
 ```bash

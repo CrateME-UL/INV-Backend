@@ -7,13 +7,13 @@ edition = "2021"
 service = { path = "../service" }
 domain = { path = "../domain" }
 
-serde_json = "1.0.120"
+serde_json = "1.0.127"
 axum = "0.7.5"
 
-sqlx = { version = "0.5", features = [
+sqlx = { version = "0.8.1", features = [
     "runtime-tokio-rustls",
     "postgres",
     "json",
 ] }
 
-warp = "0.3"
+warp = "0.3.7"

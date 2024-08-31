@@ -7,6 +7,7 @@ use std::env;
 async fn main() {
     // get the database URL from the environment variable
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    let excel_path = env::var("EXCEL_PATH").expect("EXCEL_PATH must be set");
     // Create a connection pool
     let pool = PgPoolOptions::new()
         .max_connections(5)
@@ -14,7 +15,7 @@ async fn main() {
         .await
         .expect("Failed to create pool.");
 
-    let parsed_data = parse_records_from_excel("map_inventaire.xlsx");
+    let parsed_data = parse_records_from_excel(&excel_path);
     match parsed_data {
         Ok(data) => {
             if let Err(e) = add_places_db(&pool, data.clone()).await {
@@ -28,7 +29,7 @@ async fn main() {
             }
         }
         Err(e) => {
-            eprintln!("Error parsing data: {}", e);
+            eprintln!("Error parsing data: {} at: {}", e, &excel_path);
         }
     }
 }
