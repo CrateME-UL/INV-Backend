@@ -1,7 +1,7 @@
 use axum::extract::Query;
 
-use domain::{InventoryItemQuery, InventoryPlaceQuery};
-use repository::{get_inventory_items_db, get_inventory_places_db, get_items_db, get_places_db};
+use domain::{InventoryItemQuery, InventoryPlaceQuery, ItemListDb};
+use repository::{get_inventory_items_db, get_inventory_places_db, get_places_db, FetchItems};
 use serde::Serialize;
 use serde_json::Value;
 
@@ -29,7 +29,7 @@ where
 }
 
 pub async fn get_items_service() -> Result<Value, Box<dyn Error>> {
-    handle_db_result(get_items_db()).await
+    handle_db_result(ItemListDb::fetch_items()).await
 }
 
 pub async fn get_places_service() -> Result<Value, Box<dyn Error>> {

@@ -9,6 +9,7 @@ use warp::{
     reject, Filter, Rejection,
 };
 
+//FIXME: ?? add this to a secret never hardcoded
 const AUTH_HEADER: &str = "x-authentication-token";
 const JWT_SECRET: &[u8] = b"testsecret";
 

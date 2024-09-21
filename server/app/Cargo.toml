@@ -5,15 +5,3 @@ edition = "2021"
 
 [dependencies]
 resource = { path = "../resource" }
-
-axum = { version = "0.7.5", features = ["tracing"] }
-tokio = { version = "1.40.0", features = ["full"] }
-tracing = { version = "0.1.40" }
-tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
-tower-http = { version = "0.5.2", features = ["cors"] }
-serde = { version = "1.0.209", features = ["derive"] }
-bcrypt = "0.15.1"
-
-[dev-dependencies]
-axum-test = "15.6.0"
-hyper = { version = "1.4.1", features = ["full"] }
