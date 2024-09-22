@@ -28,9 +28,8 @@ impl AddInventoryItems for InventoryItem {
         inventory_item: InventoryItemRequest,
     ) -> Result<InventoryItem, Box<dyn std::error::Error>> {
         let absent = -1;
-        println!("{:?}", inventory_item);
         let place_id: Option<i32> = sqlx::query!(
-            "SELECT place_id FROM Places WHERE place_name = $1",
+            "SELECT place_id FROM places WHERE TRIM(place_name) = $1",
             inventory_item.place_name
         )
         .fetch_optional(get_db_pool())
@@ -38,7 +37,7 @@ impl AddInventoryItems for InventoryItem {
         .map(|record| record.place_id);
 
         let item_id: Option<i32> = sqlx::query!(
-            "SELECT item_id FROM Items WHERE item_name = $1",
+            "SELECT item_id FROM Items WHERE TRIM(item_name) = $1",
             inventory_item.item_name,
         )
         .fetch_optional(get_db_pool())

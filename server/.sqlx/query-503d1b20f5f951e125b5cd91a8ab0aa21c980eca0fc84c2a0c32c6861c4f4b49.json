@@ -1,11 +1,11 @@
 {
   "db_name": "PostgreSQL",
-  "query": "SELECT item_id FROM Items WHERE item_name = $1",
+  "query": "SELECT place_id FROM places WHERE TRIM(place_name) = $1",
   "describe": {
     "columns": [
       {
         "ordinal": 0,
-        "name": "item_id",
+        "name": "place_id",
         "type_info": "Int4"
       }
     ],
@@ -18,5 +18,5 @@
       false
     ]
   },
-  "hash": "125ed0f03ece4152f0e4b6239a3e33c39c4735ef54f07df093275cec91037ba9"
+  "hash": "503d1b20f5f951e125b5cd91a8ab0aa21c980eca0fc84c2a0c32c6861c4f4b49"
 }
