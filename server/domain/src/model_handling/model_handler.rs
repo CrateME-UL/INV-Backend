@@ -17,7 +17,7 @@ pub struct Place {
     pub place_type: String,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Deserialize)]
 pub struct InventoryItem {
     pub item_id: i32,
     pub item_name: String,
@@ -73,4 +73,11 @@ pub struct LoginRequest {
 #[derive(Serialize, Debug)]
 pub struct LoginResponse {
     pub token: String,
+}
+
+#[derive(Serialize, Debug, Deserialize)]
+pub struct InventoryItemRequest {
+    pub place_name: String,
+    pub item_name: String,
+    pub nb_of_items: i32,
 }

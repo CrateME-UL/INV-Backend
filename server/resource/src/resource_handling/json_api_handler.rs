@@ -1,9 +1,8 @@
 use axum::{extract::Query, http::StatusCode, response::IntoResponse, Json};
-use domain::{InventoryItemQuery, InventoryPlaceQuery, LoginRequest};
-use serde_json::Value;
+use domain::{InventoryItemQuery, InventoryItemRequest, InventoryPlaceQuery, LoginRequest};
 use service::{
-    get_inventory_items_service, get_inventory_places_service, get_items_service,
-    get_places_service, login_service,
+    add_items_service, get_inventory_items_service, get_inventory_places_service,
+    get_items_service, get_places_service, login_service,
 };
 
 pub async fn health() -> &'static str {
@@ -15,18 +14,6 @@ fn handle_service_result(
 ) -> impl IntoResponse {
     match result {
         Ok(data) => (StatusCode::OK, Json(data)),
-        Err(err) => (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(serde_json::json!({ "error": err.to_string() })),
-        ),
-    }
-}
-
-fn handle_service_result_login(
-    result: Result<Value, Box<dyn std::error::Error>>,
-) -> impl IntoResponse {
-    match result {
-        Ok(data) => (StatusCode::ACCEPTED, Json(data)),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(serde_json::json!({ "error": err.to_string() })),
@@ -51,5 +38,9 @@ pub async fn get_inventory_places(query: Query<InventoryPlaceQuery>) -> impl Int
 }
 
 pub async fn login_request(payload: Json<LoginRequest>) -> impl IntoResponse {
-    handle_service_result_login(login_service(payload).await)
+    handle_service_result(login_service(payload).await)
+}
+
+pub async fn add_items(payload: Json<InventoryItemRequest>) -> impl IntoResponse {
+    handle_service_result(add_items_service(payload).await)
 }

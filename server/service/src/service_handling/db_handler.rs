@@ -1,7 +1,10 @@
-use axum::extract::Query;
-
-use domain::{InventoryItemQuery, InventoryPlaceQuery, ItemListDb};
-use repository::{get_inventory_items_db, get_inventory_places_db, get_places_db, FetchItems};
+use axum::{extract::Query, Json};
+use domain::{
+    InventoryItem, InventoryItemQuery, InventoryItemRequest, InventoryPlaceQuery, ItemListDb,
+};
+use repository::{
+    get_inventory_items_db, get_inventory_places_db, get_places_db, AddInventoryItems, FetchItems,
+};
 use serde::Serialize;
 use serde_json::Value;
 
@@ -46,4 +49,26 @@ pub async fn get_inventory_places_service(
     query: Query<InventoryPlaceQuery>,
 ) -> Result<Value, Box<dyn Error>> {
     handle_db_result(get_inventory_places_db(&query)).await
+}
+
+pub async fn add_items_service(
+    payload: Json<InventoryItemRequest>,
+) -> Result<Value, Box<dyn Error>> {
+    let inventory_item = InventoryItemRequest {
+        place_name: payload.place_name.clone(),
+        item_name: payload.item_name.clone(),
+        nb_of_items: payload.nb_of_items,
+    };
+
+    // Call the function without an unnecessary async block
+    let db_call = <InventoryItem as AddInventoryItems>::add_inventory_items(inventory_item).await;
+
+    // Handle the result directly
+    match db_call {
+        Ok(result) => Ok(map_to_value(result)),
+        Err(err) => {
+            eprintln!("Error: {}", err);
+            Err(err)
+        }
+    }
 }

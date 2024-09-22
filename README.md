@@ -50,7 +50,7 @@ cargo install sqlx-cli
 export SQLX_OFFLINE=true
 export export DATABASE_URL=postgres://some-postgres:mysecretpassword@localhost:5432/some-postgres
 cargo sqlx prepare --workspace
-# or for non workspcace
+# or for non workspace
 cargo sqlx prepare
 ```
 

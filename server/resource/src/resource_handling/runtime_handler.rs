@@ -1,5 +1,6 @@
 use crate::{
     get_inventory_items, get_inventory_places, get_items, get_places, health, login_request,
+    resource_handling::json_api_handler::add_items,
 };
 use axum::{
     routing::{get, post},
@@ -31,6 +32,7 @@ pub async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
         .route("/items", get(get_items))
         .route("/places", get(get_places))
         .route("/inventory/items", get(get_inventory_items))
+        .route("/inventory/items", post(add_items))
         .route("/inventory/places", get(get_inventory_places))
         .route("/login", post(login_request))
         .layer(CorsLayer::permissive());

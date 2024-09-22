@@ -1,0 +1,16 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE Inventory SET nb_of_items = $3 WHERE place_id = $1 AND item_id = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int4",
+        "Int4",
+        "Int4"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "efc236f153042025b4cf9a8d3e48e52f50a7402a7e0e805ed758daf8f17ccc50"
+}

@@ -2,8 +2,11 @@ use crate::get_db_pool;
 use crate::FetchItems;
 use axum::extract::Query;
 use domain::{
-    InventoryItem, InventoryItemQuery, InventoryPlace, InventoryPlaceQuery, Item, ItemListDb, Place,
+    InventoryItem, InventoryItemQuery, InventoryItemRequest, InventoryPlace, InventoryPlaceQuery,
+    Item, ItemListDb, Place,
 };
+
+use super::storage_handler::AddInventoryItems;
 
 impl FetchItems for ItemListDb {
     async fn fetch_items() -> Result<Vec<Item>, Box<dyn std::error::Error>> {
@@ -17,6 +20,63 @@ impl FetchItems for ItemListDb {
             })
             .collect();
         Ok(items)
+    }
+}
+
+impl AddInventoryItems for InventoryItem {
+    async fn add_inventory_items(
+        inventory_item: InventoryItemRequest,
+    ) -> Result<InventoryItem, Box<dyn std::error::Error>> {
+        let absent = -1;
+        println!("{:?}", inventory_item);
+        let place_id: Option<i32> = sqlx::query!(
+            "SELECT place_id FROM Places WHERE place_name = $1",
+            inventory_item.place_name
+        )
+        .fetch_optional(get_db_pool())
+        .await?
+        .map(|record| record.place_id);
+
+        let item_id: Option<i32> = sqlx::query!(
+            "SELECT item_id FROM Items WHERE item_name = $1",
+            inventory_item.item_name,
+        )
+        .fetch_optional(get_db_pool())
+        .await?
+        .map(|record| record.item_id);
+
+        let inventory_item_exists: Option<bool> = sqlx::query_scalar!(
+            "SELECT EXISTS(SELECT 1 FROM Inventory WHERE item_id = $1 AND place_id = $2)",
+            item_id.unwrap_or(absent),
+            place_id.unwrap_or(absent)
+        )
+        .fetch_one(get_db_pool())
+        .await?;
+
+        if !inventory_item_exists.is_some() && place_id.is_some() && item_id.is_some() {
+            sqlx::query!(
+                "INSERT INTO Inventory (place_id, item_id, nb_of_items) VALUES ($1, $2, $3)",
+                place_id,
+                item_id,
+                inventory_item.nb_of_items,
+            )
+            .execute(get_db_pool())
+            .await?;
+        } else if place_id.is_some() && item_id.is_some() {
+            sqlx::query!(
+                "UPDATE Inventory SET nb_of_items = $3 WHERE place_id = $1 AND item_id = $2",
+                place_id,
+                item_id,
+                inventory_item.nb_of_items,
+            )
+            .execute(get_db_pool())
+            .await?;
+        }
+        Ok(InventoryItem {
+            item_id: item_id.unwrap(),
+            item_name: inventory_item.item_name,
+            nb_of_items: inventory_item.nb_of_items,
+        })
     }
 }
 
