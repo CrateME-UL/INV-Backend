@@ -1,0 +1,32 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT Items.item_id, Items.item_name, SUM (Inventory.nb_of_items) AS nb_of_items\n                    FROM Inventory\n                    JOIN Places ON Inventory.place_id = Places.place_id\n                    JOIN Items ON Inventory.item_id = Items.item_id\n                GROUP BY Items.item_id, Items.item_name \n                ORDER BY nb_of_items DESC, Items.item_name;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "item_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "item_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "nb_of_items",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": []
+    },
+    "nullable": [
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "5821a9503f80ddf25c0e4abc4796ac9272e0f27f08e8652a3504e2fc478d63e4"
+}

@@ -5,6 +5,10 @@ pub struct Item {
     pub item_id: i32,
     pub item_name: String,
 }
+#[derive(Serialize, Debug)]
+pub struct ItemListDb {
+    pub items: Vec<Item>,
+}
 
 #[derive(Serialize, Debug)]
 pub struct Place {

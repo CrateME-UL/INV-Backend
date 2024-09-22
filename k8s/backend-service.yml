@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inv-backend
+  labels:
+    app: inv
+    tier: backend
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+  selector:
+    app: inv
+    tier: backend

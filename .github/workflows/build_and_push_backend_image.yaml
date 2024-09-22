@@ -1,15 +1,29 @@
 name: build_and_push_image
 on:
   push:
+    # TODO: fix this for the correct branch
     branches:
-      - "main"
+      - "*"
     tags:
+      - "*"
+  pull_request:
+    branches:
       - "*"
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  # TODO: place this in the docker swarm pipeline
+  # POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+  # POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+  # POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  # DATABASE_PORT: ${{ env.DATABASE_PORT }}
+  # APP_DIR: ${{ env.APP_DIR }}
+  # DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  # DATABASE_HOST: ${{ env.DATABASE_HOST }}
+  # RUST_LOG: ${{ env.RUST_LOG }}
+  # VITE_API_ENDPOINT: ${{ env.VITE_API_ENDPOINT }}
 
 jobs:
   build-and-push-image:
@@ -22,6 +36,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Log in to the Container registry
+        # TODO: fix the action for a version, not a hash
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: ${{ env.REGISTRY }}
@@ -30,11 +45,13 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
+        # TODO: fix the action for a version, not a hash
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
+        # TODO: fix the action for a version, not a hash
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .

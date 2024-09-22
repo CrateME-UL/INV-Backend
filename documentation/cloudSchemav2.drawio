@@ -1,0 +1,414 @@
+<mxfile host="65bd71144e">
+    <diagram id="b72ZzESE90N9_cNAmUY-" name="Page-1">
+        <mxGraphModel dx="2323" dy="2060" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="76" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="1495" y="420" width="610" height="610" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="-590" width="700" height="1290" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="2" target="4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="108" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="2" target="105" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="110" y="260" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;" parent="1" source="3" target="2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="280" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="route 53" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="110" y="90" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="280" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="dev.myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="355" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="myapp.com?" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="180" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="&amp;lt;ip-adress&amp;gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="175" y="180" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="AWS Region" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="310" y="10" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="162" style="edgeStyle=none;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="31" target="161">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="210" y="380" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" value="kube-api.myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="245" y="310" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="ACM" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="-40" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="45" value="3 options:&lt;br&gt;- load balancer (ALB) -&amp;gt; scaling setup&lt;br&gt;- 2 elastic ipv4 -&amp;gt; basic setup&lt;br&gt;- manual mapping with scripts -&amp;gt; save money, but at what cost?" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="-20" y="545" width="280" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="900" width="610" height="460" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" style="edgeStyle=none;html=1;entryX=-0.006;entryY=0.4;entryDx=0;entryDy=0;startArrow=classic;startFill=1;entryPerimeter=0;" parent="1" source="51" target="65" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="51" target="54" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="51" target="75" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="930" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;" parent="1" source="53" target="51" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="940" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="route 53" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="750" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="460" y="935" width="500" height="395" as="geometry"/>
+                </mxCell>
+                <mxCell id="56" value="myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="940" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="57" value="dev.myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="250" y="1040" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="58" value="myapp.com?" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="850" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="59" value="&amp;lt;-elastic-ip-adress&amp;gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="850" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="60" value="k8s cluster" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="470" y="940" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="61" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="490" y="1140" width="440" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="62" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="63" target="61" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="63" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="490" y="1000" width="360" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="64" value="AWS AZ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="900" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="65" value="Master node: (elastic-ip-1)&lt;br&gt;ex: kube api-server -&amp;gt; github actions -&amp;gt; CD changes in cluster&lt;br&gt;-&amp;gt; schedule pods and many more" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="1000" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="66" value="Worker node:(elastic-ip-2)&lt;br&gt;ex: run the pods" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="1130" width="110" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="67" value="myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="260" y="1060" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="68" value="kube-api.myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="955" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="69" value="namespace: prod" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="680" y="1150" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="70" value="namespace: dev" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="680" y="1220" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="71" style="edgeStyle=none;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="72" target="65" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="72" value="certificates: cert-manager" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="690" y="750" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="73" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="75" target="69" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="74" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="75" target="70" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="75" value="ingres controller" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="1220" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="77" style="edgeStyle=none;html=1;entryX=-0.006;entryY=0.4;entryDx=0;entryDy=0;startArrow=classic;startFill=1;entryPerimeter=0;" parent="1" source="80" target="94" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="78" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="80" target="83" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="79" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="80" target="104" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="80" value="internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="300" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="81" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;" parent="1" source="82" target="80" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="82" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+                    <mxGeometry x="1100" y="310" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="150" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="83" target="148" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="83" value="route 53" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="120" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="84" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="1520" y="582.5" width="500" height="395" as="geometry"/>
+                </mxCell>
+                <mxCell id="85" value="myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1160" y="310" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="86" value="dev.myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1300" y="485" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="87" value="myapp.com?" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="220" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="88" value="&amp;lt;ip-adress&amp;gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1300" y="220" width="70" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" value="k8s cluster" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1530" y="587.5" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="1550" y="787.5" width="440" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="91" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="92" target="90" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="92" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="1550" y="647.5" width="360" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="93" value="AWS" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1510" y="420" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="94" value="Master node: (EC2 instance) -&amp;gt; with tag&lt;br&gt;ex: kube api-server -&amp;gt; github actions -&amp;gt; CD changes in cluster&lt;br&gt;-&amp;gt; schedule pods and many more" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1540" y="647.5" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="95" value="Worker node: (EC2 instance) -&amp;gt; with tag&lt;br&gt;ex: run the pods" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1540" y="777.5" width="210" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="96" value="myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1300" y="460" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="97" value="kube-api.myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1380" y="410" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="98" value="namespace: prod" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="1740" y="797.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="99" value="namespace: dev" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="1740" y="867.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="100" style="edgeStyle=none;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" target="94" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1810" y="180" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="102" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="104" target="98" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="103" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="104" target="99" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="104" value="ingres controller" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="1560" y="827.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="109" style="edgeStyle=none;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="105" target="31" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="110" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="105" target="40" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="143" style="edgeStyle=none;html=1;entryX=0.25;entryY=1;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="105" target="38" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="203" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="105" target="189">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="204" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="105" target="183">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="205" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="105" target="202">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="206" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="105" target="196">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="105" value="ALB" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="310" y="90" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="140" value="myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="285" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="141" value="dev.myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="300" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="142" value="kube-api.myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="190" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="146" value="certificates: cert-manager" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="1750" y="120" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="156" style="edgeStyle=none;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="1" source="148" target="155" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="148" value="lambda function:&lt;br&gt;script for mapping ip adresses&lt;br&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="1590" y="480" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="155" value="1. health check for ec2 instances (every minute on working hours)&lt;br&gt;2. verify ip of the instances&lt;br&gt;3. if ip change -&amp;gt; change route 53 mapping a-record (change them for both ec2 instances)&lt;br&gt;4. if health check fails after change 3 times -&amp;gt; call the police" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="1900" y="290" width="270" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="161" value="certificates: cert-manager" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="1080" y="-70" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="163" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="445" y="277.5" width="500" height="395" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="163" vertex="1">
+                    <mxGeometry width="500" height="395" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="AWS AZ-1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="163" vertex="1">
+                    <mxGeometry x="35" y="2.5" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="163" vertex="1">
+                    <mxGeometry x="35" y="202.5" width="440" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="163" source="27" target="26" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="163" vertex="1">
+                    <mxGeometry x="75" y="62.5" width="360" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="Master node:&lt;br&gt;ex: kube api-server -&amp;gt; github actions -&amp;gt; CD changes in cluster&lt;br&gt;-&amp;gt; schedule pods and many more" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="163" vertex="1">
+                    <mxGeometry x="70" y="72.5" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="Worker node:&lt;br&gt;ex: run the pods" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="163" vertex="1">
+                    <mxGeometry x="25" y="192.5" width="110" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="36" value="namespace: prod" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="163" vertex="1">
+                    <mxGeometry x="225" y="212.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="namespace: dev" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="163" vertex="1">
+                    <mxGeometry x="225" y="282.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="163" source="40" target="36" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" parent="163" source="40" target="37" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="ingres controller" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" parent="163" vertex="1">
+                    <mxGeometry x="45" y="242.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="207" value="dev.myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="163">
+                    <mxGeometry x="165" y="312.5" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="208" value="myapp.com" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="163">
+                    <mxGeometry x="155" y="212.5" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="177" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="450" y="-160" width="500" height="395" as="geometry"/>
+                </mxCell>
+                <mxCell id="178" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="177">
+                    <mxGeometry width="500" height="395" as="geometry"/>
+                </mxCell>
+                <mxCell id="179" value="AWS AZ-2" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="177">
+                    <mxGeometry x="35" y="2.5" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="180" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="177">
+                    <mxGeometry x="35" y="202.5" width="440" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="181" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" edge="1" parent="177" source="182" target="180">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="182" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="177">
+                    <mxGeometry x="75" y="62.5" width="360" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="183" value="Master node:&lt;br&gt;ex: kube api-server -&amp;gt; github actions -&amp;gt; CD changes in cluster&lt;br&gt;-&amp;gt; schedule pods and many more" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="177">
+                    <mxGeometry x="70" y="72.5" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="184" value="Worker node:&lt;br&gt;ex: run the pods" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="177">
+                    <mxGeometry x="25" y="192.5" width="110" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="185" value="namespace: prod" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="177">
+                    <mxGeometry x="225" y="212.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="186" value="namespace: dev" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="177">
+                    <mxGeometry x="225" y="282.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="187" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" edge="1" parent="177" source="189" target="185">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="188" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" edge="1" parent="177" source="189" target="186">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="189" value="ingres controller" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="177">
+                    <mxGeometry x="45" y="242.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="190" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="450" y="-580" width="500" height="395" as="geometry"/>
+                </mxCell>
+                <mxCell id="191" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="190">
+                    <mxGeometry width="500" height="395" as="geometry"/>
+                </mxCell>
+                <mxCell id="192" value="AWS AZ-3" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="190">
+                    <mxGeometry x="35" y="2.5" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="193" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="190">
+                    <mxGeometry x="35" y="202.5" width="440" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="194" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" edge="1" parent="190" source="195" target="193">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="195" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="190">
+                    <mxGeometry x="75" y="62.5" width="360" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="196" value="Master node:&lt;br&gt;ex: kube api-server -&amp;gt; github actions -&amp;gt; CD changes in cluster&lt;br&gt;-&amp;gt; schedule pods and many more" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="190">
+                    <mxGeometry x="70" y="72.5" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="197" value="Worker node:&lt;br&gt;ex: run the pods" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="190">
+                    <mxGeometry x="25" y="192.5" width="110" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="198" value="namespace: prod" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="190">
+                    <mxGeometry x="225" y="212.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="199" value="namespace: dev" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="190">
+                    <mxGeometry x="225" y="282.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="200" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" edge="1" parent="190" source="202" target="198">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="201" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;endArrow=classic;endFill=1;" edge="1" parent="190" source="202" target="199">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="202" value="ingres controller" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="190">
+                    <mxGeometry x="45" y="242.5" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="209" style="edgeStyle=none;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="183" target="161">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="210" style="edgeStyle=none;html=1;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="196" target="161">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

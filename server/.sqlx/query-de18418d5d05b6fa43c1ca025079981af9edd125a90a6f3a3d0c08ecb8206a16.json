@@ -1,0 +1,40 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT Places.place_id, Places.place_name, Places.place_type, SUM(Inventory.nb_of_items) as nb_of_items\n                    FROM Inventory\n                    JOIN Places ON Inventory.place_id = Places.place_id\n                    JOIN Items ON Inventory.item_id = Items.item_id\n                    WHERE (place_type = ANY($1::text[]) OR $1 = '{}')\n                GROUP BY Places.place_id, Places.place_name, Places.place_type\n                ORDER BY nb_of_items DESC, Places.place_name;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "place_id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "place_name",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "place_type",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "nb_of_items",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "TextArray"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      null
+    ]
+  },
+  "hash": "de18418d5d05b6fa43c1ca025079981af9edd125a90a6f3a3d0c08ecb8206a16"
+}

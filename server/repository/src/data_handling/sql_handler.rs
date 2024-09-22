@@ -1,18 +1,23 @@
 use crate::get_db_pool;
+use crate::FetchItems;
 use axum::extract::Query;
-use domain::{InventoryItem, InventoryItemQuery, InventoryPlace, InventoryPlaceQuery, Item, Place};
-pub async fn get_items_db() -> Result<Vec<Item>, Box<dyn std::error::Error>> {
-    let items = sqlx::query!("SELECT item_id, item_name FROM Items ORDER BY item_name;")
-        .fetch_all(get_db_pool())
-        .await?
-        .into_iter()
-        .map(|record| Item {
-            item_id: record.item_id,
-            item_name: record.item_name,
-        })
-        .collect();
+use domain::{
+    InventoryItem, InventoryItemQuery, InventoryPlace, InventoryPlaceQuery, Item, ItemListDb, Place,
+};
 
-    Ok(items)
+impl FetchItems for ItemListDb {
+    async fn fetch_items() -> Result<Vec<Item>, Box<dyn std::error::Error>> {
+        let items = sqlx::query!("SELECT item_id, item_name FROM Items ORDER BY item_name;")
+            .fetch_all(get_db_pool())
+            .await?
+            .into_iter()
+            .map(|record| Item {
+                item_id: record.item_id,
+                item_name: record.item_name,
+            })
+            .collect();
+        Ok(items)
+    }
 }
 
 pub async fn get_places_db() -> Result<Vec<Place>, Box<dyn std::error::Error>> {

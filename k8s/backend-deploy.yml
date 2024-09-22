@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deploy
+  labels:
+    app: inv
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inv
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: inv
+        tier: backend
+    spec:
+      containers:
+        - name: inv-backend
+          image: ghcr.io/crateme-ul/inv-backend:INV-114-pipeline-cd-ec2
+          env:
+            - name: DATABASE_URL
+              value: postgres://some-postgres:mysecretpassword@inv-db:5432/some-postgres
+            - name: RUST_LOG
+              value: debug
+            - name: POSTGRES_USER
+              value: some-postgres
+            - name: POSTGRES_DB
+              value: some-postgres
+            - name: POSTGRES_PASSWORD
+              value: mysecretpassword
+            - name: APP_DIR
+              value: /app
+            - name: DATABASE_HOST
+              value: inv-db
+            - name: DATABASE_PORT
+              value: "5432"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "500Mi"
+              cpu: "1"
+      imagePullSecrets:
+        - name: ghcr-secret
