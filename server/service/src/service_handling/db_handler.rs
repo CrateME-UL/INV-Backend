@@ -54,21 +54,10 @@ pub async fn get_inventory_places_service(
 pub async fn add_items_service(
     payload: Json<InventoryItemRequest>,
 ) -> Result<Value, Box<dyn Error>> {
-    let inventory_item = InventoryItemRequest {
+    handle_db_result(InventoryItem::add_inventory_items(InventoryItemRequest {
         place_name: payload.place_name.clone(),
         item_name: payload.item_name.clone(),
         nb_of_items: payload.nb_of_items,
-    };
-
-    // Call the function without an unnecessary async block
-    let db_call = <InventoryItem as AddInventoryItems>::add_inventory_items(inventory_item).await;
-
-    // Handle the result directly
-    match db_call {
-        Ok(result) => Ok(map_to_value(result)),
-        Err(err) => {
-            eprintln!("Error: {}", err);
-            Err(err)
-        }
-    }
+    }))
+    .await
 }
