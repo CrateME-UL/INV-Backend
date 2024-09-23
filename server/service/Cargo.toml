@@ -4,15 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-repository = { path = "../repository" }
 domain = { path = "../domain" }
-
-serde = { version = "1.0.209", features = ["derive"] }
-serde_json = "1.0.127"
-axum = "0.7.5"
-
-jsonwebtoken = "9.3.0"
-warp = "0.3.7"
-chrono = "0.4.38"
-bcrypt = "0.15.1"
-thiserror = "1.0.63"

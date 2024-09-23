@@ -4,21 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-service = { path = "../service" }
 domain = { path = "../domain" }
-
-serde_json = "1.0.128"
-axum = "0.7.6"
-
-sqlx = { version = "0.8.2", features = [
-    "runtime-tokio-rustls",
-    "postgres",
-    "json",
-] }
-tower-http = { version = "0.6.0", features = ["cors"] }
-tower = { version = "0.5.1", features = ["util"] }
 tokio = { version = "1.40.0", features = ["full"] }
-tracing = { version = "0.1.40" }
-tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
-
-warp = "0.3.7"
+axum = "0.7.6"

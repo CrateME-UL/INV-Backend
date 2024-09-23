@@ -1,7 +1,4 @@
-mod resource_handling;
+mod adapters;
 
-pub use crate::resource_handling::json_api_handler::{
-    get_inventory_items, get_inventory_places, get_items, get_places, health, login_request,
-};
-
-pub use crate::resource_handling::runtime_handler::run_server;
+pub use crate::adapters::axum_server::AxumServerAdapter;
+pub use crate::adapters::event_publisher_impl::EventPublisherAdapter;

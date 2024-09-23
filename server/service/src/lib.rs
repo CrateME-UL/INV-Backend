@@ -1,16 +1,14 @@
-mod service_handling;
-pub use crate::service_handling::db_handler::{
-    add_items_service, get_inventory_items_service, get_inventory_places_service,
-    get_items_service, get_places_service,
-};
-pub use crate::service_handling::error::handle_rejection;
+pub fn add(left: u64, right: u64) -> u64 {
+    left + right
+}
 
-pub use crate::service_handling::auth::{create_jwt, with_auth};
-pub use crate::service_handling::auth_handler::login_service;
-pub use crate::service_handling::crypto::{hash_pass, verify_hash};
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-use service_handling::error;
-use warp::Rejection;
-
-pub type WebResult<T> = std::result::Result<T, Rejection>;
-pub type Result<T> = std::result::Result<T, error::AuthError>;
+    #[test]
+    fn it_works() {
+        let result = add(2, 2);
+        assert_eq!(result, 4);
+    }
+}

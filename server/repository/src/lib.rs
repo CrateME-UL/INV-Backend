@@ -1,12 +1,14 @@
-mod data_handling;
+pub fn add(left: u64, right: u64) -> u64 {
+    left + right
+}
 
-pub use crate::data_handling::pool_handler::get_db_pool;
-pub use crate::data_handling::sql_handler::{
-    get_inventory_items_db, get_inventory_places_db, get_places_db,
-};
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-pub use crate::data_handling::users_handler::get_user_db;
-
-pub use crate::data_handling::storage_handler::{
-    AddInventoryItem, FetchItems, InventoryRepository,
-};
+    #[test]
+    fn it_works() {
+        let result = add(2, 2);
+        assert_eq!(result, 4);
+    }
+}
