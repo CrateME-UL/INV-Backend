@@ -7,4 +7,6 @@ pub use crate::data_handling::sql_handler::{
 
 pub use crate::data_handling::users_handler::get_user_db;
 
-pub use crate::data_handling::storage_handler::{AddInventoryItems, FetchItems};
+pub use crate::data_handling::storage_handler::{
+    AddInventoryItem, FetchItems, InventoryRepository,
+};

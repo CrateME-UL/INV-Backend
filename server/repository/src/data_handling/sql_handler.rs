@@ -1,12 +1,13 @@
 use crate::get_db_pool;
 use crate::FetchItems;
+use crate::InventoryRepository;
 use axum::extract::Query;
 use domain::{
     InventoryItem, InventoryItemQuery, InventoryItemRequest, InventoryPlace, InventoryPlaceQuery,
     Item, ItemListDb, Place,
 };
 
-use super::storage_handler::AddInventoryItems;
+use super::storage_handler::AddInventoryItem;
 
 impl FetchItems for ItemListDb {
     async fn fetch_items() -> Result<Vec<Item>, Box<dyn std::error::Error>> {
@@ -23,8 +24,85 @@ impl FetchItems for ItemListDb {
     }
 }
 
-impl AddInventoryItems for InventoryItem {
-    async fn add_inventory_items(
+pub struct SqlxInventoryRepository {
+    db_pool: sqlx::PgPool,
+}
+
+impl InventoryRepository for SqlxInventoryRepository {
+    async fn find_place_id(&self, place_name: &str) -> Result<i32, Box<dyn std::error::Error>> {
+        let place_id = sqlx::query!(
+            "SELECT place_id FROM places WHERE TRIM(place_name) = $1",
+            place_name
+        )
+        .fetch_optional(&self.db_pool)
+        .await?
+        .map(|record| record.place_id);
+        Ok(place_id.unwrap_or(-1))
+    }
+
+    async fn find_item_id(&self, item_name: &str) -> Result<i32, Box<dyn std::error::Error>> {
+        let item_id = sqlx::query!(
+            "SELECT item_id FROM Items WHERE TRIM(item_name) = $1",
+            item_name
+        )
+        .fetch_optional(&self.db_pool)
+        .await?
+        .map(|record| record.item_id);
+        Ok(item_id.unwrap_or(-1))
+    }
+
+    async fn inventory_exists(
+        &self,
+        place_id: i32,
+        item_id: i32,
+    ) -> Result<bool, Box<dyn std::error::Error>> {
+        let exists = sqlx::query_scalar!(
+            "SELECT EXISTS(SELECT 1 FROM Inventory WHERE item_id = $1 AND place_id = $2)",
+            item_id,
+            place_id
+        )
+        .fetch_one(&self.db_pool)
+        .await?;
+        Ok(exists.unwrap_or(false))
+    }
+
+    async fn add_inventory(
+        &self,
+        place_id: i32,
+        item_id: i32,
+        nb_of_items: i32,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        sqlx::query!(
+            "INSERT INTO Inventory (place_id, item_id, nb_of_items) VALUES ($1, $2, $3)",
+            place_id,
+            item_id,
+            nb_of_items
+        )
+        .execute(&self.db_pool)
+        .await?;
+        Ok(())
+    }
+
+    async fn update_inventory(
+        &self,
+        place_id: i32,
+        item_id: i32,
+        nb_of_items: i32,
+    ) -> Result<(), Box<dyn std::error::Error>> {
+        sqlx::query!(
+            "UPDATE Inventory SET nb_of_items = $3 WHERE place_id = $1 AND item_id = $2",
+            place_id,
+            item_id,
+            nb_of_items
+        )
+        .execute(&self.db_pool)
+        .await?;
+        Ok(())
+    }
+}
+
+impl AddInventoryItem for InventoryItem {
+    async fn add_inventory_item(
         inventory_item: InventoryItemRequest,
     ) -> Result<InventoryItem, Box<dyn std::error::Error>> {
         let absent = -1;
