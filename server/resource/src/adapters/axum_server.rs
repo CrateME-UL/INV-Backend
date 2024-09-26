@@ -20,16 +20,18 @@ impl AxumServerAdapter {
             order_service,
         }
     }
-
+    //2. l'event est reçu: on traite l'évènement en l'envoyant au service du domaine correspondant
+    // (pas besoin de port ici quand on appelle le domaine)
     pub async fn listen_and_start_server(self, mut receiver: broadcast::Receiver<Event>) {
+        let shared_self = Arc::new(self);
+        let shared_self_clone = Arc::clone(&shared_self);
         tokio::spawn(async move {
             while let Ok(event) = receiver.recv().await {
                 match event {
                     Event::OrderPlaced(order) => {
-                        println!(
-                            "Received OrderPlaced event: ID = {}, Amount = {}",
-                            order.order_id, order.amount
-                        );
+                        shared_self_clone
+                            .order_service
+                            .place_order(order.order_id, order.amount);
                     }
                     Event::DeliverEvent(deliver_event) => {
                         println!(
@@ -40,8 +42,7 @@ impl AxumServerAdapter {
                 }
             }
         });
-
-        self.start_server().await;
+        shared_self.start_server().await;
     }
 
     async fn start_server(&self) {
@@ -56,6 +57,10 @@ impl AxumServerAdapter {
     }
 }
 
+//1. ici on reçoit les demandes de l'API pour les envoyer dans la queue du serveur. on map d'abord les objets pour se conformer aux
+//cette architecture ne permet pas de retourner une réponse directement...il faut utiliser un autre endpoint pour obtenir l'information
+//il faudrait générer une route pour pouvoir handle tout ça, mais on sait pas quand on recoit l'info
+//il faudrait ici un websocket à la place
 async fn place_order(
     State(axum_server): State<Arc<Mutex<AxumServerAdapter>>>,
 ) -> Json<&'static str> {
@@ -65,7 +70,6 @@ async fn place_order(
         amount: 99.99,
     });
     let _ = server.sender.send(order_event);
-
     Json("Order placed")
 }
 
