@@ -1,1 +1,1 @@
-pub mod event_publisher;
+pub mod inventory_item_ports;

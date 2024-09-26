@@ -1,6 +1,6 @@
-use std::sync::Arc;
+use std::{error::Error, sync::Arc};
 
-use crate::{events::events::OrderPlaced, InventoryItemFetchable};
+use crate::{InventoryItem, InventoryItemFetchable};
 
 #[derive(Clone)]
 pub struct OrderService {
@@ -14,10 +14,9 @@ impl OrderService {
         }
     }
 
-    pub fn place_order(&self, order_id: u64, amount: f64) -> OrderPlaced {
+    pub fn fetch_inventory_items(&self) -> Result<Vec<InventoryItem>, Box<dyn Error>> {
         let items = self.order_service_repository.fetch_inventory_items();
         println!("{:?}", items);
-        println!("Order placed: ID = {}, amount = {}", order_id, amount);
-        OrderPlaced { order_id, amount }
+        items
     }
 }

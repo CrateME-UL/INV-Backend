@@ -1,1 +1,1 @@
-pub mod order_services;
+pub mod inventory_item_service;

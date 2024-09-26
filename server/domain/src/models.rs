@@ -1,1 +1,1 @@
-pub mod inventory_items;
+pub mod inventory_item;
