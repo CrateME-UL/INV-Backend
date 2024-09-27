@@ -81,59 +81,59 @@ impl InventoryItemFetchable for SqlxPostgresRepository {
         })
     }
 
-    fn fetch_inventory_items(
-        &self,
-        inventory_item: InventoryItem,
-    ) -> std::pin::Pin<
-        Box<dyn std::future::Future<Output = Result<Vec<InventoryItem>, Box<dyn Error>>> + Send>,
-    > {
-        todo!();
-        // Box::pin(async move {
-        //     let default = "";
-        //     let is_query_empty = inventory_item.place_name == default;
-        //     let items = match is_query_empty {
-        //             true => sqlx::query!(
-        //             "SELECT Items.item_id, Items.item_name, SUM (Inventory.nb_of_items) AS nb_of_items
-        //                     FROM Inventory
-        //                     JOIN Places ON Inventory.place_id = Places.place_id
-        //                     JOIN Items ON Inventory.item_id = Items.item_id
-        //                 GROUP BY Items.item_id, Items.item_name
-        //                 ORDER BY nb_of_items DESC, Items.item_name;"
-        //         )
-        //             .fetch_all(get_db_pool())
-        //             .await?
-        //             .into_iter()
-        //             .map(|record| InventoryItem {
-        //                 item_id: record.item_id,
-        //                 item_name: record.item_name,
-        //                 place_name: record.place_name,
-        //                 place_type: None,
-        //                 nb_of_items: record.nb_of_items.unwrap_or(0) as i32,
-        //             })
-        //             .collect(),
-        //             _ => sqlx::query!(
-        //                 "SELECT Items.item_id, Items.item_name, Inventory.nb_of_items
-        //                     FROM Inventory
-        //                     JOIN Places ON Inventory.place_id = Places.place_id
-        //                     JOIN Items ON Inventory.item_id = Items.item_id
-        //                     WHERE (place_name =  $1 OR $1 = '')
-        //                     ORDER BY Inventory.nb_of_items DESC;",
-        //                 query.place_name.as_deref().unwrap_or(default),
-        //             )
-        //             .fetch_all(get_db_pool())
-        //             .await?
-        //             .into_iter()
-        //             .map(|record| InventoryItem {
-        //                 item_id: record.item_id,
-        //                 item_name: record.item_name,
-        //                 place_name: record.place_name,
-        //                 place_type: None,
-        //                 nb_of_items: record.nb_of_items,
-        //             })
-        //             .collect(),
-        //         };
+    // fn fetch_inventory_items(
+    //     &self,
+    //     inventory_item: InventoryItem,
+    // ) -> std::pin::Pin<
+    //     Box<dyn std::future::Future<Output = Result<Vec<InventoryItem>, Box<dyn Error>>> + Send>,
+    // > {
+    //     todo!();
+    //     // Box::pin(async move {
+    //     //     let default = "";
+    //     //     let is_query_empty = inventory_item.place_name == default;
+    //     //     let items = match is_query_empty {
+    //     //             true => sqlx::query!(
+    //     //             "SELECT Items.item_id, Items.item_name, SUM (Inventory.nb_of_items) AS nb_of_items
+    //     //                     FROM Inventory
+    //     //                     JOIN Places ON Inventory.place_id = Places.place_id
+    //     //                     JOIN Items ON Inventory.item_id = Items.item_id
+    //     //                 GROUP BY Items.item_id, Items.item_name
+    //     //                 ORDER BY nb_of_items DESC, Items.item_name;"
+    //     //         )
+    //     //             .fetch_all(get_db_pool())
+    //     //             .await?
+    //     //             .into_iter()
+    //     //             .map(|record| InventoryItem {
+    //     //                 item_id: record.item_id,
+    //     //                 item_name: record.item_name,
+    //     //                 place_name: record.place_name,
+    //     //                 place_type: None,
+    //     //                 nb_of_items: record.nb_of_items.unwrap_or(0) as i32,
+    //     //             })
+    //     //             .collect(),
+    //     //             _ => sqlx::query!(
+    //     //                 "SELECT Items.item_id, Items.item_name, Inventory.nb_of_items
+    //     //                     FROM Inventory
+    //     //                     JOIN Places ON Inventory.place_id = Places.place_id
+    //     //                     JOIN Items ON Inventory.item_id = Items.item_id
+    //     //                     WHERE (place_name =  $1 OR $1 = '')
+    //     //                     ORDER BY Inventory.nb_of_items DESC;",
+    //     //                 query.place_name.as_deref().unwrap_or(default),
+    //     //             )
+    //     //             .fetch_all(get_db_pool())
+    //     //             .await?
+    //     //             .into_iter()
+    //     //             .map(|record| InventoryItem {
+    //     //                 item_id: record.item_id,
+    //     //                 item_name: record.item_name,
+    //     //                 place_name: record.place_name,
+    //     //                 place_type: None,
+    //     //                 nb_of_items: record.nb_of_items,
+    //     //             })
+    //     //             .collect(),
+    //     //         };
 
-        //     Ok(items)
-        // })
-    }
+    //     //     Ok(items)
+    //     // })
+    // }
 }

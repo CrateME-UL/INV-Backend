@@ -19,8 +19,8 @@ pub struct InventoryPlaceQuery {
 }
 #[derive(Deserialize, Debug)]
 pub struct InventoryItemQuery {
-    pub place_name: Option<String>,
-    pub place_type: Option<String>,
+    pub _place_name: Option<String>,
+    pub _place_type: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -122,24 +122,24 @@ pub async fn get_places() -> impl IntoResponse {
     todo!();
 }
 
-pub async fn get_inventory_items(
-    State(adapter): State<AxumServerAdapter>,
-    query: Query<InventoryItemQuery>,
-) -> impl IntoResponse {
-    todo!();
-    // let default = "";
-    // let inventory_item = InventoryItem {
-    //     item_id: None,
-    //     place_name: query.place_name.as_deref().unwrap_or(default).to_string(),
-    //     item_name: None,
-    //     place_type: query.place_type,
-    //     nb_of_items: -1,
-    // };
+// pub async fn get_inventory_items(
+//     State(adapter): State<AxumServerAdapter>,
+//     query: Query<InventoryItemQuery>,
+// ) -> impl IntoResponse {
+//     todo!();
+//     // let default = "";
+//     // let inventory_item = InventoryItem {
+//     //     item_id: None,
+//     //     place_name: query.place_name.as_deref().unwrap_or(default).to_string(),
+//     //     item_name: None,
+//     //     place_type: query.place_type,
+//     //     nb_of_items: -1,
+//     // };
 
-    // let result = adapter.inventory_item_service
-    //     .fetch_inventory_items(inventory_item)
-    //     .await;
-}
+//     // let result = adapter.inventory_item_service
+//     //     .fetch_inventory_items(inventory_item)
+//     //     .await;
+// }
 
 pub async fn get_inventory_places(_query: Query<InventoryPlaceQuery>) -> impl IntoResponse {
     todo!();

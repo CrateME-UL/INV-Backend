@@ -14,12 +14,12 @@ impl InventoryItemFetchable for InMemoryListRepository {
         todo!()
     }
 
-    fn fetch_inventory_items(
-        &self,
-        inventory_item: InventoryItem,
-    ) -> std::pin::Pin<
-        Box<dyn std::future::Future<Output = Result<Vec<InventoryItem>, Box<dyn Error>>> + Send>,
-    > {
-        todo!()
-    }
+    // fn fetch_inventory_items(
+    //     &self,
+    //     inventory_item: InventoryItem,
+    // ) -> std::pin::Pin<
+    //     Box<dyn std::future::Future<Output = Result<Vec<InventoryItem>, Box<dyn Error>>> + Send>,
+    // > {
+    //     todo!()
+    // }
 }
