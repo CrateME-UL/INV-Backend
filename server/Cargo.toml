@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 
-members = ["app", "domain", "resource", "repository", "service"]
+members = ["app", "domain", "resource", "repository"]
 
 [profile.release]
 opt-level = 3

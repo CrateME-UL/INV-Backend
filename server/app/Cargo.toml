@@ -8,4 +8,3 @@ domain = { path = "../domain" }
 repository = { path = "../repository" }
 resource = { path = "../resource" }
 tokio = { version = "1.40.0", features = ["full"] }
-axum = "0.7.6"

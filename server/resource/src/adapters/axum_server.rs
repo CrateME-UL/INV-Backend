@@ -1,20 +1,29 @@
 use axum::{
-    extract::State,
     routing::{get, post},
-    Json, Router,
+    Router,
 };
-use domain::OrderService;
+use domain::InventoryItemService;
+use tower_http::cors::CorsLayer;
+use tracing::instrument;
 
-#[derive(Clone)]
+use crate::adapters::json_adapter::{
+    add_item, get_inventory_items, get_inventory_places, get_items, get_places, health,
+    login_request,
+};
+
+#[derive(Clone, Debug)]
 pub struct AxumServerAdapter {
-    pub order_service: OrderService,
+    pub inventory_item_service: InventoryItemService,
 }
 
 impl AxumServerAdapter {
-    pub fn new(order_service: OrderService) -> Self {
-        Self { order_service }
+    pub fn new(order_service: InventoryItemService) -> Self {
+        Self {
+            inventory_item_service: order_service,
+        }
     }
-
+    #[tokio::main]
+    #[instrument]
     pub async fn listen_and_start_server(self) {
         self.start_server().await;
     }
@@ -22,21 +31,17 @@ impl AxumServerAdapter {
     async fn start_server(&self) {
         let app = Router::new()
             .route("/", get(health))
-            .route("/order", post(place_order))
+            .route("/items", get(get_items))
+            .route("/places", get(get_places))
+            .route("/inventory/items", get(get_inventory_items))
+            .route("/inventory/items", post(add_item))
+            .route("/inventory/places", get(get_inventory_places))
+            .route("/login", post(login_request))
+            .layer(CorsLayer::permissive())
             .with_state(self.clone());
 
         let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+        tracing::debug!("listening on {}", listener.local_addr().unwrap());
         axum::serve(listener, app).await.unwrap();
     }
-}
-
-//TODO: place the methods in a different file
-//TODO: in a different file add a mapper (json to domain) and (domain to json)
-async fn place_order(State(axum_server): State<AxumServerAdapter>) -> Json<&'static str> {
-    let _ = axum_server.order_service.fetch_inventory_items();
-    Json("Order placed")
-}
-
-pub async fn health() -> &'static str {
-    "Hello, World!"
 }
