@@ -7,7 +7,7 @@ use tower_http::cors::CorsLayer;
 // use tracing::instrument;
 
 use crate::adapters::json_adapter::{
-    add_item, get_inventory_places, get_items, get_places, health, login_request,
+    add_inventory_item, get_inventory_places, get_items, get_places, health, login_request,
 };
 
 #[derive(Clone)]
@@ -33,7 +33,7 @@ impl AxumServerAdapter {
             .route("/items", get(get_items))
             .route("/places", get(get_places))
             // .route("/inventory/items", get(get_inventory_items))
-            .route("/inventory/items", post(add_item))
+            .route("/inventory/items", post(add_inventory_item))
             .route("/inventory/places", get(get_inventory_places))
             .route("/login", post(login_request))
             .layer(CorsLayer::permissive())

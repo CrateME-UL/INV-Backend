@@ -73,7 +73,7 @@ where
 }
 
 #[axum::debug_handler]
-pub async fn add_item(
+pub async fn add_inventory_item(
     State(adapter): State<AxumServerAdapter>,
     Json(payload): Json<InventoryItemRequest>,
 ) -> impl IntoResponse {
