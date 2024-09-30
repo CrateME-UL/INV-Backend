@@ -6,7 +6,7 @@ use axum::{
     response::IntoResponse,
     Json,
 };
-use domain::InventoryItem;
+// use domain::InventoryItem;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -72,43 +72,43 @@ where
     }
 }
 
-#[axum::debug_handler]
-pub async fn add_inventory_item(
-    State(adapter): State<AxumServerAdapter>,
-    Json(payload): Json<InventoryItemRequest>,
-) -> impl IntoResponse {
-    let inventory_item = InventoryItem {
-        item_id: None,
-        place_name: payload.place_name.clone(),
-        item_name: Some(payload.item_name.clone()),
-        place_type: None,
-        nb_of_items: payload.nb_of_items,
-    };
+// #[axum::debug_handler]
+// pub async fn add_inventory_item(
+//     State(adapter): State<AxumServerAdapter>,
+//     Json(payload): Json<InventoryItemRequest>,
+// ) -> impl IntoResponse {
+//     let inventory_item = InventoryItem {
+//         item_id: None,
+//         place_name: payload.place_name.clone(),
+//         item_name: Some(payload.item_name.clone()),
+//         place_type: None,
+//         nb_of_items: payload.nb_of_items,
+//     };
 
-    let result = adapter
-        .inventory_item_service
-        .add_inventory_items(inventory_item)
-        .await;
+//     let result = adapter
+//         .inventory_item_service
+//         .add_inventory_items(inventory_item)
+//         .await;
 
-    match result {
-        Ok(item) => {
-            let response = Response {
-                message: format!(
-                    "Successfully added item: {}",
-                    item.item_name.unwrap_or("does not exist".to_string())
-                ),
-            };
-            (StatusCode::CREATED, Json(response))
-        }
-        Err(err) => {
-            eprintln!("Error adding item: {}", err);
-            let response = Response {
-                message: format!("Error adding item: {}", err),
-            };
-            (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
-        }
-    }
-}
+//     match result {
+//         Ok(item) => {
+//             let response = Response {
+//                 message: format!(
+//                     "Successfully added item: {}",
+//                     item.item_name.unwrap_or("does not exist".to_string())
+//                 ),
+//             };
+//             (StatusCode::CREATED, Json(response))
+//         }
+//         Err(err) => {
+//             eprintln!("Error adding item: {}", err);
+//             let response = Response {
+//                 message: format!("Error adding item: {}", err),
+//             };
+//             (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
+//         }
+//     }
+// }
 
 pub async fn health() -> &'static str {
     "Hello, World!"

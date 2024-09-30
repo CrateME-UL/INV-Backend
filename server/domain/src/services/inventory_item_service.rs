@@ -1,4 +1,4 @@
-use crate::{InventoryItem, InventoryItemFetchable};
+use crate::InventoryItemFetchable;
 use std::{error::Error, sync::Arc};
 
 #[derive(Clone)]
@@ -32,14 +32,14 @@ impl InventoryItemService {
     //         .await
     // }
 
-    pub async fn add_inventory_items(
-        &self,
-        inventory_item: InventoryItem,
-    ) -> Result<InventoryItem, Box<dyn Error>> {
-        self.inventory_item_service_repository
-            .as_ref()
-            .expect("Repository not initialized")
-            .add_inventory_items(inventory_item)
-            .await
-    }
+    // pub async fn add_inventory_items(
+    //     &self,
+    //     inventory_item: InventoryItem,
+    // ) -> Result<InventoryItem, Box<dyn Error>> {
+    //     self.inventory_item_service_repository
+    //         .as_ref()
+    //         .expect("Repository not initialized")
+    //         .add_inventory_items(inventory_item)
+    //         .await
+    // }
 }

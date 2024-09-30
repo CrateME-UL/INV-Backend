@@ -1,3 +1,3 @@
-mod adapters;
+// mod adapters;
 
-pub use crate::adapters::axum_server::AxumServerAdapter;
+// pub use crate::adapters::axum_server::AxumServerAdapter;
