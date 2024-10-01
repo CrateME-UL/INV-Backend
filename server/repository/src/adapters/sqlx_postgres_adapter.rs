@@ -31,7 +31,7 @@
 //             let absent = -1;
 //             let place_id: Option<i32> = sqlx::query!(
 //                 "SELECT place_id FROM places WHERE TRIM(place_name) = $1",
-//                 inventory_item.place_name
+//                 inventory_item.get_place_name(),
 //             )
 //             .fetch_optional(get_db_pool())
 //             .await?
@@ -39,7 +39,7 @@
 
 //             let item_id: Option<i32> = sqlx::query!(
 //                 "SELECT item_id FROM Items WHERE TRIM(item_name) = $1",
-//                 inventory_item.item_name,
+//                 inventory_item.get_item_name(),
 //             )
 //             .fetch_optional(get_db_pool())
 //             .await?
@@ -58,7 +58,7 @@
 //                     "UPDATE Inventory SET nb_of_items = $3 WHERE place_id = $1 AND item_id = $2",
 //                     place_id,
 //                     item_id,
-//                     inventory_item.nb_of_items,
+//                     inventory_item.get_nb_of_items().unwrap().value(),
 //                 )
 //                 .execute(get_db_pool())
 //                 .await?;
@@ -67,7 +67,7 @@
 //                     "INSERT INTO Inventory (place_id, item_id, nb_of_items) VALUES ($1, $2, $3)",
 //                     place_id,
 //                     item_id,
-//                     inventory_item.nb_of_items,
+//                     inventory_item.get_nb_of_items().unwrap().value(),
 //                 )
 //                 .execute(get_db_pool())
 //                 .await?;

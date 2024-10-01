@@ -1,5 +1,3 @@
-//TODO: start TDD with commented code to help if needed
-//TODO: implement the builder pattern because of the number of optionals
 // use crate::{ItemId, PlaceId};
 
 // use super::place::PlaceType;
@@ -43,6 +41,7 @@
 //     }
 // }
 // #[derive(Debug)]
+// #[allow(dead_code)]
 // pub struct InventoryItem {
 //     m_item_id: Option<ItemId>,
 //     m_place_id: Option<PlaceId>,
@@ -72,5 +71,17 @@
 //             }
 //             Err(e) => Err(e),
 //         }
+//     }
+
+//     pub fn get_place_name(&self) -> &str {
+//         &self.m_place_name
+//     }
+
+//     pub fn get_item_name(&self) -> &str {
+//         &self.m_item_name
+//     }
+
+//     pub fn get_nb_of_items(&self) -> Option<&NbOfItems> {
+//         self.m_nb_of_items.as_ref()
 //     }
 // }
