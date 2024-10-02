@@ -52,23 +52,23 @@ impl<'a> Item<'a> {
 mod tests {
     use super::*;
     const VALID_ID_NUMBER: i32 = 42;
-    // const VALID_NAME: &str = "Laurence";
+    const THE_BEST: &str = "Laurence";
 
     trait ItemMockable {
-        fn new_unchecked(id: i32) -> ItemId;
+        fn new_valid(id: i32) -> ItemId;
     }
 
     impl ItemMockable for ItemId {
-        fn new_unchecked(id: i32) -> ItemId {
+        fn new_valid(id: i32) -> ItemId {
             Self { m_id: id }
         }
     }
 
     #[test]
-    fn given_invalid_item_name_when_defining_item_should_reject_definition() {
+    fn given_invalid_item_name_when_defining_item_should_reject_item() {
         const INVALID_NAME_EMPTY: &str = " ";
         const INVALID_NAME_30_OVER_FLOW_LIMIT: &str = "012345678901234567890123456789";
-        let valid_id: ItemId = ItemId::new_unchecked(VALID_ID_NUMBER);
+        let valid_id: ItemId = ItemId::new_valid(VALID_ID_NUMBER);
 
         assert!(matches!(
             Item::new(&valid_id, &INVALID_NAME_EMPTY.to_string()),
@@ -81,7 +81,7 @@ mod tests {
     }
 
     #[test]
-    fn given_invalid_id_when_defining_item_should_reject_definition() {
+    fn given_invalid_id_when_defining_item_should_reject_item() {
         const INVALID_ID_NUMBER_NEGATIVE: i32 = -1;
         const INVALID_ID_NUMBER_ZERO: i32 = 0;
 
@@ -94,4 +94,39 @@ mod tests {
             Err(DomainError::ItemIdError(_))
         ));
     }
+    //i want to create an object -> but first, i need to validate the parameters for defining an object are valid -> valid name, valid id 
+    //-> valid name implies that i verify the buisness logic such as constraints of name, types
+    //-> it also implies if the name of the item already exists -> i should not create it
+    //-> it also implies that i need a repository reference 
+    //-> it also implies that we need a factory to manage the creation of those objects from the api server so the factory can reference the repository with an interface
+    //-> it also implies that whenever i create an item in memory, it stores the item in the repository
+    //-> when the item is stored, the lifecycle of the object ends in memory? or we could keep it in memory and fetch the data at start
+
+    //-> we will need an agregate object to handle all of the inventory logic to manage collections of Items, Places, InventoryItems
+    //-> items and places are frequently access, if the application grows, this is important to have access quickcly, it reduces the number of querry the database wich is the most costly
+    //-> for InventoryItems, it's different, they are only accessed at certain times and querrying the database makes sense because the number of different items and places is far lower than the InventoryItems
+    //-> conclusion: create a Repository (for persistant storage and querrying) and an Inventory[using Repository] (for common accessed objects, object constraints, aggregates, processing)
+
+    // #[test]
+    // fn given_name_when_fetching_item_by_name_should_return_item() {
+    //     const TAKEN_NAME: &str = "Laurence";
+    //     let valid_id: ItemId = ItemId::new_valid(VALID_ID_NUMBER);
+
+    //     assert!(matches!(
+    //         Item::new(&valid_id, &TAKEN_NAME.to_string()),
+    //         Err(DomainError::ItemError(_))
+    //     ));
+
+    // }
+    // #[test]
+    // fn given_taken_name_when_defining_item_should_reject_item() {
+    //     const TAKEN_NAME: &str = "Laurence";
+    //     let valid_id: ItemId = ItemId::new_valid(VALID_ID_NUMBER);
+
+    //     assert!(matches!(
+    //         Item::new(&valid_id, &TAKEN_NAME.to_string()),
+    //         Err(DomainError::ItemError(_))
+    //     ));
+
+    // }
 }
