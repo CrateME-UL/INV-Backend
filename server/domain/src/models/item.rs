@@ -2,7 +2,7 @@ use crate::models::domain_error::DomainError;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ItemId {
-    m_id: i32,
+    pub(crate) m_id: i32,
 }
 
 impl ItemId {
@@ -21,8 +21,8 @@ impl ItemId {
 }
 #[derive(Debug, PartialEq)]
 pub struct Item<'a> {
-    m_id: &'a ItemId,
-    m_name: String,
+    pub(crate) m_id: &'a ItemId,
+    pub(crate) m_name: String,
 }
 impl<'a> Item<'a> {
     fn validate(id: &ItemId, name: &String) -> Result<(), DomainError> {
@@ -39,7 +39,7 @@ impl<'a> Item<'a> {
         Ok(())
     }
 
-    fn new(id: &'a ItemId, name: &String) -> Result<Self, DomainError> {
+    pub fn new(id: &'a ItemId, name: &String) -> Result<Self, DomainError> {
         Item::validate(&id, &name)?;
         Ok(Self {
             m_id: id,
@@ -52,15 +52,15 @@ impl<'a> Item<'a> {
 mod tests {
     use super::*;
     const VALID_ID_NUMBER: i32 = 42;
-    const THE_BEST: &str = "Laurence";
+    const VALID_NAME: &str = "Alice";
 
-    trait ItemMockable {
+    trait MockItemId {
         fn new_valid(id: i32) -> ItemId;
     }
 
-    impl ItemMockable for ItemId {
+    impl MockItemId for ItemId {
         fn new_valid(id: i32) -> ItemId {
-            Self { m_id: id }
+            ItemId { m_id: id }
         }
     }
 

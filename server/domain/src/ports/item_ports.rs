@@ -1,9 +1,11 @@
-use std::error::Error;
+use std::{error::Error, future::Future, pin::Pin};
 
-use crate::models::item::Item;
 
-pub trait ItemFetchable {
-    async fn fetch_item_by_id(&self, id: i32) -> Result<Item, Box<dyn Error>>;
+pub trait ItemFetchable: Send + Sync {
+    fn fetch_item_by_id(
+        &self,
+        id: i32,
+    ) -> Pin<Box<dyn Future<Output = Result<i32, Box<dyn Error>>> + Send>>;
 }
 
 pub trait ItemRepository: ItemFetchable + Send + Sync {}
