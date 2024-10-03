@@ -41,49 +41,45 @@ mod tests {
         }
     }
 
+    pub enum MockFound {
+        NotFound,
+        Found,
+    }
+
     trait MockItem<'a> {
-        fn mock(id: &'a ItemId, name: &String, is_found: MockFound) -> Result<Self, DomainError> where Self: Sized;
+        fn mock(id: &'a ItemId, name: &str, is_found: MockFound) -> Result<Self, DomainError>
+        where
+            Self: Sized;
     }
     
     impl<'a> MockItem<'a> for Item<'a> {
-        fn mock(id: &'a item::ItemId, name: &String, is_found: MockFound) -> Result<Self, DomainError> {
-            let item = match is_found {
-            MockFound::Found => Ok(Self {
-                    m_id: &id,
+        fn mock(id: &'a ItemId, name: &str, is_found: MockFound) -> Result<Self, DomainError> {
+            match is_found {
+                MockFound::Found => Ok(Self {
+                    m_id: id,
                     m_name: name.trim().to_string(),
                 }),
-                _ => Err(DomainError::ItemError("Item not found".to_string()))
-            };
-            item
-
+                MockFound::NotFound => Err(DomainError::ItemError("Item not found".to_string())),
+            }
         }
-    }
-
-    pub enum MockFound{
-        NotFound,
-        Found
     }
 
     trait MockItemRepository {
         fn fetch_item_by_name(&self, name: &str, is_found: MockFound) -> Option<Item>;
     } 
 
-    impl MockItemRepository for dyn ItemRepository {
-        fn fetch_item_by_name(&self, name: &str, is_found: MockFound) -> Option<Item> {
-            match Item::mock(&ItemId::new_valid(VALID_ID_NUMBER), &name.to_string(), MockFound::Found) {
-                Ok(_) => todo!(),
-                Err(_) => todo!(),
-                // MockFound::Found => {
-                //     // Create a new item to return when found
-                //     match Item::mock(&ItemId::new_valid(VALID_ID_NUMBER), &name.to_string(), MockFound::Found) {
-                //         Ok(item) => Some(item),
-                //         Err(_) => None, 
-                //     }
-                // },
-                // MockFound::NotFound => None,  // Return None if not found
-            }
-        }
-    }
+    // impl MockItemRepository for dyn ItemRepository {
+    //     fn fetch_item_by_name(&self, name: &str, is_found: MockFound) -> Option<Item> {
+    //         let item_found = Item::mock(&ItemId::new_valid(VALID_ID_NUMBER), name, is_found).clone();
+    //         match item_found {
+    //             Ok(item) => {
+    //                 Some(item)
+    //             },
+    //             Err(_) => None,
+    //         }
+    //     }
+    // }
+    
     
 
     // struct {

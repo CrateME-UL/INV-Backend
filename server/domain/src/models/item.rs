@@ -19,7 +19,7 @@ impl ItemId {
         Ok(Self { m_id: id })
     }
 }
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Item<'a> {
     pub(crate) m_id: &'a ItemId,
     pub(crate) m_name: String,
