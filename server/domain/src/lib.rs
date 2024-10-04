@@ -2,7 +2,9 @@ mod models;
 mod ports;
 mod services;
 
+pub use crate::ports::item_ports::ItemRepository;
 // pub use crate::models::inventory_item::InventoryItem;
+pub use crate::models::item::Item;
 pub use crate::models::item::ItemId;
 // pub use crate::models::place::PlaceId;
 // pub use crate::ports::inventory_item_ports::InventoryItemFetchable;

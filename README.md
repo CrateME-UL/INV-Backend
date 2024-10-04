@@ -88,3 +88,15 @@ cargo fmt
 - only the service has access to the domain again to prevent devastating changes to all the codebase, because it's protected by the traits on both sides
 - we will do an abstraction for inMemory in the repository for easier testing. we will add a config to choose between the two at runtime. a slight trade off of performance for flexibility
 - integration tests are in seperate files, but unit tests are in the same file
+    i want to create an object -> but first, i need to validate the parameters for defining an object are valid -> valid name, valid id 
+    -> valid name implies that i verify the buisness logic such as constraints of name, types
+    -> it also implies if the name of the item already exists -> i should not create it
+    -> it also implies that i need a repository reference 
+    -> it also implies that we need a factory to manage the creation of those objects from the api server so the factory can reference the repository with an interface
+    -> it also implies that whenever i create an item in memory, it stores the item in the repository
+    -> when the item is stored, the lifecycle of the object ends in memory? or we could keep it in memory and fetch the data at start
+
+    -> we will need an agregate object to handle all of the inventory logic to manage collections of Items, Places, InventoryItems
+    -> items and places are frequently access, if the application grows, this is important to have access quickcly, it reduces the number of querry the database wich is the most costly
+    -> for InventoryItems, it's different, they are only accessed at certain times and querrying the database makes sense because the number of different items and places is far lower than the InventoryItems
+    -> conclusion: create a Repository (for persistant storage and querrying) and an Inventory[using Repository] (for common accessed objects, object constraints, aggregates, processing)
