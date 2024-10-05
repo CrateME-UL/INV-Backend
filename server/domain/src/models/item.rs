@@ -2,7 +2,7 @@ use crate::models::domain_error::DomainError;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ItemId {
-    pub(crate) m_id: i32,
+    pub(crate) id: i32,
 }
 
 impl ItemId {
@@ -16,16 +16,16 @@ impl ItemId {
     }
     fn new(id: i32) -> Result<Self, DomainError> {
         ItemId::validate(id)?;
-        Ok(Self { m_id: id })
+        Ok(Self { id })
     }
 }
 #[derive(Debug, PartialEq, Clone)]
 pub struct Item {
-    pub(crate) m_id: ItemId,
-    pub(crate) m_name: String,
+    pub(crate) id: ItemId,
+    pub(crate) name: String,
 }
 impl Item {
-    fn validate(id: &ItemId, name: &String) -> Result<(), DomainError> {
+    fn validate(name: &String) -> Result<(), DomainError> {
         if name.trim().is_empty() {
             return Err(DomainError::ItemError(
                 "Name should not be empty.".to_string(),
@@ -39,14 +39,14 @@ impl Item {
         Ok(())
     }
     pub fn get_id(&self) -> ItemId {
-        self.m_id.clone()
+        self.id.clone()
     }
 
     pub fn new(id: ItemId, name: &String) -> Result<Self, DomainError> {
-        Item::validate(&id, &name)?;
+        Item::validate(&name)?;
         Ok(Self {
-            m_id: id,
-            m_name: name.trim().to_string(),
+            id,
+            name: name.trim().to_string(),
         })
     }
 }
@@ -57,12 +57,12 @@ mod tests {
     const VALID_ID_NUMBER: i32 = 42;
 
     trait MockItemId {
-        fn new_valid(id: i32) -> ItemId;
+        fn mock(id: i32) -> ItemId;
     }
 
     impl MockItemId for ItemId {
-        fn new_valid(id: i32) -> ItemId {
-            ItemId { m_id: id }
+        fn mock(id: i32) -> ItemId {
+            ItemId { id }
         }
     }
 
@@ -70,7 +70,7 @@ mod tests {
     fn given_invalid_item_name_when_defining_item_should_reject_item() {
         const INVALID_NAME_EMPTY: &str = " ";
         const INVALID_NAME_30_OVER_FLOW_LIMIT: &str = "012345678901234567890123456789";
-        let valid_id: ItemId = ItemId::new_valid(VALID_ID_NUMBER);
+        let valid_id: ItemId = ItemId::mock(VALID_ID_NUMBER);
 
         assert!(matches!(
             Item::new(valid_id.clone(), &INVALID_NAME_EMPTY.to_string()),
@@ -86,7 +86,7 @@ mod tests {
     }
 
     #[test]
-    fn given_invalid_id_when_defining_item_should_reject_item() {
+    fn given_invalid_item_id_when_defining_item_should_reject_item() {
         const INVALID_ID_NUMBER_NEGATIVE: i32 = -1;
         const INVALID_ID_NUMBER_ZERO: i32 = 0;
 
