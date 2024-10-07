@@ -4,7 +4,7 @@ use crate::models::domain_error::DomainError;
 pub enum PlaceType {
     EXTERIOR,
     INTERIOR,
-    INVENTORY
+    INVENTORY,
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PlaceId {
@@ -29,7 +29,7 @@ impl PlaceId {
 pub struct Place {
     pub(crate) id: PlaceId,
     pub(crate) name: String,
-    pub(crate) place_type: PlaceType
+    pub(crate) place_type: PlaceType,
 }
 impl Place {
     fn validate(name: &String) -> Result<(), DomainError> {
@@ -54,7 +54,7 @@ impl Place {
         Ok(Self {
             id,
             name: name.trim().to_string(),
-            place_type: place_type.clone()
+            place_type: place_type.clone(),
         })
     }
 }
@@ -82,7 +82,11 @@ mod tests {
         let valid_place_type = PlaceType::INVENTORY;
 
         assert!(matches!(
-            Place::new(valid_id.clone(), &INVALID_NAME_EMPTY.to_string(), &valid_place_type),
+            Place::new(
+                valid_id.clone(),
+                &INVALID_NAME_EMPTY.to_string(),
+                &valid_place_type
+            ),
             Err(DomainError::PlaceError(_))
         ));
         assert!(matches!(
