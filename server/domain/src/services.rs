@@ -1,1 +1,1 @@
-// pub mod inventory_item_service;
+pub mod item_service;

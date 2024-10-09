@@ -23,8 +23,9 @@ impl ItemRepository for InMemoryItemRepository {
                 + Send,
         >,
     > {
-        let item_list = self.item_list.clone();
-        Box::pin(async move { Ok(item_list.get(&item_name).cloned()) })
+        todo!("missing the tests to implement before the code ;P")
+        // let item_list = self.item_list.clone();
+        // Box::pin(async move { Ok(item_list.get(&item_name).cloned()) })
     }
 
     fn fetch_place_by_name(
@@ -35,4 +36,13 @@ impl ItemRepository for InMemoryItemRepository {
     > {
         todo!()
     }
+    
+    fn store_item(
+        &self,
+        item: Item,
+    ) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<domain::ItemNo, Box<dyn Error>>> + Send>> {
+        todo!()
+    }
+    
+
 }

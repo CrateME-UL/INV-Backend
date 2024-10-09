@@ -1,15 +1,13 @@
 use std::sync::Arc;
 
-use crate::{ports::item_ports::ItemRepository, Item};
-
-use super::{domain_error::DomainError, place::Place};
+use crate::{models::domain_error::DomainError, ports::item_ports::ItemRepository, Item, Place};
 
 #[derive(Clone)]
-pub struct Inventory {
+pub struct ItemService {
     inventory_repository: Arc<dyn ItemRepository>,
 }
 
-impl Inventory {
+impl ItemService {
     pub fn new(inventory_repository: Arc<dyn ItemRepository>) -> Self {
         Self {
             inventory_repository,
@@ -56,50 +54,50 @@ mod tests {
     use super::*;
     use crate::{
         models::{item::Item, place::Place},
-        ItemId,
+        ItemNo,
     };
 
     const VALID_ID_NUMBER: i32 = 42;
 
-    trait MockItemId {
-        fn mock(id: i32) -> ItemId;
+    trait StubItemNo {
+        fn stub(number: i32) -> ItemNo;
     }
 
-    impl MockItemId for ItemId {
-        fn mock(id: i32) -> ItemId {
-            ItemId { id }
+    impl StubItemNo for ItemNo {
+        fn stub(number: i32) -> ItemNo {
+            ItemNo { number }
         }
     }
 
-    trait MockItem {
-        fn mock(id: ItemId, name: &str) -> Self;
+    trait StubItem {
+        fn stub(number: ItemNo, name: &str) -> Self;
     }
 
-    impl MockItem for Item {
-        fn mock(id: ItemId, name: &str) -> Self {
+    impl StubItem for Item {
+        fn stub(number: ItemNo, name: &str) -> Self {
             Self {
-                id,
+                number,
                 name: name.trim().to_string(),
             }
         }
     }
 
     pub struct MockItemRepository {
-        pub mock_item: Option<Item>,
-        pub mock_place: Option<Place>,
+        pub stub_item: Option<Item>,
+        pub stub_place: Option<Place>,
     }
 
     impl MockItemRepository {
-        fn mock_with_item(mock_data: &Option<Item>) -> Self {
+        fn mock_with_item(stub_data: &Option<Item>) -> Self {
             Self {
-                mock_item: mock_data.clone(),
-                mock_place: None,
+                stub_item: stub_data.clone(),
+                stub_place: None,
             }
         }
-        fn mock_with_place(mock_data: &Option<Place>) -> Self {
+        fn mock_with_place(stub_data: &Option<Place>) -> Self {
             Self {
-                mock_item: None,
-                mock_place: mock_data.clone(),
+                stub_item: None,
+                stub_place: stub_data.clone(),
             }
         }
     }
@@ -114,7 +112,7 @@ mod tests {
                     + Send,
             >,
         > {
-            let result = self.mock_item.clone();
+            let result = self.stub_item.clone();
             Box::pin(async move { Ok(result) })
         }
 
@@ -127,26 +125,35 @@ mod tests {
                     + Send,
             >,
         > {
-            let result = self.mock_place.clone();
+            let result = self.stub_place.clone();
             Box::pin(async move { Ok(result) })
         }
+        
+        fn store_item(
+            &self,
+            item: Item,
+        ) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<ItemNo, Box<dyn std::error::Error>>> + Send>> {
+            todo!()
+        }
+
+    
     }
 
     #[tokio::test]
     async fn given_existing_item_name_when_fetching_item_by_name_then_return_corresponding_item() {
         const EXISTING_ITEM_NAME: &str = "Bob";
-        let valid_id: ItemId = ItemId::mock(VALID_ID_NUMBER);
-        let expected_id: ItemId = ItemId::mock(VALID_ID_NUMBER);
-        let valid_item: Item = Item::mock(valid_id, EXISTING_ITEM_NAME);
-        let inventory: Inventory = Inventory::new(Arc::new(MockItemRepository::mock_with_item(
-            &Option::Some(valid_item),
-        )));
+        let valid_id: ItemNo = ItemNo::stub(VALID_ID_NUMBER);
+        let expected_id: ItemNo = ItemNo::stub(VALID_ID_NUMBER);
+        let valid_item: Item = Item::stub(valid_id, EXISTING_ITEM_NAME);
+        let inventory: ItemService = ItemService::new(Arc::new(
+            MockItemRepository::mock_with_item(&Option::Some(valid_item)),
+        ));
 
         let actual_id = inventory
             .fetch_item_by_name(EXISTING_ITEM_NAME.to_string())
             .await
             .unwrap()
-            .get_id();
+            .get_number();
 
         assert_eq!(expected_id, actual_id);
     }
@@ -155,9 +162,9 @@ mod tests {
     async fn given_not_existing_item_name_when_fetching_item_by_name_then_reject_it() {
         const NOT_EXISTING_ITEM_NAME: &str = "Bob";
         let not_existing_item = None;
-        let inventory: Inventory = Inventory::new(Arc::new(MockItemRepository::mock_with_item(
-            &not_existing_item,
-        )));
+        let inventory: ItemService = ItemService::new(Arc::new(
+            MockItemRepository::mock_with_item(&not_existing_item),
+        ));
 
         assert!(matches!(
             inventory
@@ -171,9 +178,9 @@ mod tests {
     async fn given_not_existing_place_name_when_fetching_place_by_name_then_reject_it() {
         const NOT_EXISTING_PLACE_NAME: &str = "Bob's Place";
         let not_existing_place = None;
-        let inventory: Inventory = Inventory::new(Arc::new(MockItemRepository::mock_with_place(
-            &not_existing_place,
-        )));
+        let inventory: ItemService = ItemService::new(Arc::new(
+            MockItemRepository::mock_with_place(&not_existing_place),
+        ));
 
         assert!(matches!(
             inventory

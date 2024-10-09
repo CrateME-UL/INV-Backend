@@ -1,7 +1,7 @@
 #[derive(Debug, PartialEq, Clone)]
 pub enum DomainError {
     ItemError(String),
-    ItemIdError(String),
+    ItemNumberError(String),
     PlaceIdError(String),
     PlaceError(String),
     InventoryError(String),

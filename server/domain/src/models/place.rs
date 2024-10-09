@@ -7,27 +7,27 @@ pub enum PlaceType {
     INVENTORY,
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct PlaceId {
-    pub(crate) id: i32,
+pub struct PlaceNo {
+    pub(crate) number: i32,
 }
 
-impl PlaceId {
-    fn validate(id: i32) -> Result<(), DomainError> {
-        if id <= 0 {
+impl PlaceNo {
+    fn validate(number: i32) -> Result<(), DomainError> {
+        if number <= 0 {
             return Err(DomainError::PlaceIdError(
-                "PlaceId should be strictly positive.".to_string(),
+                "PlaceNo should be strictly positive.".to_string(),
             ));
         }
         Ok(())
     }
-    fn new(id: i32) -> Result<Self, DomainError> {
-        PlaceId::validate(id)?;
-        Ok(Self { id })
+    fn new(number: i32) -> Result<Self, DomainError> {
+        PlaceNo::validate(number)?;
+        Ok(Self { number })
     }
 }
 #[derive(Debug, PartialEq, Clone)]
 pub struct Place {
-    pub(crate) id: PlaceId,
+    pub(crate) number: PlaceNo,
     pub(crate) name: String,
     pub(crate) place_type: PlaceType,
 }
@@ -45,14 +45,18 @@ impl Place {
         }
         Ok(())
     }
-    pub fn get_id(&self) -> PlaceId {
-        self.id.clone()
+    pub fn get_number(&self) -> PlaceNo {
+        self.number.clone()
     }
 
-    pub fn new(id: PlaceId, name: &String, place_type: &PlaceType) -> Result<Self, DomainError> {
+    pub fn new(
+        number: PlaceNo,
+        name: &String,
+        place_type: &PlaceType,
+    ) -> Result<Self, DomainError> {
         Place::validate(&name)?;
         Ok(Self {
-            id,
+            number,
             name: name.trim().to_string(),
             place_type: place_type.clone(),
         })
@@ -62,15 +66,15 @@ impl Place {
 #[cfg(test)]
 mod tests {
     use super::*;
-    const VALID_PLACE_ID_NUMBER: i32 = 42;
+    const VALID_PLACE_NUMBER: i32 = 42;
 
-    trait MockPlaceId {
-        fn mock(id: i32) -> PlaceId;
+    trait StubPlaceNumber {
+        fn mock(number: i32) -> PlaceNo;
     }
 
-    impl MockPlaceId for PlaceId {
-        fn mock(id: i32) -> PlaceId {
-            PlaceId { id }
+    impl StubPlaceNumber for PlaceNo {
+        fn mock(number: i32) -> PlaceNo {
+            PlaceNo { number }
         }
     }
 
@@ -78,12 +82,12 @@ mod tests {
     fn given_invalid_place_name_when_defining_place_should_reject_place() {
         const INVALID_NAME_EMPTY: &str = " ";
         const INVALID_NAME_30_OVER_FLOW_LIMIT: &str = "012345678901234567890123456789";
-        let valid_id: PlaceId = PlaceId::mock(VALID_PLACE_ID_NUMBER);
+        let valid_number: PlaceNo = PlaceNo::mock(VALID_PLACE_NUMBER);
         let valid_place_type = PlaceType::INVENTORY;
 
         assert!(matches!(
             Place::new(
-                valid_id.clone(),
+                valid_number.clone(),
                 &INVALID_NAME_EMPTY.to_string(),
                 &valid_place_type
             ),
@@ -91,7 +95,7 @@ mod tests {
         ));
         assert!(matches!(
             Place::new(
-                valid_id.clone(),
+                valid_number.clone(),
                 &INVALID_NAME_30_OVER_FLOW_LIMIT.to_string(),
                 &valid_place_type
             ),
@@ -105,11 +109,11 @@ mod tests {
         const INVALID_PLACE_ID_NUMBER_ZERO: i32 = 0;
 
         assert!(matches!(
-            &PlaceId::new(INVALID_PLACE_ID_NUMBER_NEGATIVE),
+            &PlaceNo::new(INVALID_PLACE_ID_NUMBER_NEGATIVE),
             Err(DomainError::PlaceIdError(_))
         ));
         assert!(matches!(
-            &PlaceId::new(INVALID_PLACE_ID_NUMBER_ZERO),
+            &PlaceNo::new(INVALID_PLACE_ID_NUMBER_ZERO),
             Err(DomainError::PlaceIdError(_))
         ));
     }

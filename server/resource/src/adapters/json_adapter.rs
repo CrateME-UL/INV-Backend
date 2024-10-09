@@ -6,11 +6,11 @@ use axum::{
     response::IntoResponse,
     Json,
 };
-// use domain::InventoryItem;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::AxumServerAdapter;
+
 
 #[derive(Deserialize, Debug)]
 pub struct InventoryPlaceQuery {
@@ -34,6 +34,11 @@ pub struct InventoryItemRequest {
     pub place_name: String,
     pub item_name: String,
     pub nb_of_items: i32,
+}
+
+#[derive(Serialize, Debug, Deserialize)]
+pub struct ItemRequest {
+    pub item_name: String,
 }
 
 #[derive(Serialize, Debug, Deserialize)]
@@ -73,6 +78,40 @@ where
 }
 
 // #[axum::debug_handler]
+// pub async fn add_item(
+//     State(adapter): State<AxumServerAdapter>,
+//     Json(payload): Json<ItemRequest>,
+// ) -> impl IntoResponse {
+//     let inventory_item = Item {
+//         item_id: None,
+//     };
+
+//     let result = adapter
+//         .inventory_item_service
+//         .add_inventory_items(inventory_item)
+//         .await;
+
+//     match result {
+//         Ok(item) => {
+//             let response = Response {
+//                 message: format!(
+//                     "Successfully added item: {}",
+//                     item.item_name.unwrap_or("does not exist".to_string())
+//                 ),
+//             };
+//             (StatusCode::CREATED, Json(response))
+//         }
+//         Err(err) => {
+//             eprintln!("Error adding item: {}", err);
+//             let response = Response {
+//                 message: format!("Error adding item: {}", err),
+//             };
+//             (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
+//         }
+//     }
+// }
+
+// #[axum::debug_handler]
 // pub async fn add_inventory_item(
 //     State(adapter): State<AxumServerAdapter>,
 //     Json(payload): Json<InventoryItemRequest>,
@@ -110,17 +149,40 @@ where
 //     }
 // }
 
-pub async fn health() -> &'static str {
-    "Hello, World!"
-}
+// pub async fn health() -> &'static str {
+//     "Hello, World!"
+// }
 
-pub async fn get_items() -> impl IntoResponse {
-    todo!();
-}
+// #[axum::debug_handler]
+// pub async fn get_items(State(adapter): State<AxumServerAdapter>) -> impl IntoResponse {
 
-pub async fn get_places() -> impl IntoResponse {
-    todo!();
-}
+//     let result = adapter
+//     .item_service
+//     .fetch_item_by_name(inventory_item)
+//     .await;
+//     match result {
+//         Ok(item) => {
+//             let response = Response {
+//                 message: format!(
+//                     "Successfully added item: {}",
+//                     item.item_name.unwrap_or("does not exist".to_string())
+//                 ),
+//             };
+//             (StatusCode::CREATED, Json(response))
+//         }
+//         Err(err) => {
+//             eprintln!("Error adding item: {}", err);
+//             let response = Response {
+//                 message: format!("Error adding item: {}", err),
+//             };
+//             (StatusCode::INTERNAL_SERVER_ERROR, Json(response))
+//         }
+//     }
+// }
+
+// pub async fn get_places() -> impl IntoResponse {
+//     todo!();
+// }
 
 // pub async fn get_inventory_items(
 //     State(adapter): State<AxumServerAdapter>,
@@ -141,10 +203,10 @@ pub async fn get_places() -> impl IntoResponse {
 //     //     .await;
 // }
 
-pub async fn get_inventory_places(_query: Query<InventoryPlaceQuery>) -> impl IntoResponse {
-    todo!();
-}
+// pub async fn get_inventory_places(_query: Query<InventoryPlaceQuery>) -> impl IntoResponse {
+//     todo!();
+// }
 
-pub async fn login_request(_payload: Json<LoginRequest>) -> impl IntoResponse {
-    todo!();
-}
+// pub async fn login_request(_payload: Json<LoginRequest>) -> impl IntoResponse {
+//     todo!();
+// }

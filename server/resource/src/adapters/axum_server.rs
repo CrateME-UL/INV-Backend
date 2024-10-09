@@ -1,27 +1,17 @@
-use axum::{
-    routing::{get, post},
-    Router,
-};
-use domain::Inventory;
-// use domain::InventoryItemService;
+use axum::Router;
+use domain::ItemService;
 use tower_http::cors::CorsLayer;
-// use tracing::instrument;
-
-// use crate::adapters::json_adapter::{
-//     add_inventory_item, get_inventory_places, get_items, get_places, health, login_request,
-// };
 
 #[derive(Clone)]
 pub struct AxumServerAdapter {
-    pub inventory: Inventory,
+    pub item_service: ItemService,
 }
 
 impl AxumServerAdapter {
-    pub fn new(inventory: Inventory) -> Self {
-        Self { inventory }
+    pub fn new(item_service: ItemService) -> Self {
+        Self { item_service }
     }
     #[tokio::main]
-    // #[instrument]
     pub async fn listen_and_start_server(self) {
         self.start_server().await;
     }
@@ -39,7 +29,6 @@ impl AxumServerAdapter {
             .with_state(self.clone());
 
         let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-        // tracing::debug!("listening on {}", listener.local_addr().unwrap());
         axum::serve(listener, app).await.unwrap();
     }
 }

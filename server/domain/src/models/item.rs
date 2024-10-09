@@ -1,27 +1,27 @@
 use crate::models::domain_error::DomainError;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ItemId {
-    pub(crate) id: i32,
+pub struct ItemNo {
+    pub(crate) number: i32,
 }
 
-impl ItemId {
-    fn validate(id: i32) -> Result<(), DomainError> {
-        if id <= 0 {
-            return Err(DomainError::ItemIdError(
-                "ItemId should be strictly positive.".to_string(),
+impl ItemNo {
+    fn validate(number: i32) -> Result<(), DomainError> {
+        if number <= 0 {
+            return Err(DomainError::ItemNumberError(
+                "ItemNo should be strictly positive.".to_string(),
             ));
         }
         Ok(())
     }
-    fn new(id: i32) -> Result<Self, DomainError> {
-        ItemId::validate(id)?;
-        Ok(Self { id })
+    fn new(number: i32) -> Result<Self, DomainError> {
+        ItemNo::validate(number)?;
+        Ok(Self { number })
     }
 }
 #[derive(Debug, PartialEq, Clone)]
 pub struct Item {
-    pub(crate) id: ItemId,
+    pub(crate) number: ItemNo,
     pub(crate) name: String,
 }
 impl Item {
@@ -38,14 +38,14 @@ impl Item {
         }
         Ok(())
     }
-    pub fn get_id(&self) -> ItemId {
-        self.id.clone()
+    pub fn get_number(&self) -> ItemNo {
+        self.number.clone()
     }
 
-    pub fn new(id: ItemId, name: &String) -> Result<Self, DomainError> {
+    pub fn new(number: ItemNo, name: &String) -> Result<Self, DomainError> {
         Item::validate(&name)?;
         Ok(Self {
-            id,
+            number,
             name: name.trim().to_string(),
         })
     }
@@ -54,15 +54,15 @@ impl Item {
 #[cfg(test)]
 mod tests {
     use super::*;
-    const VALID_ID_NUMBER: i32 = 42;
+    const VALID_NUMBER: i32 = 42;
 
-    trait MockItemId {
-        fn mock(id: i32) -> ItemId;
+    trait StubItemNo {
+        fn mock(number: i32) -> ItemNo;
     }
 
-    impl MockItemId for ItemId {
-        fn mock(id: i32) -> ItemId {
-            ItemId { id }
+    impl StubItemNo for ItemNo {
+        fn mock(number: i32) -> ItemNo {
+            ItemNo { number }
         }
     }
 
@@ -70,15 +70,15 @@ mod tests {
     fn given_invalid_item_name_when_defining_item_should_reject_item() {
         const INVALID_NAME_EMPTY: &str = " ";
         const INVALID_NAME_30_OVER_FLOW_LIMIT: &str = "012345678901234567890123456789";
-        let valid_id: ItemId = ItemId::mock(VALID_ID_NUMBER);
+        let valid_number: ItemNo = ItemNo::mock(VALID_NUMBER);
 
         assert!(matches!(
-            Item::new(valid_id.clone(), &INVALID_NAME_EMPTY.to_string()),
+            Item::new(valid_number.clone(), &INVALID_NAME_EMPTY.to_string()),
             Err(DomainError::ItemError(_))
         ));
         assert!(matches!(
             Item::new(
-                valid_id.clone(),
+                valid_number.clone(),
                 &INVALID_NAME_30_OVER_FLOW_LIMIT.to_string()
             ),
             Err(DomainError::ItemError(_))
@@ -91,12 +91,12 @@ mod tests {
         const INVALID_ID_NUMBER_ZERO: i32 = 0;
 
         assert!(matches!(
-            &ItemId::new(INVALID_ID_NUMBER_NEGATIVE),
-            Err(DomainError::ItemIdError(_))
+            &ItemNo::new(INVALID_ID_NUMBER_NEGATIVE),
+            Err(DomainError::ItemNumberError(_))
         ));
         assert!(matches!(
-            &ItemId::new(INVALID_ID_NUMBER_ZERO),
-            Err(DomainError::ItemIdError(_))
+            &ItemNo::new(INVALID_ID_NUMBER_ZERO),
+            Err(DomainError::ItemNumberError(_))
         ));
     }
 }
