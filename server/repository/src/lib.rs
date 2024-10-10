@@ -1,3 +1,3 @@
 pub mod adapters;
 
-pub use crate::adapters::list_adapter::InMemoryItemRepository;
+pub use crate::adapters::item_list_adapter::InMemoryItemRepository;

@@ -81,7 +81,7 @@ mod tests {
     #[test]
     fn given_invalid_place_name_when_defining_place_should_reject_place() {
         const INVALID_NAME_EMPTY: &str = " ";
-        const INVALID_NAME_30_OVER_FLOW_LIMIT: &str = "012345678901234567890123456789";
+        const INVALID_ANY_NAME_30_OR_MORE_OVER_FLOW_LIMIT: &str = "012345678901234567890123456789";
         let valid_number: PlaceNo = PlaceNo::mock(VALID_PLACE_NUMBER);
         let valid_place_type = PlaceType::INVENTORY;
 
@@ -96,7 +96,7 @@ mod tests {
         assert!(matches!(
             Place::new(
                 valid_number.clone(),
-                &INVALID_NAME_30_OVER_FLOW_LIMIT.to_string(),
+                &INVALID_ANY_NAME_30_OR_MORE_OVER_FLOW_LIMIT.to_string(),
                 &valid_place_type
             ),
             Err(DomainError::PlaceError(_))
@@ -104,16 +104,16 @@ mod tests {
     }
 
     #[test]
-    fn given_invalid_place_id_when_defining_place_should_reject_place() {
-        const INVALID_PLACE_ID_NUMBER_NEGATIVE: i32 = -1;
-        const INVALID_PLACE_ID_NUMBER_ZERO: i32 = 0;
+    fn given_invalid_place_number_when_defining_place_should_reject_place() {
+        const INVALID_ANY_NEGATIVE_PLACE_NUMBER: i32 = -1;
+        const INVALID_PLACE_NUMBER_ZERO: i32 = 0;
 
         assert!(matches!(
-            &PlaceNo::new(INVALID_PLACE_ID_NUMBER_NEGATIVE),
+            &PlaceNo::new(INVALID_ANY_NEGATIVE_PLACE_NUMBER),
             Err(DomainError::PlaceIdError(_))
         ));
         assert!(matches!(
-            &PlaceNo::new(INVALID_PLACE_ID_NUMBER_ZERO),
+            &PlaceNo::new(INVALID_PLACE_NUMBER_ZERO),
             Err(DomainError::PlaceIdError(_))
         ));
     }

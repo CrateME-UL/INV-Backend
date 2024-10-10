@@ -69,7 +69,7 @@ mod tests {
     #[test]
     fn given_invalid_item_name_when_defining_item_should_reject_item() {
         const INVALID_NAME_EMPTY: &str = " ";
-        const INVALID_NAME_30_OVER_FLOW_LIMIT: &str = "012345678901234567890123456789";
+        const INVALID_ANY_NAME_30_OR_MORE_OVER_FLOW_LIMIT: &str = "012345678901234567890123456789";
         let valid_number: ItemNo = ItemNo::mock(VALID_NUMBER);
 
         assert!(matches!(
@@ -79,23 +79,23 @@ mod tests {
         assert!(matches!(
             Item::new(
                 valid_number.clone(),
-                &INVALID_NAME_30_OVER_FLOW_LIMIT.to_string()
+                &INVALID_ANY_NAME_30_OR_MORE_OVER_FLOW_LIMIT.to_string()
             ),
             Err(DomainError::ItemError(_))
         ));
     }
 
     #[test]
-    fn given_invalid_item_id_when_defining_item_should_reject_item() {
-        const INVALID_ID_NUMBER_NEGATIVE: i32 = -1;
-        const INVALID_ID_NUMBER_ZERO: i32 = 0;
+    fn given_invalid_item_number_when_defining_item_should_reject_item() {
+        const INVALID_ANY_NEGATIVE_ITEM_NUMBER: i32 = -1;
+        const INVALID_ITEM_NUMBER_ZERO: i32 = 0;
 
         assert!(matches!(
-            &ItemNo::new(INVALID_ID_NUMBER_NEGATIVE),
+            &ItemNo::new(INVALID_ANY_NEGATIVE_ITEM_NUMBER),
             Err(DomainError::ItemNumberError(_))
         ));
         assert!(matches!(
-            &ItemNo::new(INVALID_ID_NUMBER_ZERO),
+            &ItemNo::new(INVALID_ITEM_NUMBER_ZERO),
             Err(DomainError::ItemNumberError(_))
         ));
     }

@@ -1,6 +1,6 @@
 use std::{collections::HashMap, error::Error};
 
-use domain::{Item, ItemRepository, Place};
+use domain::{Item, ItemRepository};
 
 #[derive(Debug)]
 pub struct InMemoryItemRepository {
@@ -28,21 +28,12 @@ impl ItemRepository for InMemoryItemRepository {
         // Box::pin(async move { Ok(item_list.get(&item_name).cloned()) })
     }
 
-    fn fetch_place_by_name(
-        &self,
-        place_name: String,
-    ) -> std::pin::Pin<
-        Box<dyn std::future::Future<Output = Result<Option<Place>, Box<dyn Error>>> + Send>,
-    > {
-        todo!()
-    }
-    
     fn store_item(
         &self,
         item: Item,
-    ) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<domain::ItemNo, Box<dyn Error>>> + Send>> {
+    ) -> std::pin::Pin<
+        Box<dyn std::future::Future<Output = Result<domain::ItemNo, Box<dyn Error>>> + Send>,
+    > {
         todo!()
     }
-    
-
 }

@@ -5,9 +5,8 @@ use resource::AxumServerAdapter;
 use std::{collections::HashMap, sync::Arc};
 
 fn main() {
-    let inventory_list = HashMap::<String, Item>::new();
-    let item_repository: Arc<dyn ItemRepository> =
-        Arc::new(InMemoryItemRepository::new(inventory_list));
+    let item_list = HashMap::<String, Item>::new();
+    let item_repository: Arc<dyn ItemRepository> = Arc::new(InMemoryItemRepository::new(item_list));
     let item_service = ItemService::new(item_repository);
 
     let axum_server = AxumServerAdapter::new(item_service);

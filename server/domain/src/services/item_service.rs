@@ -1,49 +1,51 @@
 use std::sync::Arc;
 
-use crate::{models::domain_error::DomainError, ports::item_ports::ItemRepository, Item, Place};
+use crate::{models::domain_error::DomainError, ports::item_ports::ItemRepository, Item, ItemNo};
 
 #[derive(Clone)]
 pub struct ItemService {
-    inventory_repository: Arc<dyn ItemRepository>,
+    item_repository: Arc<dyn ItemRepository>,
 }
 
 impl ItemService {
-    pub fn new(inventory_repository: Arc<dyn ItemRepository>) -> Self {
-        Self {
-            inventory_repository,
-        }
+    pub fn new(item_repository: Arc<dyn ItemRepository>) -> Self {
+        Self { item_repository }
     }
 
     pub async fn fetch_item_by_name(&self, item_name: String) -> Result<Item, DomainError> {
-        match self
-            .inventory_repository
-            .fetch_item_by_name(item_name)
-            .await
-        {
+        match self.item_repository.fetch_item_by_name(item_name).await {
             Ok(item) => match item {
                 Some(_) => Ok(item.unwrap()),
-                None => Err(DomainError::InventoryError("Item not found.".to_string())),
+                None => Err(DomainError::ItemError("Item not found.".to_string())),
             },
-            _ => Err(DomainError::InventoryError(
+            _ => Err(DomainError::ItemError(
                 "Unhandled error while fetching the item with inventory from repository."
                     .to_string(),
             )),
         }
     }
 
-    pub async fn fetch_place_by_name(&self, item_name: String) -> Result<Place, DomainError> {
+    pub async fn store_item(&self, item: Item) -> Result<ItemNo, DomainError> {
+        //TODO: fix TDA here, let the repository perform the storage logic
         match self
-            .inventory_repository
-            .fetch_place_by_name(item_name)
+            .item_repository
+            .fetch_item_by_name(item.clone().name)
             .await
         {
-            Ok(place) => match place {
-                Some(_) => Ok(place.unwrap()),
-                None => Err(DomainError::InventoryError("Place not found.".to_string())),
+            Ok(item_obtained) => match item_obtained {
+                Some(_) => Err(DomainError::ItemError(
+                    "Item already exists, cannot store duplicate items.".to_string(),
+                )),
+                _ => match self.item_repository.store_item(item).await {
+                    Ok(item_no) => Ok(item_no),
+                    _ => Err(DomainError::ItemError(
+                        "Unhandled error while storing the item with inventory from repository."
+                            .to_string(),
+                    )),
+                },
             },
-            _ => Err(DomainError::InventoryError(
-                "Unhandled error while fetching the place with inventory from repository."
-                    .to_string(),
+            _ => Err(DomainError::ItemError(
+                "Unhandled error while storing the item in the repository.".to_string(),
             )),
         }
     }
@@ -52,12 +54,9 @@ impl ItemService {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{
-        models::{item::Item, place::Place},
-        ItemNo,
-    };
+    use crate::{models::item::Item, ItemNo};
 
-    const VALID_ID_NUMBER: i32 = 42;
+    const ANY_ITEM_NUMBER: i32 = 42;
 
     trait StubItemNo {
         fn stub(number: i32) -> ItemNo;
@@ -84,20 +83,12 @@ mod tests {
 
     pub struct MockItemRepository {
         pub stub_item: Option<Item>,
-        pub stub_place: Option<Place>,
     }
 
     impl MockItemRepository {
         fn mock_with_item(stub_data: &Option<Item>) -> Self {
             Self {
                 stub_item: stub_data.clone(),
-                stub_place: None,
-            }
-        }
-        fn mock_with_place(stub_data: &Option<Place>) -> Self {
-            Self {
-                stub_item: None,
-                stub_place: stub_data.clone(),
             }
         }
     }
@@ -116,34 +107,23 @@ mod tests {
             Box::pin(async move { Ok(result) })
         }
 
-        fn fetch_place_by_name(
-            &self,
-            _place_name: String,
-        ) -> std::pin::Pin<
-            Box<
-                dyn std::future::Future<Output = Result<Option<Place>, Box<dyn std::error::Error>>>
-                    + Send,
-            >,
-        > {
-            let result = self.stub_place.clone();
-            Box::pin(async move { Ok(result) })
-        }
-        
         fn store_item(
             &self,
             item: Item,
-        ) -> std::pin::Pin<Box<dyn std::future::Future<Output = Result<ItemNo, Box<dyn std::error::Error>>> + Send>> {
+        ) -> std::pin::Pin<
+            Box<
+                dyn std::future::Future<Output = Result<ItemNo, Box<dyn std::error::Error>>> + Send,
+            >,
+        > {
             todo!()
         }
-
-    
     }
 
     #[tokio::test]
     async fn given_existing_item_name_when_fetching_item_by_name_then_return_corresponding_item() {
         const EXISTING_ITEM_NAME: &str = "Bob";
-        let valid_id: ItemNo = ItemNo::stub(VALID_ID_NUMBER);
-        let expected_id: ItemNo = ItemNo::stub(VALID_ID_NUMBER);
+        let valid_id: ItemNo = ItemNo::stub(ANY_ITEM_NUMBER);
+        let expected_id: ItemNo = ItemNo::stub(ANY_ITEM_NUMBER);
         let valid_item: Item = Item::stub(valid_id, EXISTING_ITEM_NAME);
         let inventory: ItemService = ItemService::new(Arc::new(
             MockItemRepository::mock_with_item(&Option::Some(valid_item)),
@@ -170,23 +150,24 @@ mod tests {
             inventory
                 .fetch_item_by_name(NOT_EXISTING_ITEM_NAME.to_string())
                 .await,
-            Err(DomainError::InventoryError(_))
+            Err(DomainError::ItemError(_))
         ));
     }
 
     #[tokio::test]
-    async fn given_not_existing_place_name_when_fetching_place_by_name_then_reject_it() {
-        const NOT_EXISTING_PLACE_NAME: &str = "Bob's Place";
-        let not_existing_place = None;
-        let inventory: ItemService = ItemService::new(Arc::new(
-            MockItemRepository::mock_with_place(&not_existing_place),
+    async fn given_duplicate_item_when_storing_duplicate_item_then_reject_it() {
+        const ANY_ITEM_NAME: &str = "Bob's hammer";
+        let any_item_no: ItemNo = ItemNo::stub(ANY_ITEM_NUMBER);
+        let any_item: Item = Item::stub(any_item_no, ANY_ITEM_NAME);
+        let item_service: ItemService = ItemService::new(Arc::new(
+            MockItemRepository::mock_with_item(&Option::Some(any_item.clone())),
         ));
 
         assert!(matches!(
-            inventory
-                .fetch_place_by_name(NOT_EXISTING_PLACE_NAME.to_string())
+            item_service
+                .store_item(any_item.clone())
                 .await,
-            Err(DomainError::InventoryError(_))
+            Err(DomainError::ItemError(_))
         ));
     }
 }

@@ -4,5 +4,4 @@ pub enum DomainError {
     ItemNumberError(String),
     PlaceIdError(String),
     PlaceError(String),
-    InventoryError(String),
 }

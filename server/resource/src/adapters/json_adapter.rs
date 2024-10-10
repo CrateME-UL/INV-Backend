@@ -11,7 +11,6 @@ use serde_json::Value;
 
 use crate::AxumServerAdapter;
 
-
 #[derive(Deserialize, Debug)]
 pub struct InventoryPlaceQuery {
     pub _item_name: Option<String>,
