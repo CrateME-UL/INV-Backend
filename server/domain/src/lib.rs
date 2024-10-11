@@ -2,6 +2,7 @@ mod models;
 mod ports;
 mod services;
 
+pub use crate::models::domain_error::DomainError;
 pub use crate::models::item::Item;
 pub use crate::models::item::ItemNo;
 pub use crate::ports::item_ports::ItemRepository;

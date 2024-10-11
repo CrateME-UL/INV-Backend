@@ -1,6 +1,6 @@
-use std::{collections::HashMap, error::Error};
+use std::{collections::HashMap, error::Error, future::Future, pin::Pin};
 
-use domain::{Item, ItemRepository};
+use domain::{DomainError, Item, ItemNo, ItemRepository};
 
 #[derive(Debug)]
 pub struct InMemoryItemRepository {
@@ -17,12 +17,8 @@ impl ItemRepository for InMemoryItemRepository {
     fn fetch_item_by_name(
         &self,
         item_name: String,
-    ) -> std::pin::Pin<
-        Box<
-            dyn std::future::Future<Output = Result<Option<Item>, Box<dyn std::error::Error>>>
-                + Send,
-        >,
-    > {
+    ) -> Pin<Box<dyn std::future::Future<Output = Result<Option<Item>, Box<dyn Error>>> + Send>>
+    {
         todo!("missing the tests to implement before the code ;P")
         // let item_list = self.item_list.clone();
         // Box::pin(async move { Ok(item_list.get(&item_name).cloned()) })
@@ -31,9 +27,7 @@ impl ItemRepository for InMemoryItemRepository {
     fn store_item(
         &self,
         item: Item,
-    ) -> std::pin::Pin<
-        Box<dyn std::future::Future<Output = Result<domain::ItemNo, Box<dyn Error>>> + Send>,
-    > {
+    ) -> Pin<Box<(dyn Future<Output = Result<ItemNo, Box<dyn Error>>> + Send)>> {
         todo!()
     }
 }

@@ -18,42 +18,25 @@ impl ItemService {
                 Some(_) => Ok(item.unwrap()),
                 None => Err(DomainError::ItemError("Item not found.".to_string())),
             },
-            _ => Err(DomainError::ItemError(
-                "Unhandled error while fetching the item with inventory from repository."
-                    .to_string(),
-            )),
+            Err(err) => Err(DomainError::ItemError(err.to_string())),
         }
     }
 
     pub async fn store_item(&self, item: Item) -> Result<ItemNo, DomainError> {
-        //TODO: fix TDA here, let the repository perform the storage logic
-        match self
-            .item_repository
-            .fetch_item_by_name(item.clone().name)
-            .await
-        {
-            Ok(item_obtained) => match item_obtained {
-                Some(_) => Err(DomainError::ItemError(
-                    "Item already exists, cannot store duplicate items.".to_string(),
-                )),
-                _ => match self.item_repository.store_item(item).await {
-                    Ok(item_no) => Ok(item_no),
-                    _ => Err(DomainError::ItemError(
-                        "Unhandled error while storing the item with inventory from repository."
-                            .to_string(),
-                    )),
-                },
-            },
-            _ => Err(DomainError::ItemError(
-                "Unhandled error while storing the item in the repository.".to_string(),
-            )),
+        match self.item_repository.store_item(item).await {
+            Ok(item_no) => Ok(item_no),
+            Err(err) => Err(DomainError::ItemError(err.to_string())),
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use std::error::Error;
+
     use super::*;
+
+    use crate::models::domain_error::DomainError;
     use crate::{models::item::Item, ItemNo};
 
     const ANY_ITEM_NUMBER: i32 = 42;
@@ -99,7 +82,7 @@ mod tests {
             _item_name: String,
         ) -> std::pin::Pin<
             Box<
-                dyn std::future::Future<Output = Result<Option<Item>, Box<dyn std::error::Error>>>
+                dyn std::future::Future<Output = Result<Option<Item>, Box<dyn Error>>>
                     + Send,
             >,
         > {
@@ -111,11 +94,17 @@ mod tests {
             &self,
             item: Item,
         ) -> std::pin::Pin<
-            Box<
-                dyn std::future::Future<Output = Result<ItemNo, Box<dyn std::error::Error>>> + Send,
-            >,
+            Box<dyn std::future::Future<Output = Result<ItemNo, Box<dyn Error>>> + Send>,
         > {
-            todo!()
+            let result = self.stub_item.clone();
+            match item.get_number().eq(&result.clone().unwrap().get_number()) {
+                false => Box::pin(async move { Ok(result.clone().unwrap().get_number()) }),
+                true => Box::pin(async move {
+                    Err(Box::from(DomainError::ItemError(
+                        "duplicate item".to_string(),
+                    )))
+                }),
+            }
         }
     }
 
@@ -164,9 +153,7 @@ mod tests {
         ));
 
         assert!(matches!(
-            item_service
-                .store_item(any_item.clone())
-                .await,
+            item_service.store_item(any_item.clone()).await,
             Err(DomainError::ItemError(_))
         ));
     }

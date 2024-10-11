@@ -14,7 +14,7 @@ pub struct PlaceNo {
 impl PlaceNo {
     fn validate(number: i32) -> Result<(), DomainError> {
         if number <= 0 {
-            return Err(DomainError::PlaceIdError(
+            return Err(DomainError::PlaceNumberError(
                 "PlaceNo should be strictly positive.".to_string(),
             ));
         }
@@ -110,11 +110,11 @@ mod tests {
 
         assert!(matches!(
             &PlaceNo::new(INVALID_ANY_NEGATIVE_PLACE_NUMBER),
-            Err(DomainError::PlaceIdError(_))
+            Err(DomainError::PlaceNumberError(_))
         ));
         assert!(matches!(
             &PlaceNo::new(INVALID_PLACE_NUMBER_ZERO),
-            Err(DomainError::PlaceIdError(_))
+            Err(DomainError::PlaceNumberError(_))
         ));
     }
 }
