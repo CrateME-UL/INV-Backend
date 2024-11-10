@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+
+members = ["app", "domain"]
+
+[profile.release]
+opt-level = 3

@@ -52,13 +52,13 @@ mod tests {
     }
 
     trait StubItem {
-        fn stub(number: ItemNo, name: &str) -> Self;
+        fn stub(number: &ItemNo, name: &str) -> Self;
     }
 
     impl StubItem for Item {
-        fn stub(number: ItemNo, name: &str) -> Self {
+        fn stub(number: &ItemNo, name: &str) -> Self {
             Self {
-                number,
+                number: number.clone(),
                 name: name.trim().to_string(),
             }
         }
@@ -81,10 +81,7 @@ mod tests {
             &self,
             _item_name: String,
         ) -> std::pin::Pin<
-            Box<
-                dyn std::future::Future<Output = Result<Option<Item>, Box<dyn Error>>>
-                    + Send,
-            >,
+            Box<dyn std::future::Future<Output = Result<Option<Item>, Box<dyn Error>>> + Send>,
         > {
             let result = self.stub_item.clone();
             Box::pin(async move { Ok(result) })
@@ -97,13 +94,13 @@ mod tests {
             Box<dyn std::future::Future<Output = Result<ItemNo, Box<dyn Error>>> + Send>,
         > {
             let result = self.stub_item.clone();
-            match item.get_number().eq(&result.clone().unwrap().get_number()) {
-                false => Box::pin(async move { Ok(result.clone().unwrap().get_number()) }),
+            match !result.is_none() && item.get_number().eq(&result.clone().unwrap().get_number()) {
                 true => Box::pin(async move {
                     Err(Box::from(DomainError::ItemError(
                         "duplicate item".to_string(),
                     )))
                 }),
+                false => Box::pin(async move { Ok(result.clone().unwrap().get_number()) }),
             }
         }
     }
@@ -113,7 +110,7 @@ mod tests {
         const EXISTING_ITEM_NAME: &str = "Bob";
         let valid_id: ItemNo = ItemNo::stub(ANY_ITEM_NUMBER);
         let expected_id: ItemNo = ItemNo::stub(ANY_ITEM_NUMBER);
-        let valid_item: Item = Item::stub(valid_id, EXISTING_ITEM_NAME);
+        let valid_item: Item = Item::stub(&valid_id, EXISTING_ITEM_NAME);
         let inventory: ItemService = ItemService::new(Arc::new(
             MockItemRepository::mock_with_item(&Option::Some(valid_item)),
         ));
@@ -144,10 +141,10 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn given_duplicate_item_when_storing_duplicate_item_then_reject_it() {
+    async fn given_duplicate_item_when_storing_item_then_reject_it() {
         const ANY_ITEM_NAME: &str = "Bob's hammer";
         let any_item_no: ItemNo = ItemNo::stub(ANY_ITEM_NUMBER);
-        let any_item: Item = Item::stub(any_item_no, ANY_ITEM_NAME);
+        let any_item: Item = Item::stub(&any_item_no, ANY_ITEM_NAME);
         let item_service: ItemService = ItemService::new(Arc::new(
             MockItemRepository::mock_with_item(&Option::Some(any_item.clone())),
         ));
@@ -156,5 +153,20 @@ mod tests {
             item_service.store_item(any_item.clone()).await,
             Err(DomainError::ItemError(_))
         ));
+    }
+
+    #[tokio::test]
+    async fn when_storing_item_receive_item_number() {
+        const ANY_ITEM_NAME: &str = "Bob's hammer";
+        let any_item_no: ItemNo = ItemNo::stub(ANY_ITEM_NUMBER);
+        let any_item: Item = Item::stub(&any_item_no, ANY_ITEM_NAME);        
+        let any_other_item_no: ItemNo = ItemNo::stub(ANY_ITEM_NUMBER);
+        let any_other_item: Item = Item::stub(&any_other_item_no, ANY_ITEM_NAME);
+        let item_service: ItemService =
+            ItemService::new(Arc::new(MockItemRepository::mock_with_item(&Option::Some(any_other_item.clone()))));
+
+        let actual_id = item_service.store_item(any_item.clone()).await.unwrap();
+
+        assert_eq!(any_item_no, actual_id);
     }
 }
