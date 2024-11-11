@@ -1,15 +1,13 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: example-ingressroute
+  name: webserver-ingressroute
 spec:
   entryPoints:
-    - websecure
+    - web
   routes:
-    - match: Host(`example.local`)
+    - match: Host(`monequilibre.inventaire.local`)
       kind: Rule
       services:
-        - name: your-service-name
+        - name: webserver-service
           port: 80
-  tls:
-    secretName: inv-tls

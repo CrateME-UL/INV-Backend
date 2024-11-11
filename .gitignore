@@ -2,4 +2,5 @@ target/
 .dockerconfigjson
 .vscode/
 *.lock
+*.pem
 config.yml
