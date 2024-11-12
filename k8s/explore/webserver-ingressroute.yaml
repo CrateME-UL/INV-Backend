@@ -4,10 +4,12 @@ metadata:
   name: webserver-ingressroute
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
     - match: Host(`monequilibre.inventaire.local`)
       kind: Rule
       services:
         - name: webserver-service
           port: 80
+  tls:
+    secretName: mkcert-tls-secret
