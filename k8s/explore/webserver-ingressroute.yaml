@@ -1,4 +1,31 @@
 apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-redirect
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http-to-https
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`monequilibre.inventaire.local`)
+      kind: Rule
+      middlewares:
+        - name: https-redirect
+      services:
+        - name: webserver-service
+          port: 80
+
+---
+apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: webserver-ingressroute

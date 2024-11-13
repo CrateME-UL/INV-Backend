@@ -4,7 +4,7 @@ sudo apt install mkcert
 mkcert monequilibre.inventaire.local
 ```
 
-### make sure to add the host to "C:\Windows\System32\drivers\etc\hosts" and link the ip address of the wsl to the hostname at the end of the file
+### make sure to add the host to "C:\Windows\System32\drivers\etc\hosts" on Windows and link the ip address of the wsl to the hostname at the end of the file
 
 ```bash
 w.x.y.z monequilibre.inventaire.local
@@ -32,4 +32,6 @@ sudo k3s kubectl create secret tls mkcert-tls-secret \
 ```bash
 [monequilibre.inventaire.local](https://monequilibre.inventaire.local/)
 ```
+
+### note: you can also access it through the http url, you will be redirected towards https
 
